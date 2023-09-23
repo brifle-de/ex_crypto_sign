@@ -1,0 +1,115 @@
+<SignatureDocument xmlns="http://uri.etsi.org/01903/v1.1.1#" elementFormDefault="qualified" targetNamespace="http://uri.etsi.org/01903/v1.1.1#">
+  <Metadata>
+    <version>1.0</version>
+  </Metadata>
+  <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" id="signature_id">
+    <ds:SignedInfo>
+      <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:CanonicalizationMethod>
+      <ds:SignatureMethod Algorithm="unknown signature method"></ds:SignatureMethod>
+      <ds:Reference ID="doc-1" URI="https://documents.brifle.de/2341ac23HAbcA">
+        <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
+        <ds:DigestValue>
+          OS9yYyt1R3BKVTVEdEZHMzJUS3A0SWhnZFlxUHdGYlczU1JObzlUK3lZZERwZ05rSmVhZDE4QTBoZ2ZIdXFpTm1HUlVVemFiNXlqWTNKUmw5L0pQRnc9PQ==
+        </ds:DigestValue>
+      </ds:Reference>
+      <ds:Reference ID="doc-2" URI="https://documents.brifle.de/671ac23HAbcA">
+        <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
+        <ds:DigestValue>
+          dWd0NXpZck1CNkpKRzZreGRONkZFL2psNS9BWTRIc0FzbVpFSlE3NkNNdnZBS202eEh0YkY1N2M3d2thM3lhaCtzSDZOeTVuTmlsRmtlakVIQTUzRUE9PQ==
+        </ds:DigestValue>
+      </ds:Reference>
+      <ds:Reference URI="#SignedProperties">
+        <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
+        <ds:DigestValue>
+          K2FJMG1kQy9tTS9ZQWJJV3JDSGVWRDZLWXdKa0MxaURYakJoeWFtRjlCR3Y0NUo1UCs2MmRhK014QmtzTjRVZGRpYW5LWXVDOHpJSHBrZ3VhNnd4REE9PQ==
+        </ds:DigestValue>
+      </ds:Reference>
+    </ds:SignedInfo>
+    <ds:SignatureValue>
+      MEUCIClGDir64VXu61x9oovMPTEYTPk2RodOeAw5pcoYZA9jAiEA4fMxosxQG4m/ZRgSpwCN317yYyo3CtdrsX1VD0XL5IM=
+    </ds:SignatureValue>
+    <ds:Object>
+      <QualifyingProperties Target="#signature_id">
+        <SignedProperties>
+          <SignedSignatureProperties>
+            <SigningTime>
+              2019-01-01T00:00:00Z
+            </SigningTime>
+            <SigningCertificate>
+              <Cert>
+                <CertDigest>
+                  <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+                  <DigestValue>
+                    C/R0iWNjUF5epeXWrOjr+xOnYKQJsftGfUKPxxb58oQ=
+                  </DigestValue>
+                </CertDigest>
+                <IssuerSerial>
+                  <X509IssuerName>
+                    issuer
+                  </X509IssuerName>
+                  <X509SerialNumber>
+                    serial
+                  </X509SerialNumber>
+                </IssuerSerial>
+              </Cert>
+            </SigningCertificate>
+            <SignaturePolicyIdentifier>
+              <SignaturePolicyImplied></SignaturePolicyImplied>
+            </SignaturePolicyIdentifier>
+            <SignatureProductionPlace>
+              <City>
+                Stuttgart
+              </City>
+              <CountryName>
+                Germany
+              </CountryName>
+            </SignatureProductionPlace>
+            <SignerRole>
+              <ClaimedRoles>
+                <ClaimedRole>
+                  role1
+                </ClaimedRole>
+                <ClaimedRole>
+                  role2
+                </ClaimedRole>
+              </ClaimedRoles>
+              <CertifiedRoles>
+
+              </CertifiedRoles>
+            </SignerRole>
+          </SignedSignatureProperties>
+          <SignedDataObjectProperties>
+            
+            
+            
+            
+          </SignedDataObjectProperties>
+        </SignedProperties>
+        <UnsignedProperties>
+          <UnsignedSignatureProperties></UnsignedSignatureProperties>
+        </UnsignedProperties>
+      </QualifyingProperties>
+    </ds:Object>
+    <ds:KeyInfo>
+      <ds:X509Data>
+        <ds:X509Certificate>
+          -----BEGIN CERTIFICATE-----
+MIICRzCCAe6gAwIBAgIIPW91pHoLk2kwCgYIKoZIzj0EAwIwWTELMAkGA1UEBhMC
+VVMxCzAJBgNVBAgMAkNBMRYwFAYDVQQHDA1TYW4gRnJhbmNpc2NvMQ0wCwYDVQQK
+DARBY21lMRYwFAYDVQQDDA1FQ0RTQSBSb290IENBMB4XDTIzMDkyMzA3NTkzMloX
+DTI0MTAyMjA4MDQzMlowUjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAkNBMRYwFAYD
+VQQHDA1TYW4gRnJhbmNpc2NvMQ0wCwYDVQQKDARBY21lMQ8wDQYDVQQDDAZTYW1w
+bGUwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAR+Ysh0ojs+EkvCayRZhAOGyt6V
+l7ChEAwwQm04IcLUhHHa0MaKz1Sxplp0nq8jhgl/PFtXQS9LJbr4iSYzyIjWo4Gm
+MIGjMAkGA1UdEwQCMAAwDgYDVR0PAQH/BAQDAgWgMB0GA1UdJQQWMBQGCCsGAQUF
+BwMBBggrBgEFBQcDAjAdBgNVHQ4EFgQU+owh0WB05PhI9jpPJLSgIEWr7xUwHwYD
+VR0jBBgwFoAUMEk8PWE4DRFFVd1/F/Dw2Chv3XYwJwYDVR0RBCAwHoILZXhhbXBs
+ZS5vcmeCD3d3dy5leGFtcGxlLm9yZzAKBggqhkjOPQQDAgNHADBEAiBiESzOl0O+
+2CTSi/4GrxZIsgwiUE9s9UYFk/lPgNld+AIgf0A9VIkMbgljg6xlY5TFn2N/PDoX
+n/UUusqZlld4PA4=
+-----END CERTIFICATE-----
+        </ds:X509Certificate>
+      </ds:X509Data>
+    </ds:KeyInfo>
+  </ds:Signature>
+</SignatureDocument>
