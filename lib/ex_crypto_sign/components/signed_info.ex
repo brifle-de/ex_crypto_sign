@@ -17,9 +17,11 @@ defmodule ExCryptoSign.Components.SignedInfo do
   end
 
   def parse_document(signature_id, xml_document) do
-    signed_info = SweetXml.xpath(xml_document, SweetXml.sigil_x("//ds:Signature/ds:SignedInfo"))
     canonicalization_method = SweetXml.xpath(xml_document, SweetXml.sigil_x("//ds:Signature/ds:SignedInfo/ds:CanonicalizationMethod/@Algorithm"))
     signature_method = SweetXml.xpath(xml_document, SweetXml.sigil_x("//ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm"))
+      |> to_string()
+      |> SignatureMethods.from_w3_url()
+
     references = SweetXml.xpath(xml_document, SweetXml.sigil_x("//ds:Signature/ds:SignedInfo/ds:Reference", 'l'))
     signed_property_digest = SweetXml.xpath(xml_document, SweetXml.sigil_x("//ds:Signature/ds:SignedInfo/ds:Reference[@URI='#SignedProperties']/ds:DigestMethod/@Algorithm", 's'))
     signed_property_digest_value = SweetXml.xpath(xml_document, SweetXml.sigil_x("//ds:Signature/ds:SignedInfo/ds:Reference[@URI='#SignedProperties']/ds:DigestValue/text()", 's')) |> String.trim()
@@ -27,7 +29,7 @@ defmodule ExCryptoSign.Components.SignedInfo do
       id: nil,
       uri: "#SignedProperties",
       digest_method: signed_property_digest,
-      digest_value: signed_property_digest_value
+      digest_value: signed_property_digest_value |> Base.decode64!()
     }
 
     documents_digest = Enum.map(references, fn ref ->
@@ -39,7 +41,7 @@ defmodule ExCryptoSign.Components.SignedInfo do
         id: id,
         uri: uri,
         digest_method: digest_method,
-        digest_value: digest_value
+        digest_value: digest_value |> Base.decode64!()
       }
     end) |> Enum.filter(fn ref -> ref.uri != "#SignedProperties" end)
 
@@ -86,8 +88,17 @@ defmodule ExCryptoSign.Components.SignedInfo do
           },
           optional(any) => any
         }
+  @spec put_signed_property_digest(map, any, any) :: %{
+          :signed_property_digest => %{
+            digest_method: <<_::64, _::_*8>>,
+            digest_value: any,
+            id: nil,
+            uri: <<_::136>>
+          },
+          optional(any) => any
+        }
   def put_signed_property_digest(signed_info, digest_method, signed_properties_map) when is_map(signed_properties_map) do
-    xml = PropertiesObject.build_signature_xml(signed_properties_map, signed_info.signature_id)
+    xml = PropertiesObject.build_signature_xml(signed_properties_map)
 
     put_signed_property_digest(signed_info, digest_method, xml)
   end
@@ -96,7 +107,6 @@ defmodule ExCryptoSign.Components.SignedInfo do
 
     digest_value = :crypto.hash(digest_method, signed_properties_xml)
     digest_method_name = HashMethods.get_w3_url(digest_method)
-
     signed_property_digest = %{
       id: nil,
       uri: "#SignedProperties",
@@ -106,6 +116,42 @@ defmodule ExCryptoSign.Components.SignedInfo do
 
     Map.put(signed_info, :signed_property_digest, signed_property_digest)
   end
+
+  def get_document_digests(signed_info) do
+    documents_digest = Map.get(signed_info, :documents_digest)
+    Enum.map(documents_digest, fn doc -> {HashMethods.from_w3_url(doc.digest_method) , doc.digest_value }end)
+  end
+
+  @doc """
+  checks if the signed info contains all the documents
+  """
+  def contains_documents?(signed_info, document_contents) do
+    digests = get_document_digests(signed_info)
+
+    # check if all documents are contained in the signed info
+    document_contents
+    |> Enum.all?(fn document ->
+      # check if the document in contains in any of the digests of the signed info
+      Enum.any?(digests, fn {digest_method, digest_value} ->
+        digest_value == :crypto.hash(digest_method, document)
+      end)
+    end)
+  end
+
+  @doc """
+  checks if the signed info contains the signed properties
+  """
+  def contains_signed_property?(signed_info, signed_properties_xml) do
+    signed_property_digest = Map.get(signed_info, :signed_property_digest)
+    signed_property_digest_value = signed_property_digest.digest_value |> Base.encode64()
+    signed_property_digest_method = signed_property_digest.digest_method |> HashMethods.from_w3_url()
+
+    expected_digest = :crypto.hash(signed_property_digest_method, signed_properties_xml) |> Base.encode64()
+
+    signed_property_digest_value == expected_digest
+  end
+
+
 
 
   def build(sign_info) do
@@ -121,7 +167,6 @@ defmodule ExCryptoSign.Components.SignedInfo do
 
     refs = documents_digest ++ [signed_property_digest]
 
-    IO.inspect(refs)
 
     # build the references based on the documents digest and the signed property digest
     references_xml = Enum.map(refs, fn ref ->

@@ -4,14 +4,12 @@ defmodule ExCryptoSign.Properties.SignedSignatureProperties do
 
     # use implient policy
 
-    signature_policy_identifier = XmlBuilder.element("SignaturePolicyIdentifier", [
-      XmlBuilder.element("SignaturePolicyImplied", [])
-    ])
+
 
     %{
       signing_time: nil,
       signing_certificate: nil,
-      signature_policy_identifier: signature_policy_identifier,
+      signature_policy_identifier: "SignaturePolicyImplied",
       signature_production_place: nil,
       signer_role: nil
     }
@@ -65,6 +63,8 @@ defmodule ExCryptoSign.Properties.SignedSignatureProperties do
       claimed_roles: Enum.map(signer_roles_claimed, fn role -> SweetXml.xpath(role, SweetXml.sigil_x("./text()", 's')) |> String.trim() end),
       certified_roles: Enum.map(signer_roles_certified, fn role -> SweetXml.xpath(role, SweetXml.sigil_x("./text()", 's')) |> String.trim() end)
     }
+
+
     new(%{
       signing_time: signing_time,
       signing_certificate: signing_certificate,
@@ -80,21 +80,26 @@ defmodule ExCryptoSign.Properties.SignedSignatureProperties do
   @spec put_signing_time(map, nil) :: %{:signing_time => nil, optional(any) => any}
   def put_signing_time(signature_properties, nil), do: Map.put(signature_properties, :signing_time, nil)
   def put_signing_time(signature_properties, %{signing_time: signing_time}) do
-    put_signing_time(signature_properties, signing_time)
+    Map.put(signature_properties, :signing_time, signing_time)
+  end
+  def put_signing_time(signature_properties, signing_time) do
+    Map.put(signature_properties, :signing_time, signing_time)
   end
 
-  def put_signing_time(signed_signature_properties, signing_time) do
-    xml = XmlBuilder.element("SigningTime", [
-      signing_time
-    ])
-    Map.put(signed_signature_properties, :signing_time, xml)
+  def build_signing_time(signed_signature_properties) do
+
+    if signed_signature_properties.signing_time == nil do
+      nil
+    else
+      XmlBuilder.element("SigningTime", [
+        signed_signature_properties.signing_time
+      ])
+    end
+
   end
 
 
   def put_x590_certificate(signed_signature_properties, nil), do: Map.put(signed_signature_properties, :signing_certificate, nil)
-  def put_x590_certificate(signed_signature_properties, %{issuer: issuer, serial: serial, digest_type: digest_type, digest: digest}) do
-    put_x590_certificate(signed_signature_properties, issuer, serial, digest_type, digest)
-  end
   def put_x590_certificate(signed_signature_properties, map) when is_map(map) do
     values = %{
       issuer: nil,
@@ -104,61 +109,65 @@ defmodule ExCryptoSign.Properties.SignedSignatureProperties do
     }
     |> Map.merge(map)
 
-    put_x590_certificate(signed_signature_properties, values)
+    Map.put(signed_signature_properties, :signing_certificate, values)
   end
 
-  def put_x590_certificate(signed_signature_properties, issuer, serial, digest_type, digest) do
+  def build_x590_certificate(signed_signature_properties) do
 
-    xml = XmlBuilder.element("SigningCertificate", [
-      XmlBuilder.element("Cert", [
-        XmlBuilder.element("CertDigest", [
-          XmlBuilder.element("DigestMethod", %{"Algorithm" => HashMethods.get_w3_url(digest_type)}),
-          XmlBuilder.element("DigestValue", [
-            digest
-          ])
-        ]),
-        XmlBuilder.element("IssuerSerial", [
-          XmlBuilder.element("X509IssuerName", [
-            issuer
+    if signed_signature_properties.signing_certificate == nil do
+      nil
+    else
+      xml = XmlBuilder.element("SigningCertificate", [
+        XmlBuilder.element("Cert", [
+          XmlBuilder.element("CertDigest", [
+            XmlBuilder.element("DigestMethod", %{Algorithm: HashMethods.get_w3_url(signed_signature_properties.signing_certificate.digest_type)}, []),
+            XmlBuilder.element("DigestValue", [
+              signed_signature_properties.signing_certificate.digest
+            ])
           ]),
-          XmlBuilder.element("X509SerialNumber", [
-            serial
+          XmlBuilder.element("IssuerSerial", [
+            XmlBuilder.element("X509IssuerName", [
+              signed_signature_properties.signing_certificate.issuer
+            ]),
+            XmlBuilder.element("X509SerialNumber", [
+              signed_signature_properties.signing_certificate.serial
+            ])
           ])
         ])
       ])
-    ])
 
-    Map.put(signed_signature_properties, :signing_certificate, xml)
+      xml
+    end
+
   end
 
 
   def put_signature_production_place(signature_properties, nil), do: Map.put(signature_properties, :signature_production_place, nil)
-  def put_signature_production_place(signature_properties, %{city_name: city_name, country: country}) do
-    put_signature_production_place(signature_properties, city_name, country)
-  end
   def put_signature_production_place(signature_properties, map) when is_map(map) do
     values = %{
       city_name: nil,
       country: nil
     }
     |> Map.merge(map)
-
-    put_signature_production_place(signature_properties, values)
+    Map.put(signature_properties, :signature_production_place, values)
   end
   @doc """
   puts the signature production place in the signed signature properties
   """
-  def put_signature_production_place(signed_signature_properties, city_name, country) do
-    xml = XmlBuilder.element("SignatureProductionPlace", [
-      XmlBuilder.element("City", [
-        city_name
-      ]),
-      XmlBuilder.element("CountryName", [
-        country
-      ])
-    ])
+  def build_signature_production_place(signed_signature_properties) do
 
-    Map.put(signed_signature_properties, :signature_production_place, xml)
+    if(signed_signature_properties.signature_production_place == nil) do
+      nil
+    else
+      XmlBuilder.element("SignatureProductionPlace", [
+        XmlBuilder.element("City", [
+          signed_signature_properties.signature_production_place.city_name
+        ]),
+        XmlBuilder.element("CountryName", [
+          signed_signature_properties.signature_production_place.country
+        ])
+      ])
+    end
 
   end
 
@@ -166,29 +175,39 @@ defmodule ExCryptoSign.Properties.SignedSignatureProperties do
   puts the signer role in the signed signature properties
   """
   def put_signer_role(signed_signature_properties, nil), do: Map.put(signed_signature_properties, :signer_role, nil)
-  def put_signer_role(signed_signature_properties, %{claimed_roles: claimed_roles, certified_roles: certified_roles}) do
-    put_signer_role(signed_signature_properties, claimed_roles, certified_roles)
-  end
   def put_signer_role(signed_signature_properties, map) when is_map(map) do
     values = %{
       claimed_roles: [],
       certified_roles: []
     }
     |> Map.merge(map)
-    put_signer_role(signed_signature_properties, values)
+
+    Map.put(signed_signature_properties, :signer_role, values)
   end
-  def put_signer_role(signed_signature_properties, claimed_roles, certified_roles) do
+  def build_signer_role(signed_signature_properties) do
 
-    xml = XmlBuilder.element("SignerRole", [
-      XmlBuilder.element("ClaimedRoles", [
-        Enum.map(claimed_roles, fn role -> XmlBuilder.element("ClaimedRole", [role]) end)
-      ]),
-      XmlBuilder.element("CertifiedRoles", [
-        Enum.map(certified_roles, fn role -> XmlBuilder.element("CertifiedRole", [role]) end)
-      ])
-    ])
 
-    Map.put(signed_signature_properties, :signer_role, xml)
+    if(signed_signature_properties.signer_role == nil) do
+      nil
+    else
+
+      claimed_roles = signed_signature_properties.signer_role.claimed_roles
+      certified_roles = signed_signature_properties.signer_role.certified_roles
+
+      if claimed_roles == nil && certified_roles == nil do
+        nil
+      else
+        xml = XmlBuilder.element("SignerRole", [
+          XmlBuilder.element("ClaimedRoles", [
+            Enum.map(claimed_roles, fn role -> XmlBuilder.element("ClaimedRole", [role]) end)
+          ]),
+          XmlBuilder.element("CertifiedRoles", [
+            Enum.map(certified_roles, fn role -> XmlBuilder.element("CertifiedRole", [role]) end)
+          ])
+        ])
+        xml
+      end
+    end
 
   end
 
@@ -197,13 +216,17 @@ defmodule ExCryptoSign.Properties.SignedSignatureProperties do
   def build(signed_signature_properties) do
 
 
+    signature_policy_identifier = XmlBuilder.element("SignaturePolicyIdentifier", [
+      XmlBuilder.element(signed_signature_properties.signature_policy_identifier, [])
+    ])
+
 
     xml = XmlBuilder.element("SignedSignatureProperties", [
-      signed_signature_properties.signing_time,
-      signed_signature_properties.signing_certificate,
-      signed_signature_properties.signature_policy_identifier,
-      signed_signature_properties.signature_production_place,
-      signed_signature_properties.signer_role
+      build_signing_time(signed_signature_properties),
+      build_x590_certificate(signed_signature_properties),
+      signature_policy_identifier,
+      build_signature_production_place(signed_signature_properties),
+      build_signer_role(signed_signature_properties)
     ]
       |> Enum.filter(fn x -> x != nil end)
     )

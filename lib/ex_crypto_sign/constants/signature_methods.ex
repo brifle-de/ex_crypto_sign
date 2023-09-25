@@ -152,4 +152,26 @@ defmodule ExCryptoSign.Constants.SignatureMethods do
     end |> HashMethods.from_w3_url()
   end
 
+  @spec get_signature_method(any) :: :ecdsa | :rsa | <<_::192>>
+  def get_signature_method(method) do
+    case method do
+      :rsa_sha1 -> :rsa
+      :rsa_sha256 -> :rsa
+      :rsa_sha512 -> :rsa
+      :rsa_sha384 -> :rsa
+      :rsa_md5 -> :rsa
+      :rsa_sha3_256 -> :rsa
+      :rsa_sha3_512 -> :rsa
+      :rsa_sha3_384 -> :rsa
+      :ecdsa_sha1 -> :ecdsa
+      :ecdsa_sha256 -> :ecdsa
+      :ecdsa_sha512 -> :ecdsa
+      :ecdsa_sha384 -> :ecdsa
+      :ecdsa_sha3_256 -> :ecdsa
+      :ecdsa_sha3_512 -> :ecdsa
+      :ecdsa_sha3_384 -> :ecdsa
+      _ -> "unknown signature method"
+    end
+  end
+
 end

@@ -18,18 +18,116 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
   end
 
 
-  def parse_document(xml_document) do
-    data_object_format = SweetXml.xpath(xml_document, SweetXml.sigil_x("//ds:Signature/ds:Object/ds:QualifyingProperties/ds:SignedProperties/ds:SignedDataObjectProperties/ds:DataObjectFormat", 's')) |> String.trim()
-    commitment_type_indication = SweetXml.xpath(xml_document, SweetXml.sigil_x("//ds:Signature/ds:Object/ds:QualifyingProperties/ds:SignedProperties/ds:SignedDataObjectProperties/ds:CommitmentTypeIndication", 's')) |> String.trim()
-    all_data_objects_time_stamp = SweetXml.xpath(xml_document, SweetXml.sigil_x("//ds:Signature/ds:Object/ds:QualifyingProperties/ds:SignedProperties/ds:SignedDataObjectProperties/ds:AllDataObjectsTimeStamp", 's')) |> String.trim()
-    individual_data_objects_time_stamp = SweetXml.xpath(xml_document, SweetXml.sigil_x("//ds:Signature/ds:Object/ds:QualifyingProperties/ds:SignedProperties/ds:SignedDataObjectProperties/ds:IndividualDataObjectsTimeStamp", 's')) |> String.trim()
+  defp parse_data_object_format(xml_document) do
 
-    %{
+    base = "//ds:Signature/ds:Object/QualifyingProperties/SignedProperties/SignedDataObjectProperties"
+
+
+    reference_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/@ObjectReference")) != nil
+    identifier_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/ObjectIdentifier/Identifier/text()")) != nil
+    mime_type_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/MimeType/text()")) != nil
+    encoding_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/Encoding/text()")) != nil
+    description_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/ObjectIdentifier/Description/text()")) != nil
+
+
+    object_reference = if reference_exist?, do:  SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/@ObjectReference", 's')) |> String.trim(), else: nil
+    object_identifier = if identifier_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/ObjectIdentifier/Identifier/text()", 's')) |> String.trim(), else: nil
+    mime_type = if mime_type_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/MimeType/text()", 's')) |> String.trim(), else: nil
+    encoding = if encoding_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/Encoding/text()", 's')) |> String.trim(), else: nil
+    description = if description_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/ObjectIdentifier/Description/text()", 's')) |> String.trim(), else: nil
+
+
+    has_any? = reference_exist? || identifier_exist? || mime_type_exist? || encoding_exist? || description_exist?
+
+    case has_any? do
+      true ->  %{
+        object_reference: object_reference,
+        mime_type: mime_type,
+        encoding: encoding,
+        object_identifier: object_identifier,
+        description: description
+      }
+      false -> nil
+    end
+
+  end
+
+  defp parse_commitment_type_indication(xml_document) do
+    base = "//ds:Signature/ds:Object/QualifyingProperties/SignedProperties/SignedDataObjectProperties"
+
+    type_identifier_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/CommitmentTypeIndication/CommitmentTypeId/Identifier/text()")) != nil
+    type_qualifier_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/CommitmentTypeIndication/CommitmentTypeId/Description/text()")) != nil
+
+    commitment_type_identifier = if type_identifier_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/CommitmentTypeIndication/CommitmentTypeId/Identifier/text()", 's')) |> String.trim(), else: nil
+    commitment_type_qualifier = if type_qualifier_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/CommitmentTypeIndication/CommitmentTypeId/Description/text()", 's')) |> String.trim(), else: nil
+
+    has_any? = type_identifier_exist? || type_qualifier_exist?
+    case has_any? do
+      true -> %{
+        commitment_type_identifier: commitment_type_identifier,
+        commitment_type_qualifier: commitment_type_qualifier
+      }
+      false -> nil
+    end
+
+  end
+
+  defp parse_all_data_objects_time_stamp(xml_document) do
+
+    base = "//ds:Signature/ds:Object/QualifyingProperties/SignedProperties/SignedDataObjectProperties"
+
+    time_stamp_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/AllDataObjectsTimeStamp/EncapsulatedTimeStamp/text()")) != nil
+
+    time_stamp = if time_stamp_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/AllDataObjectsTimeStamp/EncapsulatedTimeStamp/text()", 's')) |> String.trim(), else: nil
+
+    has_any? = time_stamp_exist?
+
+    case has_any? do
+      true -> %{
+        time_stamp: time_stamp
+      }
+      false -> nil
+    end
+
+  end
+
+  defp parse_individual_data_objects_time_stamp(xml_document) do
+
+    base = "//ds:Signature/ds:Object/QualifyingProperties/SignedProperties/SignedDataObjectProperties"
+
+    reference_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/IndividualDataObjectsTimeStamp/@ObjectReference")) != nil
+    time_stamp_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/IndividualDataObjectsTimeStamp/EncapsulatedTimeStamp/text()")) != nil
+
+    object_reference = if reference_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/IndividualDataObjectsTimeStamp/@ObjectReference", 's')) |> String.trim(), else: nil
+    time_stamp = if time_stamp_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/IndividualDataObjectsTimeStamp/EncapsulatedTimeStamp/text()", 's')) |> String.trim(), else: nil
+
+
+    has_any? = reference_exist? || time_stamp_exist?
+
+    case has_any? do
+      true -> %{
+        object_reference: object_reference,
+        time_stamp: time_stamp
+      }
+      false -> nil
+    end
+
+
+  end
+
+
+  def parse_document(xml_document) do
+    data_object_format = parse_data_object_format(xml_document)
+    commitment_type_indication = parse_commitment_type_indication(xml_document)
+    all_data_objects_time_stamp = parse_all_data_objects_time_stamp(xml_document)
+    individual_data_objects_time_stamp = parse_individual_data_objects_time_stamp(xml_document)
+
+    new(%{
       data_object_format: data_object_format,
       commitment_type_indication: commitment_type_indication,
       all_data_objects_time_stamp: all_data_objects_time_stamp,
       individual_data_objects_time_stamp: individual_data_objects_time_stamp
-    }
+    })
   end
 
   @doc """
@@ -37,11 +135,9 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
   """
 
   def put_data_object_format(signed_data_object_properties, nil), do: Map.put(signed_data_object_properties, :data_object_format, nil)
-  def put_data_object_format(signed_data_object_properties, %{object_reference: object_reference, mime_type: mime_type, encoding: encoding, object_identifier: object_identifier, description: description}) do
-    put_data_object_format(signed_data_object_properties, object_reference, mime_type, encoding, object_identifier, description)
-  end
+
   def put_data_object_format(signed_data_object_properties, map) when is_map(map) do
-    %{
+    data = %{
       object_reference: nil,
       mime_type: nil,
       encoding: nil,
@@ -49,18 +145,62 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
       description: nil
     }
     |> Map.merge(map)
-    |> put_data_object_format(signed_data_object_properties)
+
+    Map.put(signed_data_object_properties, :data_object_format, data)
   end
-  def put_data_object_format(signed_data_object_properties, object_reference, mime_type, encoding, object_identifier, description) do
-    xml = XmlBuilder.element("DataObjectFormat", %{"ObjectReference" => object_reference}, [
-      XmlBuilder.element("MimeType", Enum.reject([mime_type], &is_nil/1)),
-      XmlBuilder.element("Encoding", Enum.reject([encoding], &is_nil/1)),
-      XmlBuilder.element("ObjectIdentifier", [
-        XmlBuilder.element("Identifier", Enum.reject([object_identifier], &is_nil/1)),
-        XmlBuilder.element("Description", Enum.reject([description], &is_nil/1))
+  def build_data_object_format(signed_data_object_properties) do
+
+    obj_ref = if signed_data_object_properties.data_object_format.object_reference != nil do
+      XmlBuilder.element("ObjectReference", [
+        signed_data_object_properties.data_object_format.object_reference
       ])
-    ])
-    Map.put(signed_data_object_properties, :data_object_format, xml)
+    else
+      nil
+    end
+
+    mime = if signed_data_object_properties.data_object_format.mime_type != nil do
+      XmlBuilder.element("MimeType", [
+        signed_data_object_properties.data_object_format.mime_type
+      ])
+    else
+      nil
+    end
+
+    encoding = if signed_data_object_properties.data_object_format.encoding != nil do
+      XmlBuilder.element("Encoding", [
+        signed_data_object_properties.data_object_format.encoding
+      ])
+    else
+      nil
+    end
+
+    identifier = if signed_data_object_properties.data_object_format.object_identifier != nil do
+      XmlBuilder.element("Identifier", [
+        signed_data_object_properties.data_object_format.object_identifier
+      ])
+    else
+      nil
+    end
+
+    description = if signed_data_object_properties.data_object_format.description != nil do
+      XmlBuilder.element("Description", [
+        signed_data_object_properties.data_object_format.description
+      ])
+    else
+      nil
+    end
+
+
+    xml = XmlBuilder.element("DataObjectFormat", [
+      obj_ref,
+      mime,
+      encoding,
+      XmlBuilder.element("ObjectIdentifier", [
+        [identifier, description] |> Enum.filter(fn x -> x != nil end)
+      ])
+    ] |> Enum.filter(fn x -> x != nil end)
+    )
+    xml
   end
 
 
@@ -68,64 +208,122 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
   puts the commitment type indication in the signed data object properties
   """
   def put_commitment_type_indication(signed_data_object_properties, nil), do: Map.put(signed_data_object_properties, :commitment_type_indication, nil)
-  def put_commitment_type_indication(signed_data_object_properties, %{commitment_type_identifier: commitment_type_identifier, commitment_type_qualifier: commitment_type_qualifier}) do
-    put_commitment_type_indication(signed_data_object_properties, commitment_type_identifier, commitment_type_qualifier)
+  def put_commitment_type_indication(signed_data_object_properties, map) do
+    data = %{
+      commitment_type_identifier: nil,
+      commitment_type_qualifier: nil,
+    }
+    |> Map.merge(map)
+
+    Map.put(signed_data_object_properties, :commitment_type_indication, data)
   end
-  def put_commitment_type_indication(signed_data_object_properties, commitment_type_identifier, commitment_type_qualifier) do
-    xml = XmlBuilder.element("CommitmentTypeIndication", [
-      XmlBuilder.element("CommitmentTypeId", [
+  @spec build_commitment_type_indication(
+          atom
+          | %{:commitment_type_indication => any, optional(any) => any}
+        ) :: list | {any, any, any}
+  def build_commitment_type_indication(signed_data_object_properties) do
+
+    if signed_data_object_properties.commitment_type_indication != nil do
+      identifier = if signed_data_object_properties.commitment_type_indication.commitment_type_identifier != nil
+      do
         XmlBuilder.element("Identifier", [
-          commitment_type_identifier
-        ]),
-        XmlBuilder.element("Description", [
-          commitment_type_qualifier
+          signed_data_object_properties.commitment_type_indication.commitment_type_identifier
         ])
+      else
+        nil
+      end
+
+      description = if signed_data_object_properties.commitment_type_indication.commitment_type_qualifier != nil
+      do
+        XmlBuilder.element("Description", [
+          signed_data_object_properties.commitment_type_indication.commitment_type_qualifier
+        ])
+      else
+        nil
+      end
+
+      type_id = [XmlBuilder.element("Identifier", [
+        identifier
       ]),
-      XmlBuilder.element("AllSignedDataObjects", [])
-    ])
-    Map.put(signed_data_object_properties, :commitment_type_indication, xml)
+      XmlBuilder.element("Description", [
+        description
+      ])] |> Enum.filter(fn x -> x != nil end)
+
+      XmlBuilder.element("CommitmentTypeIndication", [
+        XmlBuilder.element("CommitmentTypeId", type_id)
+      ])
+    else
+      nil
+    end
+
   end
 
   @doc """
   puts the all data objects time stamp in the signed data object properties
   """
   def put_all_data_objects_time_stamp(signed_data_object_properties, nil), do: Map.put(signed_data_object_properties, :all_data_objects_time_stamp, nil)
-  def put_all_data_objects_time_stamp(signed_data_object_properties, %{time_stamp: time_stamp}) do
-    put_all_data_objects_time_stamp(signed_data_object_properties, time_stamp)
+  def put_all_data_objects_time_stamp(signed_data_object_properties, map) do
+    data = %{time_stamp: nil}
+    |> Map.merge(map)
+    Map.put(signed_data_object_properties, :all_data_objects_time_stamp, data)
   end
-  def put_all_data_objects_time_stamp(signed_data_object_properties, time_stamp) do
-    xml = XmlBuilder.element("AllDataObjectsTimeStamp", [
-      XmlBuilder.element("EncapsulatedTimeStamp", [
-        time_stamp
+  def build_all_data_objects_time_stamp(signed_data_object_properties) do
+
+    if signed_data_object_properties.all_data_objects_time_stamp == nil do
+      nil
+    else
+      xml = XmlBuilder.element("AllDataObjectsTimeStamp", [
+        XmlBuilder.element("EncapsulatedTimeStamp", [
+          signed_data_object_properties.all_data_objects_time_stamp.time_stamp
+        ])
       ])
-    ])
-    Map.put(signed_data_object_properties, :all_data_objects_time_stamp, xml)
+      xml
+    end
+
   end
 
   @doc """
   puts the individual data objects time stamp in the signed data object properties
   """
   def put_individual_data_objects_time_stamp(signed_data_object_properties, nil), do: Map.put(signed_data_object_properties, :individual_data_objects_time_stamp, nil)
-  def put_individual_data_objects_time_stamp(signed_data_object_properties, %{object_reference: object_reference, time_stamp: time_stamp}) do
-    put_individual_data_objects_time_stamp(signed_data_object_properties, object_reference, time_stamp)
+  def put_individual_data_objects_time_stamp(signed_data_object_properties, map) do
+
+    data = %{
+        object_reference: nil,
+        time_stamp: nil
+      }
+      |> Map.merge(map)
+
+    Map.put(signed_data_object_properties, :individual_data_objects_time_stamp, data)
   end
-  def put_individual_data_objects_time_stamp(signed_data_object_properties, object_reference, time_stamp) do
-    xml = XmlBuilder.element("IndividualDataObjectsTimeStamp", %{"ObjectReference" => object_reference}, [
-      XmlBuilder.element("EncapsulatedTimeStamp", [
-        time_stamp
+  def build_individual_data_objects_time_stamp(signed_data_object_properties) do
+
+    if signed_data_object_properties.individual_data_objects_time_stamp == nil do
+      nil
+
+    else
+      xml = XmlBuilder.element("IndividualDataObjectsTimeStamp", [
+        XmlBuilder.element("ObjectReference", [
+          signed_data_object_properties.individual_data_objects_time_stamp.object_reference
+        ]),
+        XmlBuilder.element("EncapsulatedTimeStamp", [
+          signed_data_object_properties.individual_data_objects_time_stamp.time_stamp
+        ])
       ])
-    ])
-    Map.put(signed_data_object_properties, :individual_data_objects_time_stamp, xml)
+      xml
+    end
+
+
   end
 
   def build(nil), do: build(new())
 
   def build(signed_data_object_properties) do
     xml = XmlBuilder.element("SignedDataObjectProperties", [
-      signed_data_object_properties.data_object_format,
-      signed_data_object_properties.commitment_type_indication,
-      signed_data_object_properties.all_data_objects_time_stamp,
-      signed_data_object_properties.individual_data_objects_time_stamp
+      build_data_object_format(signed_data_object_properties),
+      build_commitment_type_indication(signed_data_object_properties),
+      build_all_data_objects_time_stamp(signed_data_object_properties),
+      build_individual_data_objects_time_stamp(signed_data_object_properties)
     ]
       |> Enum.filter(fn x -> x != nil end))
     xml

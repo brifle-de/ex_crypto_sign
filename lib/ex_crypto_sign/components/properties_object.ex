@@ -30,10 +30,50 @@ defmodule ExCryptoSign.Components.PropertiesObject do
     Map.put(properties_object, :unsigned_signature_properties, unsigned_signature_properties)
   end
 
+
+
+  @spec build(
+          atom
+          | %{
+              :signed_data_object_properties =>
+                atom
+                | %{
+                    :all_data_objects_time_stamp => any,
+                    :commitment_type_indication => any,
+                    :data_object_format => any,
+                    :individual_data_objects_time_stamp => any,
+                    optional(any) => any
+                  },
+              :signed_signature_properties =>
+                atom
+                | %{
+                    :signature_policy_identifier => any,
+                    :signature_production_place => any,
+                    :signer_role => any,
+                    :signing_certificate => any,
+                    :signing_time => any,
+                    optional(any) => any
+                  },
+              :unsigned_signature_properties =>
+                atom
+                | %{
+                    :archive_time_stamps => any,
+                    :certificate_values => any,
+                    :complete_certificate_refs => any,
+                    :complete_revocation_refs => any,
+                    :counter_signatures => any,
+                    :revocation_values => any,
+                    :sig_and_ref_time_stamps => any,
+                    :signature_time_stamps => any,
+                    optional(any) => any
+                  },
+              optional(any) => any
+            },
+          any
+        ) :: list | {any, any, any}
   def build(properties_object, signature_id) do
 
     # build signed properties xml
-
 
     signed_properties = XmlBuilder.element("SignedProperties", [
       SignedSignatureProperties.build(properties_object.signed_signature_properties),
@@ -72,7 +112,35 @@ defmodule ExCryptoSign.Components.PropertiesObject do
     properties_object_xml
   end
 
-  def build_signature_xml(properties_object, signature_id) do
+  @spec build_signature_xml(
+          atom
+          | %{
+              :signed_data_object_properties =>
+                atom
+                | %{
+                    :all_data_objects_time_stamp => any,
+                    :commitment_type_indication => any,
+                    :data_object_format => any,
+                    :individual_data_objects_time_stamp => any,
+                    optional(any) => any
+                  },
+              :signed_signature_properties =>
+                atom
+                | %{
+                    :signature_policy_identifier => any,
+                    :signature_production_place => any,
+                    :signer_role => any,
+                    :signing_certificate => any,
+                    :signing_time => any,
+                    optional(any) => any
+                  },
+              optional(any) => any
+            }
+        ) :: binary
+  @doc """
+  builds the signature xml. It returns the signed properties tag
+  """
+  def build_signature_xml(properties_object) do
 
     signed_properties = XmlBuilder.element("SignedProperties", [
       SignedSignatureProperties.build(properties_object.signed_signature_properties),

@@ -18,7 +18,6 @@ defmodule ExCryptoSign.Util.Signer do
     xml_document_string = ExCryptoSign.XmlDocument.build_xml(xml_document)
 
 
-
     {:ok, {xml_document_string, signature}}
   end
 
@@ -40,7 +39,11 @@ defmodule ExCryptoSign.Util.Signer do
     |> SignatureMethods.from_w3_url()
   end
 
-  def compute_canolized_sign_info(xml) do
+  def compute_canonicalized_sign_info(xml_string) when is_binary(xml_string) do
+    xml = SweetXml.parse(xml_string, namespace_conformant: true, document: true)
+    compute_canonicalized_sign_info(xml)
+  end
+  def compute_canonicalized_sign_info(xml) do
     # get the signed info with xpath
     signed_info = get_signature_info(xml)
 
@@ -59,7 +62,7 @@ defmodule ExCryptoSign.Util.Signer do
     signature_method = get_signature_method(xml)
 
     # canonicalize the signed info
-    can_info = compute_canolized_sign_info(xml)
+    can_info = compute_canonicalized_sign_info(xml)
 
     # compute the signature value
     signature = compute_sign(can_info, signature_method, private_key)
@@ -70,8 +73,17 @@ defmodule ExCryptoSign.Util.Signer do
     base64_signature
   end
 
+  defp compute_sign(canonicalized_string, signature_method, private_key) when is_binary(private_key) do
+    case X509.PrivateKey.from_pem(private_key) do
+      {:ok, key} -> compute_sign(canonicalized_string, signature_method, key)
+      {:error, _} -> ""
+    end
+  end
+
   defp compute_sign(canonicalized_string, signature_method, private_key) do
+
     digest_method = SignatureMethods.get_digest_method(signature_method)
+
     :public_key.sign(canonicalized_string, digest_method, private_key)
   end
 
