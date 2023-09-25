@@ -11,8 +11,8 @@ defmodule ExCryptoSign do
   @doc """
   takes in a documents and prepares the xml structure for signing by the client
   """
-  def prepare_document(signature_id, documents, x509_dem_certificate, doc_opts) do
-    key_info = KeyInfo.new() |> KeyInfo.put_x509_data(x509_dem_certificate)
+  def prepare_document(signature_id, documents, x509_pem_certificate, doc_opts) do
+    key_info = KeyInfo.new() |> KeyInfo.put_x509_data(x509_pem_certificate)
 
 
 
@@ -36,7 +36,29 @@ defmodule ExCryptoSign do
     ])
     |> ExCryptoSign.XmlDocument.build_xml()
 
+  end
 
+
+  @spec sign_and_verify(any, any, any, any, keyword) ::
+          {:error, :cert_digest | :cert_validy_date | :doc | :signature | :signed_props}
+          | {:ok, binary}
+  @doc """
+  generates the xml document add the signature and verifies if the signature is actually valid for the given documents
+
+  returns {:ok, signed_xml} if the signature is valid
+  returns {:error, error_type} if the signature is invalid
+
+  """
+  def sign_and_verify(signature_id, documents, x509_pem_certificate, signature_base64, doc_opts) do
+    xml = prepare_document(signature_id, documents, x509_pem_certificate, doc_opts)
+      |> ExCryptoSign.Util.Signer.add_signature(signature_base64)
+
+    document_contents = documents |> Enum.map(fn document -> document.content end)
+
+    case ExCryptoSign.Util.Verifier.verifies_document(xml, document_contents) do
+      {:ok, true} -> {:ok, xml}
+      {:error, error_type} -> {:error, error_type}
+    end
 
   end
 

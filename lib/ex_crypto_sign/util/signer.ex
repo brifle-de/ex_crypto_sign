@@ -21,6 +21,16 @@ defmodule ExCryptoSign.Util.Signer do
     {:ok, {xml_document_string, signature}}
   end
 
+  @doc """
+  adds the signature to the xml document
+  """
+  def add_signature(xml_string, signature) do
+    xml_document = ExCryptoSign.XmlDocument.parse_document(xml_string)
+    xml_document = ExCryptoSign.XmlDocument.put_signature_value(xml_document, signature)
+    ExCryptoSign.XmlDocument.build_xml(xml_document)
+  end
+
+
   defp get_signature_info(xml_object) do
     SweetXml.xpath(xml_object, SweetXml.sigil_x("//ds:Signature/ds:SignedInfo"))
   end
