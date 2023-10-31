@@ -61,7 +61,11 @@ defmodule ExCryptoSign.Util.Signer do
     canonicalized_method = get_canonicalized_method(xml)
 
     # canonicalize the signed info
-    canonicalize(signed_info, canonicalized_method)
+    canon = canonicalize(signed_info, canonicalized_method)
+
+    # canon contains the default namespace, this causes frontend problems
+    # remove the default namespace by applying a regex on the signedinfo node
+    String.replace(canon, ~r/ xmlns=\"([^\"]*)\"/, "")
   end
 
   def compute_signature_value(xml_string, private_key) do
