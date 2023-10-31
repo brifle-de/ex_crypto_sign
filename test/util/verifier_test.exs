@@ -15,7 +15,7 @@ defmodule VerifierTest do
 
   test "error wrong documents" do
     {key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert()
-    key = Support.CertCreator.private_key_from_pem(key_pem)
+    _key = Support.CertCreator.private_key_from_pem(key_pem)
     signature_xml_string = create_signature(cert_pem, key_pem)
     res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string, ["document3", "document5"])
 
@@ -24,7 +24,7 @@ defmodule VerifierTest do
 
   test "error certifcate invalid at signing time" do
     {key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert()
-    key = Support.CertCreator.private_key_from_pem(key_pem)
+    _key = Support.CertCreator.private_key_from_pem(key_pem)
     signature_xml_string = create_signature_old(cert_pem, key_pem)
     res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string, ["document1", "document2"])
 
@@ -34,7 +34,7 @@ defmodule VerifierTest do
 
   test "error certifcate invalid" do
     {key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert()
-    key = Support.CertCreator.private_key_from_pem(key_pem)
+    _key = Support.CertCreator.private_key_from_pem(key_pem)
     signature_xml_string = create_signature_wrong_cert(cert_pem, key_pem)
     res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string, ["document1", "document2"])
 

@@ -29,12 +29,16 @@ defmodule ExCryptoSign do
     |> SignedInfo.put_signature_method(:ecdsa_sha3_512)
     |> SignedInfo.put_signed_property_digest(:sha3_512, get_properties_object(doc_opts))
 
+
+
     ExCryptoSign.XmlDocument.new(signature_id, [
       key_info: key_info,
       signed_info: s_info,
       object: get_properties_object(doc_opts)
     ])
     |> ExCryptoSign.XmlDocument.build_xml()
+
+
 
   end
 

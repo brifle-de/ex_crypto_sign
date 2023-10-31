@@ -102,11 +102,21 @@ defmodule ExCryptoSign.XmlDocument do
   """
   def build_xml(xml_document) do
     XmlBuilder.document(build(xml_document))
-    |> XmlBuilder.generate()
+    |> XmlBuilder.generate(encoding: "UTF-8")
+    |> :binary.bin_to_list # convert to binary list to avoid encoding issues
+    |> :xmerl_scan.string(namespace_conformant: true, document: true)
+    |> then(fn {doc, _} -> doc end)
     |> XmerlC14n.canonicalize!()
     |> to_string()
   end
 
+  @spec parse_document(any()) :: %{
+          id: any(),
+          key_info: any(),
+          object: any(),
+          signature_value: any(),
+          signed_info: any()
+        }
   def parse_document(xml_string) do
     xml_document = SweetXml.parse(xml_string, namespace_conformant: true, document: true)
 

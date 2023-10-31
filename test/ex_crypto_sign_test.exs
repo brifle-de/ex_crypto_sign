@@ -35,6 +35,8 @@ defmodule ExCryptoSignTest do
 
   test "wrong signature" do
 
+
+
     # generate a key pair
     {key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert()
     {key_pem2, _cert_pem2} = Support.CertCreator.generate_dummy_cert()
@@ -42,6 +44,8 @@ defmodule ExCryptoSignTest do
     docs = [%{content: "document1", id: "2341ac23HAbcA"}, %{content: "document2", id: "671ac23HAbcA"}]
     city_name = "Stuttgart"
     signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_string
+
+
 
     xml = generate_xml_document(docs, city_name, signing_time, cert_pem)
 
@@ -79,6 +83,7 @@ defmodule ExCryptoSignTest do
 
 
 
+
     {:ok, {doc_correct, sign}} = ExCryptoSign.Util.Signer.sign(xml, key_pem)
 
     doc_contents = docs |> Enum.map(fn document -> document.content end)
@@ -111,7 +116,7 @@ defmodule ExCryptoSignTest do
           country: "Germany"
         },
         signer_role: %{
-          claimed_roles: ["role1", "role2"]
+          claimed_roles: ["role with ä", "role2"]
         }
       },
       signed_data_object_properties: %{
