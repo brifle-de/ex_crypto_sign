@@ -22,33 +22,44 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
 
     base = "//ds:Signature/ds:Object/QualifyingProperties/SignedProperties/SignedDataObjectProperties"
 
-
-    reference_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/@ObjectReference")) != nil
-    identifier_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/ObjectIdentifier/Identifier/text()")) != nil
-    mime_type_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/MimeType/text()")) != nil
-    encoding_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/Encoding/text()")) != nil
-    description_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/ObjectIdentifier/Description/text()")) != nil
+    count = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat", 'l')) |> Enum.count()
 
 
-    object_reference = if reference_exist?, do:  SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/@ObjectReference", 's')) |> String.trim(), else: nil
-    object_identifier = if identifier_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/ObjectIdentifier/Identifier/text()", 's')) |> String.trim(), else: nil
-    mime_type = if mime_type_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/MimeType/text()", 's')) |> String.trim(), else: nil
-    encoding = if encoding_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/Encoding/text()", 's')) |> String.trim(), else: nil
-    description = if description_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat/ObjectIdentifier/Description/text()", 's')) |> String.trim(), else: nil
+    data_object_format = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat", 'l')) |> Enum.map(fn element ->
+
+      reference_exist? = SweetXml.xpath(element, SweetXml.sigil_x("./@ObjectReference")) != nil
+      identifier_exist? = SweetXml.xpath(element, SweetXml.sigil_x("./ObjectIdentifier/Identifier/text()")) != nil
+      mime_type_exist? = SweetXml.xpath(element, SweetXml.sigil_x("./MimeType/text()")) != nil
+      encoding_exist? = SweetXml.xpath(element, SweetXml.sigil_x("./Encoding/text()")) != nil
+      description_exist? = SweetXml.xpath(element, SweetXml.sigil_x("./ObjectIdentifier/Description/text()")) != nil
 
 
-    has_any? = reference_exist? || identifier_exist? || mime_type_exist? || encoding_exist? || description_exist?
 
-    case has_any? do
-      true ->  %{
-        object_reference: object_reference,
-        mime_type: mime_type,
-        encoding: encoding,
-        object_identifier: object_identifier,
-        description: description
-      }
-      false -> nil
-    end
+      object_reference = if reference_exist?, do:  SweetXml.xpath(element, SweetXml.sigil_x("./@ObjectReference", 's')) |> String.trim(), else: nil
+      object_identifier = if identifier_exist?, do: SweetXml.xpath(element, SweetXml.sigil_x("./ObjectIdentifier/Identifier/text()", 's')) |> String.trim(), else: nil
+      mime_type = if mime_type_exist?, do: SweetXml.xpath(element, SweetXml.sigil_x("./MimeType/text()", 's')) |> String.trim(), else: nil
+      encoding = if encoding_exist?, do: SweetXml.xpath(element, SweetXml.sigil_x("./Encoding/text()", 's')) |> String.trim(), else: nil
+      description = if description_exist?, do: SweetXml.xpath(element, SweetXml.sigil_x("./ObjectIdentifier/Description/text()", 's')) |> String.trim(), else: nil
+
+
+      has_any? = reference_exist? || identifier_exist? || mime_type_exist? || encoding_exist? || description_exist?
+
+
+      case has_any? do
+        true ->  %{
+          object_reference: object_reference,
+          mime_type: mime_type,
+          encoding: encoding,
+          object_identifier: object_identifier,
+          description: description
+        }
+        false -> nil
+      end
+    end)
+    |> Enum.filter(fn x -> x != nil end)
+
+
+
 
   end
 
@@ -136,6 +147,22 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
 
   def put_data_object_format(signed_data_object_properties, nil), do: Map.put(signed_data_object_properties, :data_object_format, nil)
 
+  def put_data_object_format(sign_data_object_properties, data_object_format) when is_list(data_object_format) do
+
+    data = Enum.map(data_object_format, fn element ->
+      %{
+        object_reference: nil,
+        mime_type: nil,
+        encoding: nil,
+        object_identifier: nil,
+        description: nil
+      }
+      |> Map.merge(element)
+    end)
+
+    Map.put(sign_data_object_properties, :data_object_format, data)
+  end
+
   def put_data_object_format(signed_data_object_properties, map) when is_map(map) do
     data = %{
       object_reference: nil,
@@ -146,61 +173,69 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
     }
     |> Map.merge(map)
 
-    Map.put(signed_data_object_properties, :data_object_format, data)
+    Map.put(signed_data_object_properties, :data_object_format, [data])
   end
   def build_data_object_format(signed_data_object_properties) do
 
-    obj_ref = if signed_data_object_properties.data_object_format.object_reference != nil do
-      XmlBuilder.element("ObjectReference", [
-        signed_data_object_properties.data_object_format.object_reference
-      ])
-    else
-      nil
+    Enum.map(signed_data_object_properties.data_object_format, fn element ->
+
+
+      obj_ref = if element.object_reference != nil do
+        element.object_reference
+      else
+        ""
+      end
+
+      mime = if element.mime_type != nil do
+        XmlBuilder.element("MimeType", [
+          element.mime_type
+        ])
+      else
+        nil
+      end
+
+      encoding = if element.encoding != nil do
+        XmlBuilder.element("Encoding", [
+          element.encoding
+        ])
+      else
+        nil
+      end
+
+      identifier = if element.object_identifier != nil do
+        XmlBuilder.element("Identifier", [
+          element.object_identifier
+        ])
+      else
+        nil
+      end
+
+      description = if element.description != nil do
+        XmlBuilder.element("Description", [
+          element.description
+        ])
+      else
+        nil
+      end
+
+
+      xml = XmlBuilder.element("DataObjectFormat",
+      [
+        ObjectReference: obj_ref
+      ],
+      [
+        mime,
+        encoding,
+        XmlBuilder.element("ObjectIdentifier", [
+          [identifier, description] |> Enum.filter(fn x -> x != nil end)
+        ])
+      ] |> Enum.filter(fn x -> x != nil end)
+      )
+      xml
     end
-
-    mime = if signed_data_object_properties.data_object_format.mime_type != nil do
-      XmlBuilder.element("MimeType", [
-        signed_data_object_properties.data_object_format.mime_type
-      ])
-    else
-      nil
-    end
-
-    encoding = if signed_data_object_properties.data_object_format.encoding != nil do
-      XmlBuilder.element("Encoding", [
-        signed_data_object_properties.data_object_format.encoding
-      ])
-    else
-      nil
-    end
-
-    identifier = if signed_data_object_properties.data_object_format.object_identifier != nil do
-      XmlBuilder.element("Identifier", [
-        signed_data_object_properties.data_object_format.object_identifier
-      ])
-    else
-      nil
-    end
-
-    description = if signed_data_object_properties.data_object_format.description != nil do
-      XmlBuilder.element("Description", [
-        signed_data_object_properties.data_object_format.description
-      ])
-    else
-      nil
-    end
-
-
-    xml = XmlBuilder.element("DataObjectFormat", [
-      obj_ref,
-      mime,
-      encoding,
-      XmlBuilder.element("ObjectIdentifier", [
-        [identifier, description] |> Enum.filter(fn x -> x != nil end)
-      ])
-    ] |> Enum.filter(fn x -> x != nil end)
     )
-    xml
+
+
   end
 
 
@@ -319,6 +354,9 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
   def build(nil), do: build(new())
 
   def build(signed_data_object_properties) do
+
+
+
     xml = XmlBuilder.element("SignedDataObjectProperties", [
       build_data_object_format(signed_data_object_properties),
       build_commitment_type_indication(signed_data_object_properties),

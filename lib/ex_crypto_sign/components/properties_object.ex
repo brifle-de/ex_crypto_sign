@@ -142,7 +142,11 @@ defmodule ExCryptoSign.Components.PropertiesObject do
   """
   def build_signature_xml(properties_object) do
 
-    signed_properties = XmlBuilder.element("SignedProperties", [
+    signed_properties = XmlBuilder.element("SignedProperties",
+    [
+      Id: "SignedProperties"
+    ],
+    [
       SignedSignatureProperties.build(properties_object.signed_signature_properties),
       SignedDataObjectProperties.build(properties_object.signed_data_object_properties)
     ])

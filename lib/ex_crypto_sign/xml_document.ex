@@ -16,9 +16,9 @@ defmodule ExCryptoSign.XmlDocument do
   signature_value: SignatureValue
   signed_info: SignedInfo
   key_info: KeyInfo
+  embedded_documents: [EmbeddedDocument], %{id: "doc-1", content: "some content"}
 
   """
-
   def new(id, opts \\ []) do
     %{
       id: id,
@@ -26,6 +26,7 @@ defmodule ExCryptoSign.XmlDocument do
       signature_value: Keyword.get(opts, :signature_value, SignatureValue.new()),
       signed_info: Keyword.get(opts, :signed_info, SignedInfo.new()),
       key_info: Keyword.get(opts, :key_info, nil),
+      embedded_documents: Keyword.get(opts, :embedded_documents, [])
     }
   end
 
@@ -89,6 +90,18 @@ defmodule ExCryptoSign.XmlDocument do
     meta = XmlBuilder.element("Metadata", [
       XmlBuilder.element("version", "1.0"),
     ])
+
+    has_embedded_documents? = xml_document.embedded_documents != []
+
+    if has_embedded_documents? do
+        embs = Enum.map(xml_document.embedded_documents, fn doc ->
+          XmlBuilder.element("SignatureContent", [ID: "#data-content-#{doc.id}"],  doc.content)
+        end)
+        xml_embs = XmlBuilder.element("SignatureContents", embs)
+        XmlBuilder.element("SignatureDocument", type_def, [meta, xml_embs, signature])
+      else
+        XmlBuilder.element("SignatureDocument", type_def, [meta, signature])
+    end
 
     XmlBuilder.element("SignatureDocument", type_def, [meta, signature])
 

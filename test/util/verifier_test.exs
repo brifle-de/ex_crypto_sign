@@ -139,11 +139,20 @@ defmodule VerifierTest do
         }
       },
       signed_data_object_properties: %{
-        data_object_format: %{
+        data_object_format: [
+          %{
           mime_type: "text/xml",
           encoding: "UTF-8",
           description: "Die Beschreibung",
+          object_reference: "document1"
+        },
+        %{
+          mime_type: "text/xml",
+          encoding: "UTF-8",
+          description: "Die Beschreibung",
+          object_reference: "document2"
         }
+      ]
       },
       unsigned_signature_properties: %{
 

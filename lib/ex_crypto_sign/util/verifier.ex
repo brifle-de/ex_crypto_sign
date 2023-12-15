@@ -73,7 +73,12 @@ alias ExCryptoSign.Util.PemCertificate
     # check whether the documents are contained in signed info
     contains_documents = ExCryptoSign.Components.SignedInfo.contains_documents?(signed_info, document_contents)
     # check whether the signed properties are contained in signed info
+
+
+
     contains_signed_property = ExCryptoSign.Components.SignedInfo.contains_signed_property?(signed_info, signed_properties_xml)
+
+
 
     cert_match = certificate_matches?(xml_document)
 
