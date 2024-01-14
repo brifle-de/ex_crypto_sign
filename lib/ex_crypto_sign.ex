@@ -1,5 +1,6 @@
 defmodule ExCryptoSign do
 
+  alias ExCryptoSign.XmlDocument
   alias ExCryptoSign.Components.{PropertiesObject, SignedInfo, KeyInfo}
   alias ExCryptoSign.Properties.{SignedSignatureProperties, SignedDataObjectProperties, UnsignedSignatureProperties}
 
@@ -50,7 +51,7 @@ defmodule ExCryptoSign do
 
     s_info = documents
     |> Enum.reduce({1, SignedInfo.new(signature_id)}, fn document, {index, signed_info} ->
-      next_info = signed_info |> SignedInfo.add_document_digest("doc-#{index}", "data-content-#{document.id}", :sha3_512, document.content)
+      next_info = signed_info |> SignedInfo.add_document_digest("doc-#{index}", "#data-content-#{document.id}", :sha3_512, document.content)
       {index + 1, next_info}
     end)
     |> case do
@@ -121,7 +122,14 @@ defmodule ExCryptoSign do
   end
 
 
+  defdelegate get_document_ids(xml_string), to:  XmlDocument, as: :parse_document_urls
 
+
+  def export_document_signatures(xml_string, documents) do
+    xml = xml_string |> XmlDocument.parse_document()
+
+    XmlDocument.export(xml, documents)
+  end
 
 
 end

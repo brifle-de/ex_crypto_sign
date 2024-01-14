@@ -29,6 +29,7 @@ defmodule ExCryptoSignTest do
 
     assert {:ok, signed_xml} = res
 
+    File.write!("test/files/test-create.xml", signed_xml)
     assert ExCryptoSign.Util.Verifier.verifies_document(signed_xml, doc_contents)
 
   end
@@ -101,6 +102,80 @@ defmodule ExCryptoSignTest do
 
   end
 
+  test "get document ids" do
+      # generate a key pair
+      {key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert()
+
+      docs = [%{content: "document1", id: "2341ac23HAbcA"}, %{content: "document2", id: "671ac23HAbcA"}]
+      city_name = "Stuttgart"
+      signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_string
+
+      xml = generate_xml_document(docs, city_name, signing_time, cert_pem)
+
+
+
+      {:ok, {doc_correct, sign}} = ExCryptoSign.Util.Signer.sign(xml, key_pem)
+
+      doc_contents = docs |> Enum.map(fn document -> document.content end)
+
+      assert ExCryptoSign.Util.Verifier.verifies_document(doc_correct, doc_contents)
+
+      # simulate signing by other party
+      opts = get_ops(docs, city_name, signing_time, cert_pem)
+      {:ok, {_doc, signature_new}} = ExCryptoSign.Util.Signer.sign(xml, key_pem)
+
+      res = ExCryptoSign.sign_and_verify("signature_id", docs, cert_pem, signature_new, opts)
+
+      assert {:ok, signed_xml} = res
+
+      assert ExCryptoSign.Util.Verifier.verifies_document(signed_xml, doc_contents)
+
+      assert ["https://documents.brifle.de/2341ac23HAbcA", "https://documents.brifle.de/671ac23HAbcA"] == ExCryptoSign.get_document_ids(signed_xml)
+
+
+  end
+
+  test "export" do
+       # generate a key pair
+       {key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert()
+
+       docs = [%{content: "document1", id: "2341ac23HAbcA"}, %{content: "document2", id: "671ac23HAbcA"}]
+       city_name = "Stuttgart"
+       signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_string
+
+       xml = generate_xml_document(docs, city_name, signing_time, cert_pem)
+
+
+
+       {:ok, {doc_correct, sign}} = ExCryptoSign.Util.Signer.sign(xml, key_pem)
+
+       doc_contents = docs |> Enum.map(fn document -> document.content end)
+
+       assert ExCryptoSign.Util.Verifier.verifies_document(doc_correct, doc_contents)
+
+       # simulate signing by other party
+       opts = get_ops(docs, city_name, signing_time, cert_pem)
+       {:ok, {_doc, signature_new}} = ExCryptoSign.Util.Signer.sign(xml, key_pem)
+
+       res = ExCryptoSign.sign_and_verify("signature_id", docs, cert_pem, signature_new, opts)
+
+       assert {:ok, signed_xml} = res
+
+       assert ExCryptoSign.Util.Verifier.verifies_document(signed_xml, doc_contents)
+
+       assert ["https://documents.brifle.de/2341ac23HAbcA", "https://documents.brifle.de/671ac23HAbcA"] == ExCryptoSign.get_document_ids(signed_xml)
+
+       export_data = %{"https://documents.brifle.de/2341ac23HAbcA" => "document1", "https://documents.brifle.de/671ac23HAbcA" => "document2"}
+
+       export = ExCryptoSign.export_document_signatures(signed_xml, export_data)
+
+
+
+       File.write!("test/files/test-export.xml", export)
+
+
+  end
+
   defp get_ops(documents, city_name, signing_time, cert_pem) do
     docs_opts = [
       signature_properties: %{
@@ -120,11 +195,20 @@ defmodule ExCryptoSignTest do
         }
       },
       signed_data_object_properties: %{
-        data_object_format: %{
+        data_object_format: [
+          %{
           mime_type: "text/xml",
           encoding: "UTF-8",
           description: "Die Beschreibung",
+          object_reference: "#doc-1"
+        },
+          %{
+          mime_type: "text/xml",
+          encoding: "UTF-8",
+          description: "Die Beschreibung",
+          object_reference: "#doc-2"
         }
+      ]
       },
       unsigned_signature_properties: %{
 
@@ -140,5 +224,8 @@ defmodule ExCryptoSignTest do
     signature_document = ExCryptoSign.prepare_document("signature_id",documents, pem_cert, opts)
     signature_document
   end
+
+
+
 
 end

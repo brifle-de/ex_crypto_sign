@@ -2,6 +2,7 @@ defmodule ExCryptoSign.XmlDocument do
 
   # follows https://www.w3.org/TR/XAdES/
 
+  alias Hex.API.Key
   alias ExCryptoSign.Constants.CanonicalizationMethods
   alias ExCryptoSign.Properties.SignedSignatureProperties
   alias ExCryptoSign.Constants.{HashMethods, SignatureMethods}
@@ -26,7 +27,8 @@ defmodule ExCryptoSign.XmlDocument do
       signature_value: Keyword.get(opts, :signature_value, SignatureValue.new()),
       signed_info: Keyword.get(opts, :signed_info, SignedInfo.new()),
       key_info: Keyword.get(opts, :key_info, nil),
-      embedded_documents: Keyword.get(opts, :embedded_documents, [])
+      embedded_documents: Keyword.get(opts, :embedded_documents, []),
+      meta: Keyword.get(opts, :meta, %{"version" => "1.0", "baseUrl" => "https://documents.brifle.de/"})
     }
   end
 
@@ -76,7 +78,10 @@ defmodule ExCryptoSign.XmlDocument do
   builds the xml object
   """
   def build(xml_document) do
+    run_build(xml_document, export_enabled: false)
+  end
 
+  defp run_build(xml_document, opts) do
     type_def = %{
       "targetNamespace" => "http://uri.etsi.org/01903/v1.1.1\#",
       "xmlns:xsd" => "http://www.w3.org/2001/XMLSchema",
@@ -87,34 +92,71 @@ defmodule ExCryptoSign.XmlDocument do
 
     signature = build_signature(xml_document)
 
-    meta = XmlBuilder.element("Metadata", [
-      XmlBuilder.element("version", "1.0"),
-    ])
+    metadata = xml_document.meta |> Enum.map(fn {key, value} ->
+      XmlBuilder.element(key, value)
+    end)
+
+    meta = XmlBuilder.element("Metadata", metadata)
 
     has_embedded_documents? = xml_document.embedded_documents != []
+
+    export_enabled = Keyword.get(opts, :export_content, false)
+
+    export_data = if export_enabled do
+      export_content = Keyword.get(opts, :export_content, %{})
+      exp = Enum.map(export_content, fn {doc_url, doc_data} ->
+        XmlBuilder.element("SignatureContent", [URL: doc_url],  doc_data)
+      end)
+      [XmlBuilder.element("ContentExport", exp)]
+    else
+      []
+    end
 
     if has_embedded_documents? do
         embs = Enum.map(xml_document.embedded_documents, fn doc ->
           XmlBuilder.element("SignatureContent", [ID: "#data-content-#{doc.id}"],  doc.content)
         end)
         xml_embs = XmlBuilder.element("SignatureContents", embs)
-        XmlBuilder.element("SignatureDocument", type_def, [meta, xml_embs, signature])
+        XmlBuilder.element("SignatureDocument", type_def, [meta, xml_embs, signature] ++ export_data)
       else
-        XmlBuilder.element("SignatureDocument", type_def, [meta, signature])
+        XmlBuilder.element("SignatureDocument", type_def, [meta, signature] ++ export_data)
     end
-
-    XmlBuilder.element("SignatureDocument", type_def, [meta, signature])
-
-
   end
 
+  @doc """
+  builds the xml object and adds the content to the xml document
+  """
+  def export(xml_document, content) do
+    run_build(xml_document, export_enabled: true, export_content: content)
+    |> to_xml_string()
+  end
+
+  @doc """
+  gets the document urls from the xml document
+  """
+  def parse_document_urls(xml_string) do
+    urls = SweetXml.xpath(xml_string, SweetXml.sigil_x("//ds:SignedInfo/ds:Reference/@URI", 'ls')) || []
+    Enum.filter(urls, fn url -> url != "#SignedProperties" end)
+  end
 
 
   @doc """
   builds the xml object as string
   """
   def build_xml(xml_document) do
-    XmlBuilder.document(build(xml_document))
+    to_xml_string(build(xml_document))
+  end
+
+  @spec to_xml_string(
+          atom()
+          | bitstring()
+          | maybe_improper_list()
+          | {any()}
+          | {any(), any()}
+          | {any(), any(), any()}
+        ) :: binary()
+  def to_xml_string(xml_document) do
+    XmlBuilder.document(xml_document)
     |> XmlBuilder.generate(encoding: "UTF-8")
     |> :binary.bin_to_list # convert to binary list to avoid encoding issues
     |> :xmerl_scan.string(namespace_conformant: true, document: true)
@@ -138,16 +180,22 @@ defmodule ExCryptoSign.XmlDocument do
     signature_value = SignatureValue.parse_document(xml_document)
     key_info = KeyInfo.parse_document(xml_document)
     object = PropertiesObject.parse_document(xml_document)
+    meta = parse_metadata(xml_document)
 
     new(id,
       signed_info: signed_info,
       signature_value: signature_value,
       key_info: key_info,
-      object: object
+      object: object,
+      meta: meta
     )
 
+  end
 
-
+  defp parse_metadata(xml_document) do
+    version = SweetXml.xpath(xml_document, SweetXml.sigil_x("//Metadata/version/text()", 's')) || ""
+    baseUrl = SweetXml.xpath(xml_document, SweetXml.sigil_x("//Metadata/baseUrl/text()", 's')) || ""
+    %{"version" => version, "baseUrl" => baseUrl}
   end
 
   def write_to_file!(xml_document, file_name) when is_binary(xml_document) do

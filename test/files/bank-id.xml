@@ -1,0 +1,75 @@
+<ds:Signature Id="Signature" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+    <ds:SignedInfo>
+        <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+        <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+        <ds:Reference URI="signedData" Id="reference-1">
+            <ds:Transforms>
+                <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+            </ds:Transforms>
+            <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+            <ds:DigestValue>+B5H8GVLQ73O4AMZ9RLtGk26NJFphhsOUs4BEV70nm8=</ds:DigestValue>
+        </ds:Reference>
+        <ds:Reference URI="#SignedProperties" Type="http://uri.etsi.org/01903#SignedProperties">
+            <ds:Transforms>
+                <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+            </ds:Transforms>
+            <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+            <ds:DigestValue>u/Sk0p7gboARsAYPlDxdeEccj4SonWmVutV6k59YGPY=</ds:DigestValue>
+        </ds:Reference>
+    </ds:SignedInfo>
+    <ds:SignatureValue>
+        S75Nj4S3u7w0mms4HnhE/7TbLEiKLthw0qv869hLBZziKiQ+BlWhED0067sD3OYenqTbg9Ik8cl2uGcA3b51vi9CrRnh52gCVUWzg1CQTMBGBk7HDScZbvGvxRJL8uqL6mGgSNrSKbcS2iLTggDpjhEq+myW5MZhl6G7hWsGgBa5ETbC/mGjlbmmd+zNi2b9VMJENutuvKkFUwkvnyvqAULvRJOX8MaplF9JunPSf09eBaM8JEBYd7e2m6sdv+l0Z0YIoHJ3xqOAzKX7waU/2Mm/b953G49UeY0N68rT3j34oQxEQ5wDNoz3HZios46OKqFvfQpfv0dGaSndGwTQqw==
+    </ds:SignatureValue>
+    <ds:KeyInfo>
+        <ds:X509Data>
+            <ds:X509Certificate>
+                MIIEPTCCAqWgAwIBAgIBATANBgkqhkiG9w0BAQsFADBgMQswCQYDVQQGEwJTRTEUMBIGA1UEChMLVEVTVCBDQSBPUkcxGTAXBgNVBAsTEFRFU1QgQ0EgT1JHIFVOSVQxIDAeBgNVBAMTF3Rlc3QgYW5kIGRldmVsb3BtZW50IENBMB4XDTIzMDIyMjEzNDMyM1oXDTIzMDgyMTEzNDMyM1owbDEnMCUGA1UEChMebWtjZXJ0IGRldmVsb3BtZW50IGNlcnRpZmljYXRlMRIwEAYDVQQDEwlsb2NhbGhvc3QxLTArBgNVBAUTJDM4ODU4YTFiLTZhZTUtNDRmMy1hNzFjLTkzNDAzN2Y1YjQxNzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMD3Z9FWQ0YrP2ZJKgnez+xeEdcRHbnvjJpTcGo/hjHt5JGVKGBX9MwTNUGW9ueByotdvSGtggsXjGoB+yT0Qll12V7crEmsOsq+JldUE8uMPJOdwfc2VykKkGIWuW8pEc+EsedSm4Jd4Tdy4MlKDJaWvL4wyHHQqaO9DVUHtaP/RArt/Ca2azY/dcZ9Zc8OoWbFUMA4UdEs/98xlwnf9mwqXzfd2K+ne4zvLLKACbhENVzibpYr6NZCG83yDBC4B71UhKl+4+Ju9smqU86rG/+OtLVjkxSBdFPbOg749TyPyI97ZB12g3NZJjLHZntfOtOdp81HZqmftSiunhtx5pkCAwEAAaN2MHQwDgYDVR0PAQH/BAQDAgWgMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjAMBgNVHRMBAf8EAjAAMB8GA1UdIwQYMBaAFAIpjX4K082uc6f2aCcpk/cK6ETLMBQGA1UdEQQNMAuCCWxvY2FsaG9zdDANBgkqhkiG9w0BAQsFAAOCAYEAOabde+w7zz8qY5v9pBDgfgf1Os5ToVVqfh58h6DF/dDLFOJCZ0tvO/nH7RTYWhvYID3f0rhcNO92PqsTrpytSwreqQWL9uLatVGfG/bOOewAV3MtpdKR5DB3PsA8IPQHmv3NJEiojfxo9vMEHaChoGCTrkUZegUR/CClpYW2BhnHDx4/mgWAzjyPN6Weaee+YolulL6RowO+S1YNo5eP+tIzRlAp9+Lyl7EhWuylccyVkTCVwSBVerN1nSblpuboA7oKBV3gsMMnq7XFxHj0mqQosswqUMMiCYh1Mw7PIRJuSBcIjNZQ/lvbs2IQOqGP0eIxbnQfuv2OHgnaIFUNKN8kgbgrCq8fmhbmz7CJoDt4rUDcxbd/tSQ4p6Swk66aBceWlYXs8QsXWTFwzrHC+WzSSFLgOQmp1rP5yHvPPC1YN1qrPnT/5o9rVmj8IsJ7Xs/i6T4AOGbSEClH2hLke2FSu/+Q9rtvAKiuvdftt92u5LAvQgDXTbNDKRoohxgT
+            </ds:X509Certificate>
+        </ds:X509Data>
+    </ds:KeyInfo>
+    <ds:Object>
+        <xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#Signature">
+            <xades:SignedProperties Id="SignedProperties">
+                <xades:SignedSignatureProperties>
+                    <xades:SigningTime>2023-02-22T14:43:23Z</xades:SigningTime>
+                    <xades:SigningCertificate>
+                        <xades:Cert>
+                            <xades:CertDigest>
+                                <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                                <ds:DigestValue>08rujjUVTfgLNdc2ARAYlaSD0Q0VjNR1E0uy6IGyO0M=</ds:DigestValue>
+                            </xades:CertDigest>
+                            <xades:IssuerSerial>
+                                <ds:X509IssuerName>CN=test and development CA,OU=TEST CA ORG UNIT,O=TEST CA ORG,C=SE
+                                </ds:X509IssuerName>
+                                <ds:X509SerialNumber>1</ds:X509SerialNumber>
+                            </xades:IssuerSerial>
+                        </xades:Cert>
+                    </xades:SigningCertificate>
+                </xades:SignedSignatureProperties>
+                <xades:SignedDataObjectProperties>
+                    <xades:DataObjectFormat ObjectReference="#reference-1">
+                        <xades:MimeType>text/xml</xades:MimeType>
+                    </xades:DataObjectFormat>
+                </xades:SignedDataObjectProperties>
+            </xades:SignedProperties>
+        </xades:QualifyingProperties>
+        <bankIDSignedData xmlns="http://www.bankid.com/idcard/v1.0.0/types" ID="signedData">
+            <verificationId>aee13518-672f-4d06-8db2-5cdfcb187114</verificationId>
+            <orderRef>b96a8b7e-7d2e-4fa8-bb84-2765d6dd499e</orderRef>
+            <transactionType>ID-kort-validering</transactionType>
+            <endUser>
+                <personalNumber>191212121212</personalNumber>
+                <firstName>Tolvan</firstName>
+                <lastName>Tolvansson</lastName>
+                <age>110</age>
+            </endUser>
+            <relyingParty>
+                <displayName>TestRP A</displayName>
+                <commonName>Test förlitande part A</commonName>
+                <certificateSerial>5512341234</certificateSerial>
+            </relyingParty>
+            <identifiedAt>2023-02-22T13:43:23Z</identifiedAt>
+            <verifiedAt>2023-02-22T13:43:23Z</verifiedAt>
+        </bankIDSignedData>
+    </ds:Object>
+</ds:Signature>
