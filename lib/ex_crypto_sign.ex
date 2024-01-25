@@ -20,7 +20,7 @@ defmodule ExCryptoSign do
 
     s_info = documents
     |> Enum.reduce({1, SignedInfo.new(signature_id)}, fn document, {index, signed_info} ->
-      next_info = signed_info |> SignedInfo.add_document_digest("doc-#{index}", "https://documents.brifle.de/#{document.id}", :sha3_512, document.content)
+      next_info = signed_info |> SignedInfo.add_document_digest("doc-#{index}", "\#data-#{document.id}", :sha3_512, document.content)
       {index + 1, next_info}
     end)
     |> case do

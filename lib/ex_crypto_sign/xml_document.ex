@@ -105,7 +105,8 @@ defmodule ExCryptoSign.XmlDocument do
     export_data = if export_enabled do
       export_content = Keyword.get(opts, :export_content, %{})
       exp = Enum.map(export_content, fn {doc_url, doc_data} ->
-        XmlBuilder.element("SignatureContent", [URL: doc_url],  doc_data)
+        doc_id = doc_url |> String.split("/") |> List.last()
+        XmlBuilder.element("SignatureContent", [URL: doc_url, id: "data-#{doc_id}"],  doc_data)
       end)
       [XmlBuilder.element("ContentExport", exp)]
     else

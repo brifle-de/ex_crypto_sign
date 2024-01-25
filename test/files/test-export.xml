@@ -7,13 +7,13 @@
     <ds:SignedInfo>
       <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:CanonicalizationMethod>
       <ds:SignatureMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#ecdsa-sha3-512"></ds:SignatureMethod>
-      <ds:Reference ID="doc-1" URI="https://documents.brifle.de/2341ac23HAbcA">
+      <ds:Reference ID="doc-1" URI="#data-2341ac23HAbcA">
         <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
         <ds:DigestValue>
           9/rc+uGpJU5DtFG32TKp4IhgdYqPwFbW3SRNo9T+yYdDpgNkJead18A0hgfHuqiNmGRUUzab5yjY3JRl9/JPFw==
         </ds:DigestValue>
       </ds:Reference>
-      <ds:Reference ID="doc-2" URI="https://documents.brifle.de/671ac23HAbcA">
+      <ds:Reference ID="doc-2" URI="#data-671ac23HAbcA">
         <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
         <ds:DigestValue>
           ugt5zYrMB6JJG6kxdN6FE/jl5/AY4HsAsmZEJQ76CMvvAKm6xHtbF57c7wka3yah+sH6Ny5nNilFkejEHA53EA==
@@ -22,26 +22,26 @@
       <ds:Reference URI="#SignedProperties">
         <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
         <ds:DigestValue>
-          SpxriEBN2sCfS74pBwtd8MTnyPzreBtxQGbI6C+y7+nL4e+NY3L7h7E5ZyqaQrQMrW1XlbAjc6noxxcF33cp/Q==
+          DWnhu0kDwFec5+1HgsuIBB+RDHwKjIXGqJa81v7kSzWkinS5BjRLRIMYqk18T2aLhVnaEYzUYnT8GEtxP07TjA==
         </ds:DigestValue>
       </ds:Reference>
     </ds:SignedInfo>
     <ds:SignatureValue>
-      MEUCIQC9bRFCjr4RgjP8CLuVr9KHFiaiSAUkCtpPIwV3pqNI1AIgfuFPzQFnhAPTneEh8u5ICVZVlTEB5GE8RdQgTkxQNrU=
+      MEQCIBXBWz5NjuR0ln4CwZjQhpC530nkaf1mTJ4EP1oo7iOzAiAuhRMv0LKpn+b/LcsNsl19QVqmZy17MZ5LMDIE3w+ueg==
     </ds:SignatureValue>
     <ds:Object>
       <QualifyingProperties Target="#signature_id">
         <SignedProperties>
           <SignedSignatureProperties>
             <SigningTime>
-              2024-01-14 22:48:05.343548Z
+              2024-01-25 22:31:31.898754Z
             </SigningTime>
             <SigningCertificate>
               <Cert>
                 <CertDigest>
                   <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
                   <DigestValue>
-                    bIKtK8kMed45SqBnCh6F4QJk6fsliDFq2g9P+HHegxw=
+                    PUAOLM1aSEEbicRlyaway8C3CTcO68BY83Zhcdkjyko=
                   </DigestValue>
                 </CertDigest>
                 <IssuerSerial>
@@ -49,7 +49,7 @@
                     ECDSA Root CA
                   </X509IssuerName>
                   <X509SerialNumber>
-                    11247697904482470225
+                    16637878692249682573
                   </X509SerialNumber>
                 </IssuerSerial>
               </Cert>
@@ -117,26 +117,26 @@
       <ds:X509Data>
         <ds:X509Certificate>
           -----BEGIN CERTIFICATE-----
-MIICSDCCAe+gAwIBAgIJAJwX2aa5lUlRMAoGCCqGSM49BAMCMFkxCzAJBgNVBAYT
+MIICSDCCAe+gAwIBAgIJAOblnoTzlUKNMAoGCCqGSM49BAMCMFkxCzAJBgNVBAYT
 AlVTMQswCQYDVQQIDAJDQTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UE
-CgwEQWNtZTEWMBQGA1UEAwwNRUNEU0EgUm9vdCBDQTAeFw0yNDAxMTQyMTQzMDVa
-Fw0yNTAyMTIyMTQ4MDVaMFIxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEWMBQG
+CgwEQWNtZTEWMBQGA1UEAwwNRUNEU0EgUm9vdCBDQTAeFw0yNDAxMjUyMTI2MzFa
+Fw0yNTAyMjMyMTMxMzFaMFIxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEWMBQG
 A1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwEQWNtZTEPMA0GA1UEAwwGU2Ft
-cGxlMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE90EfORzpxDfqv72cNKhW9pP1
-NvQjhZJs0cHmaOPWVZZiNvWbLkfLeBaTrPhDxFFTdSbcNWxCWk0nnklpT2I8fqOB
+cGxlMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2L0/nH8e8i4HZH5GwuUjzyHo
+s5T4wJy7GbPxokaKXCnmJh3rIRqZpNZidlQkseIv9pzznHcks9Yj/lFs7+KbGaOB
 pjCBozAJBgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEF
-BQcDAQYIKwYBBQUHAwIwHQYDVR0OBBYEFGBs4R/wCyw7okjwXHojPbYugd/jMB8G
-A1UdIwQYMBaAFOEuADmjDAfuvcQo78klawXflpZiMCcGA1UdEQQgMB6CC2V4YW1w
-bGUub3Jngg93d3cuZXhhbXBsZS5vcmcwCgYIKoZIzj0EAwIDRwAwRAIgTnWGAOKt
-smTowndQopCfMdyOc2tTEjJywCaAYAFnNg0CIHirNe0Wtw+k5zWPOCbiNKuKQUJP
-3Fcg0BQ4gUdwo9Vd
+BQcDAQYIKwYBBQUHAwIwHQYDVR0OBBYEFPYBLTwSd6uV3uuH71Soz67lO+LXMB8G
+A1UdIwQYMBaAFIWSenG3CLCjTk0UrZZ7E8osa28oMCcGA1UdEQQgMB6CC2V4YW1w
+bGUub3Jngg93d3cuZXhhbXBsZS5vcmcwCgYIKoZIzj0EAwIDRwAwRAIgeQYW4SAI
+hwDKqu56tE0RqAc52d7/GTVVlZOiJErGbRYCIDIbOqacveqz7uylk0O9GMMGU12M
+Pv4f8Oe8n1/fU954
 -----END CERTIFICATE-----
         </ds:X509Certificate>
       </ds:X509Data>
     </ds:KeyInfo>
   </ds:Signature>
   <ContentExport>
-    <SignatureContent URL="https://documents.brifle.de/2341ac23HAbcA">document1</SignatureContent>
-    <SignatureContent URL="https://documents.brifle.de/671ac23HAbcA">document2</SignatureContent>
+    <SignatureContent URL="https://documents.brifle.de/2341ac23HAbcA" id="data-2341ac23HAbcA">document1</SignatureContent>
+    <SignatureContent URL="https://documents.brifle.de/671ac23HAbcA" id="data-671ac23HAbcA">document2</SignatureContent>
   </ContentExport>
 </SignatureDocument>

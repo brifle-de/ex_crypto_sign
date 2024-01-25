@@ -130,7 +130,7 @@ defmodule ExCryptoSignTest do
 
       assert ExCryptoSign.Util.Verifier.verifies_document(signed_xml, doc_contents)
 
-      assert ["https://documents.brifle.de/2341ac23HAbcA", "https://documents.brifle.de/671ac23HAbcA"] == ExCryptoSign.get_document_ids(signed_xml)
+      assert ["#data-2341ac23HAbcA", "#data-671ac23HAbcA"] == ExCryptoSign.get_document_ids(signed_xml)
 
 
   end
@@ -163,7 +163,7 @@ defmodule ExCryptoSignTest do
 
        assert ExCryptoSign.Util.Verifier.verifies_document(signed_xml, doc_contents)
 
-       assert ["https://documents.brifle.de/2341ac23HAbcA", "https://documents.brifle.de/671ac23HAbcA"] == ExCryptoSign.get_document_ids(signed_xml)
+       assert ["#data-2341ac23HAbcA", "#data-671ac23HAbcA"] == ExCryptoSign.get_document_ids(signed_xml)
 
        export_data = %{"https://documents.brifle.de/2341ac23HAbcA" => "document1", "https://documents.brifle.de/671ac23HAbcA" => "document2"}
 
