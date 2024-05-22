@@ -115,7 +115,7 @@ defmodule ExCryptoSign.XmlDocument do
 
     if has_embedded_documents? do
         embs = Enum.map(xml_document.embedded_documents, fn doc ->
-          XmlBuilder.element("SignatureContent", [ID: "#data-content-#{doc.id}"],  doc.content)
+          XmlBuilder.element("SignatureContent", [ID: "data-content-#{doc.id}"],  doc.content)
         end)
         xml_embs = XmlBuilder.element("SignatureContents", embs)
         XmlBuilder.element("SignatureDocument", type_def, [meta, xml_embs, signature] ++ export_data)
