@@ -8,40 +8,55 @@
       <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:CanonicalizationMethod>
       <ds:SignatureMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#ecdsa-sha3-512"></ds:SignatureMethod>
       <ds:Reference ID="doc-1" URI="#data-2341ac23HAbcA">
+        <ds:Transforms>
+          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+          <ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116">
+            <ds:XPath>//text()</ds:XPath>
+          </ds:Transform>
+        </ds:Transforms>
         <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
         <ds:DigestValue>
           9/rc+uGpJU5DtFG32TKp4IhgdYqPwFbW3SRNo9T+yYdDpgNkJead18A0hgfHuqiNmGRUUzab5yjY3JRl9/JPFw==
         </ds:DigestValue>
       </ds:Reference>
       <ds:Reference ID="doc-2" URI="#data-671ac23HAbcA">
+        <ds:Transforms>
+          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+          <ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116">
+            <ds:XPath>//text()</ds:XPath>
+          </ds:Transform>
+        </ds:Transforms>
         <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
         <ds:DigestValue>
           ugt5zYrMB6JJG6kxdN6FE/jl5/AY4HsAsmZEJQ76CMvvAKm6xHtbF57c7wka3yah+sH6Ny5nNilFkejEHA53EA==
         </ds:DigestValue>
       </ds:Reference>
       <ds:Reference URI="#SignedProperties">
+        <ds:Transforms>
+          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+        </ds:Transforms>
         <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
         <ds:DigestValue>
-          7ztAFC3ci2SKXASIGldImcSpGlg1J7GzSqDmJpHHMH7NsQ+ixHITQ4XuRwmVx9cSPBaDHND9Czm2JURX9hRkwg==
+          FM9Ggw1RNM6Yp9F+52agZyDBVPx/nBYLeKzVdKbbuKgbaB11+bpJS4l+dodptl79UGzOVEfvIMTC/0AFadQNrA==
         </ds:DigestValue>
       </ds:Reference>
     </ds:SignedInfo>
     <ds:SignatureValue>
-      MEYCIQCFt2pgux9Wc3KHkaMtm5GiuEbPQBiOniXEVCK8JY++wgIhAMh6itJ31t/Yee2TRSSRy87hRtTBEV2gOKe1gqzSa9Ic
+      MEQCIBwxG5xJc/oaiMoybswYKMfcHStzW0NlUTnMR4YZRQAaAiBJ3KC+f/xylq00uOT82/tI5RztGH1qKbglC7f75+XIVQ==
     </ds:SignatureValue>
     <ds:Object>
       <QualifyingProperties Target="#signature_id">
-        <SignedProperties>
+        <SignedProperties ID="SignedProperties">
           <SignedSignatureProperties>
             <SigningTime>
-              2024-05-22 22:09:10.322644Z
+              2024-05-23 19:15:41.773192Z
             </SigningTime>
             <SigningCertificate>
               <Cert>
                 <CertDigest>
                   <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
                   <DigestValue>
-                    ntHMgVqnnCe/RZZPRSTX2cOYwh2Q3Wpz5/sICHLkweo=
+                    8ILBpOtm+VY+Jpchu0xByYMuJtHvitEbgeV8YU/2RHs=
                   </DigestValue>
                 </CertDigest>
                 <IssuerSerial>
@@ -49,7 +64,7 @@
                     ECDSA Root CA
                   </X509IssuerName>
                   <X509SerialNumber>
-                    12161282419099750500
+                    15128309059044442603
                   </X509SerialNumber>
                 </IssuerSerial>
               </Cert>
@@ -117,19 +132,19 @@
       <ds:X509Data>
         <ds:X509Certificate>
           -----BEGIN CERTIFICATE-----
-MIICSTCCAe+gAwIBAgIJAKjFje1LpNBkMAoGCCqGSM49BAMCMFkxCzAJBgNVBAYT
+MIICSDCCAe+gAwIBAgIJANHyjO+cqwHrMAoGCCqGSM49BAMCMFkxCzAJBgNVBAYT
 AlVTMQswCQYDVQQIDAJDQTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UE
-CgwEQWNtZTEWMBQGA1UEAwwNRUNEU0EgUm9vdCBDQTAeFw0yNDA1MjIyMTA0MTBa
-Fw0yNTA2MjEyMTA5MTBaMFIxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEWMBQG
+CgwEQWNtZTEWMBQGA1UEAwwNRUNEU0EgUm9vdCBDQTAeFw0yNDA1MjMxODEwNDFa
+Fw0yNTA2MjIxODE1NDFaMFIxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEWMBQG
 A1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwEQWNtZTEPMA0GA1UEAwwGU2Ft
-cGxlMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAECW+cHfbetrvgZUk6rY81bKib
-3g9HcgbP3zH80pX13I2hQ6Byq1WkPRFvwzvQE2tP0xHPkXPHjbXB+VxAku04IKOB
+cGxlMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEAX5tUoEs+h+hvqNehy242WcS
+Qg9eUL/wAbva6IgstfsgkbT+N0x2vN+VgiXhy2qoL1KCJbC+kDEm13nWzI2zcKOB
 pjCBozAJBgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEF
-BQcDAQYIKwYBBQUHAwIwHQYDVR0OBBYEFIduQmE+Np03qpA/0n5eCa2+pelxMB8G
-A1UdIwQYMBaAFP7w8gLQoRwPG9SCbfOIVZOlX2y0MCcGA1UdEQQgMB6CC2V4YW1w
-bGUub3Jngg93d3cuZXhhbXBsZS5vcmcwCgYIKoZIzj0EAwIDSAAwRQIgfFEblECK
-Egfcq6ns/4ZFFU9KtxDpkccEi5p84xZJuS8CIQCiQpflq4VJsDBJ4Z2HrKsXb+RX
-DJ0FRzEf1QWCS7cX0Q==
+BQcDAQYIKwYBBQUHAwIwHQYDVR0OBBYEFKQ/zNwgRFZbbTCJ/9w7rSU1tl4mMB8G
+A1UdIwQYMBaAFIGgY/wI//Vt3DxaA67pX52AJK6NMCcGA1UdEQQgMB6CC2V4YW1w
+bGUub3Jngg93d3cuZXhhbXBsZS5vcmcwCgYIKoZIzj0EAwIDRwAwRAIgEosYnCtP
+q9/SHx6d5cOisYCU6oTEEu/dLnSZ4YZbJV8CICMjM8V15ezWQ+E8v0KHEWlBTmO6
+SwR/AbR3tNBD/rIv
 -----END CERTIFICATE-----
         </ds:X509Certificate>
       </ds:X509Data>

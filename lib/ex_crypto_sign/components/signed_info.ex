@@ -1,5 +1,6 @@
 defmodule ExCryptoSign.Components.SignedInfo do
 
+  alias ExCryptoSign.Constants.TransformMethods
   alias ExCryptoSign.Constants.CanonicalizationMethods
   alias ExCryptoSign.Constants.{HashMethods, SignatureMethods}
   alias ExCryptoSign.Components.PropertiesObject
@@ -25,11 +26,23 @@ defmodule ExCryptoSign.Components.SignedInfo do
     references = SweetXml.xpath(xml_document, SweetXml.sigil_x("//ds:Signature/ds:SignedInfo/ds:Reference", 'l'))
     signed_property_digest = SweetXml.xpath(xml_document, SweetXml.sigil_x("//ds:Signature/ds:SignedInfo/ds:Reference[@URI='#SignedProperties']/ds:DigestMethod/@Algorithm", 's'))
     signed_property_digest_value = SweetXml.xpath(xml_document, SweetXml.sigil_x("//ds:Signature/ds:SignedInfo/ds:Reference[@URI='#SignedProperties']/ds:DigestValue/text()", 's')) |> String.trim()
+    signed_property_transforms = SweetXml.xpath(xml_document, SweetXml.sigil_x("//ds:Signature/ds:SignedInfo/ds:Reference[@URI='#SignedProperties']/ds:Transforms/ds:Transform", 'l'))
+
+      |> Enum.map(fn x ->
+        algorithm = SweetXml.xpath(x, SweetXml.sigil_x("./@Algorithm", 's')) |> TransformMethods.from_w3_url()
+        value = SweetXml.xpath(x, SweetXml.sigil_x("./ds:XPath/text()", 's'))
+        case algorithm do
+          :xpath -> {:xpath, value}
+          _ -> algorithm
+        end
+      end)
+
     signed_property_digest_obj = %{
       id: nil,
       uri: "#SignedProperties",
       digest_method: signed_property_digest,
-      digest_value: signed_property_digest_value |> Base.decode64!()
+      digest_value: signed_property_digest_value |> Base.decode64!(),
+      transforms: signed_property_transforms
     }
 
     documents_digest = Enum.map(references, fn ref ->
@@ -37,10 +50,20 @@ defmodule ExCryptoSign.Components.SignedInfo do
       uri = SweetXml.xpath(ref, SweetXml.sigil_x("./@URI", 's'))
       digest_method = SweetXml.xpath(ref, SweetXml.sigil_x("./ds:DigestMethod/@Algorithm", 's'))
       digest_value = SweetXml.xpath(ref, SweetXml.sigil_x("./ds:DigestValue/text()", 's')) |> String.trim()
+      transforms = SweetXml.xpath(ref, SweetXml.sigil_x("./ds:Transforms/ds:Transform", 'l'))
+        |> Enum.map(fn x ->
+          algorithm = SweetXml.xpath(x, SweetXml.sigil_x("./@Algorithm", 's')) |> TransformMethods.from_w3_url()
+          value = SweetXml.xpath(x, SweetXml.sigil_x("./ds:XPath/text()", 's'))
+          case algorithm do
+            :xpath -> {:xpath, value}
+            _ -> algorithm
+          end
+        end)
       %{
         id: id,
         uri: uri,
         digest_method: digest_method,
+        transforms: transforms,
         digest_value: digest_value |> Base.decode64!()
       }
     end) |> Enum.filter(fn ref -> ref.uri != "#SignedProperties" end)
@@ -71,7 +94,8 @@ defmodule ExCryptoSign.Components.SignedInfo do
       id: id,
       uri: uri,
       digest_method: digest_method_name,
-      digest_value: digest_value
+      digest_value: digest_value,
+      transforms: [:c14n, {:xpath, "//text()"}]
     }
 
     document_digests = Map.get(signed_info, :documents_digest) ++ [document_digest]
@@ -104,14 +128,14 @@ defmodule ExCryptoSign.Components.SignedInfo do
   end
 
   def put_signed_property_digest(signed_info, digest_method, signed_properties_xml) do
-
     digest_value = :crypto.hash(digest_method, signed_properties_xml)
     digest_method_name = HashMethods.get_w3_url(digest_method)
     signed_property_digest = %{
       id: nil,
       uri: "#SignedProperties",
       digest_method: digest_method_name,
-      digest_value: digest_value
+      digest_value: digest_value,
+      transforms: [:c14n]
     }
 
     Map.put(signed_info, :signed_property_digest, signed_property_digest)
@@ -181,15 +205,32 @@ defmodule ExCryptoSign.Components.SignedInfo do
         digest_value |> Base.encode64()
       ])
 
+      # transforms
+      transforms = Enum.map(ref.transforms, fn transform ->
+        case transform do
+          :c14n -> XmlBuilder.element("ds:Transform", %{"Algorithm" => TransformMethods.get_c14n()})
+          {:xpath, xpath} -> XmlBuilder.element("ds:Transform", %{"Algorithm" => TransformMethods.get_xpath()}, [
+            XmlBuilder.element("ds:XPath", xpath)
+          ])
+          _ -> XmlBuilder.element("ds:Transform", %{"Algorithm" => transform})
+          end
+      end)
+
+      transform = case transforms do
+        [] -> nil
+        _ -> XmlBuilder.element("ds:Transforms", transforms)
+      end
+
       attributes = case id do
         nil -> %{"URI" => uri}
         _ -> %{"URI" => uri, "ID" => id}
       end
 
       XmlBuilder.element("ds:Reference", attributes, [
+        transform,
         digest_method_xml,
         digest_value_xml
-      ])
+      ] |> Enum.filter(fn x -> x != nil end))
     end)
 
 

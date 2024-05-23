@@ -173,6 +173,7 @@ defmodule ExCryptoSign.XmlDocument do
           signature_value: any(),
           signed_info: any()
         }
+
   def parse_document(xml_string) do
     xml_document = SweetXml.parse(xml_string, namespace_conformant: true, document: true)
 
@@ -182,13 +183,20 @@ defmodule ExCryptoSign.XmlDocument do
     key_info = KeyInfo.parse_document(xml_document)
     object = PropertiesObject.parse_document(xml_document)
     meta = parse_metadata(xml_document)
+    embedded_documents = SweetXml.xpath(xml_document, SweetXml.sigil_x("//SignatureContents/SignatureContent", 'l'))
+      |> Enum.map(fn doc ->
+        id = SweetXml.xpath(doc, SweetXml.sigil_x("@ID", 's')) |> String.replace("data-content-", "")
+        content = SweetXml.xpath(doc, SweetXml.sigil_x("text()", 's'))
+        %{id: id, content: content}
+      end)
 
     new(id,
       signed_info: signed_info,
       signature_value: signature_value,
       key_info: key_info,
       object: object,
-      meta: meta
+      meta: meta,
+      embedded_documents: embedded_documents
     )
 
   end
