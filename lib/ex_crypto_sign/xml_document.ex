@@ -2,14 +2,10 @@ defmodule ExCryptoSign.XmlDocument do
 
   # follows https://www.w3.org/TR/XAdES/
 
-  alias Hex.API.Key
   alias ExCryptoSign.Constants.CanonicalizationMethods
-  alias ExCryptoSign.Properties.SignedSignatureProperties
-  alias ExCryptoSign.Constants.{HashMethods, SignatureMethods}
 
   alias ExCryptoSign.Components.{PropertiesObject, SignatureValue, SignedInfo, KeyInfo}
 
-  @default_canal_method CanonicalizationMethods.get_exclusive()
 
   @doc """
 
