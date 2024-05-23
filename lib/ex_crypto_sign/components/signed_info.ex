@@ -46,7 +46,7 @@ defmodule ExCryptoSign.Components.SignedInfo do
     }
 
     documents_digest = Enum.map(references, fn ref ->
-      id = SweetXml.xpath(ref, SweetXml.sigil_x("./@ID", 's'))
+      id = SweetXml.xpath(ref, SweetXml.sigil_x("./@Id", 's'))
       uri = SweetXml.xpath(ref, SweetXml.sigil_x("./@URI", 's'))
       digest_method = SweetXml.xpath(ref, SweetXml.sigil_x("./ds:DigestMethod/@Algorithm", 's'))
       digest_value = SweetXml.xpath(ref, SweetXml.sigil_x("./ds:DigestValue/text()", 's')) |> String.trim()
@@ -223,7 +223,7 @@ defmodule ExCryptoSign.Components.SignedInfo do
 
       attributes = case id do
         nil -> %{"URI" => uri}
-        _ -> %{"URI" => uri, "ID" => id}
+        _ -> %{"URI" => uri, "Id" => id}
       end
 
       XmlBuilder.element("ds:Reference", attributes, [

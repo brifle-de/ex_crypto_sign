@@ -1,9 +1,4 @@
-<SignatureDocument xmlns="http://uri.etsi.org/01903/v1.1.1#" elementFormDefault="qualified" targetNamespace="http://uri.etsi.org/01903/v1.1.1#">
-  <Metadata>
-    <baseUrl>https://documents.brifle.de/</baseUrl>
-    <version>1.0</version>
-  </Metadata>
-  <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="">
+<ds:Signature Id="Signature" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
     <ds:SignedInfo>
       <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:CanonicalizationMethod>
       <ds:SignatureMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#ecdsa-sha3-512"></ds:SignatureMethod>
@@ -37,33 +32,33 @@
         </ds:Transforms>
         <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
         <ds:DigestValue>
-          Eu4Mru97UF6Fw6Y+Eb9d0F+MchFrkvMJ4kkmXJejn+suyYMks9gscuUwe2K/fFELlX/iiCbp05+kSyS6A8RohA==
+          9gQSYjhp/TW6CWzbRucWv7anFAzwx/CWYJlUxqEzGCAJO0oPuNLDnngclPw6ueV1ezQB/kuzSCmivOYtODI3fQ==
         </ds:DigestValue>
       </ds:Reference>
     </ds:SignedInfo>
     <ds:SignatureValue>
-      MEUCIQD6wABBZdvuUGKl3bHehNnVXzKxKViHaQ593CCUYs4M8gIgUHr3iIuV9monWo3ulCtRF1/HnpJtPMsT2aUyBohwUY8=
+      MEUCIQCY8FijmGDIjFdPgOgoRsoyDsvU2D8DZwt7WNDymzQh6wIgKQ1/j4LeGZliYdbqFG0dWmlNA23hLjh/IsqkgTziSRA=
     </ds:SignatureValue>
-    <ds:KeyInfo>
+     <ds:KeyInfo>
       <ds:X509Data>
-        <ds:X509Certificate>
-          MIICSTCCAe+gAwIBAgIJANagnkXmOwGfMAoGCCqGSM49BAMCMFkxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwEQWNtZTEWMBQGA1UEAwwNRUNEU0EgUm9vdCBDQTAeFw0yNDA1MjMyMTMxMjZaFw0yNTA2MjIyMTM2MjZaMFIxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwEQWNtZTEPMA0GA1UEAwwGU2FtcGxlMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+sJ+RexKc/JoboYegEnx/aPKpqbcyblURjF6LFX81HH/178sRGs27gCmZQJRsy/p5UEft3TUxHnNgfkSbH8JhqOBpjCBozAJBgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwHQYDVR0OBBYEFDC3pGZzubyIczpi7aOSUlTh2QLTMB8GA1UdIwQYMBaAFPe8/V7Es/1xv9EAzxygcDqnmF1MMCcGA1UdEQQgMB6CC2V4YW1wbGUub3Jngg93d3cuZXhhbXBsZS5vcmcwCgYIKoZIzj0EAwIDSAAwRQIhANLnkoX+sq2m4c72kbzEyj5ntz29F8scI5RmcSRI7n6+AiBvx3grB3715z4DgxHldmUHI1rON9fJ4qn6Cj6DUPIxnA==
+        <ds:X509Certificate>         
+        MIICRzCCAe6gAwIBAgIId9OYPir//u0wCgYIKoZIzj0EAwIwWTELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAkNBMRYwFAYDVQQHDA1TYW4gRnJhbmNpc2NvMQ0wCwYDVQQKDARBY21lMRYwFAYDVQQDDA1FQ0RTQSBSb290IENBMB4XDTI0MDUyMzIwNTYxNVoXDTI1MDYyMjIxMDExNVowUjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAkNBMRYwFAYDVQQHDA1TYW4gRnJhbmNpc2NvMQ0wCwYDVQQKDARBY21lMQ8wDQYDVQQDDAZTYW1wbGUwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAARkQjfb7c8fRyl6Bl39nk7IzepBTNMM9CUHLy9U/k253F9in1iKBE11u4UnonesPXTZei3s9mBws45mA5D+pwa0o4GmMIGjMAkGA1UdEwQCMAAwDgYDVR0PAQH/BAQDAgWgMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjAdBgNVHQ4EFgQU1wsmDYJ0xhk5nUvQAvTl2JjrtKwwHwYDVR0jBBgwFoAUgqHNeFH29yIG115D4wzmb7kxtRswJwYDVR0RBCAwHoILZXhhbXBsZS5vcmeCD3d3dy5leGFtcGxlLm9yZzAKBggqhkjOPQQDAgNHADBEAiB97e7l7n4CByF3q+C5ifHRAylcw+/Y3xxDljV58y8EGwIgQ459fCYFIyVmLuQatNtxlIfhw1joyv8gx/yNMct4Oh8=
         </ds:X509Certificate>
       </ds:X509Data>
     </ds:KeyInfo>
     <ds:Object>
-      <xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#">
-        <xades:SignedProperties Id="SignedProperties">
+        <xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#Signature">
+            <xades:SignedProperties Id="SignedProperties">
           <xades:SignedSignatureProperties>
             <xades:SigningTime>
-              2024-05-23 22:36:26.394021Z
+              2024-05-23 22:01:15.235772Z
             </xades:SigningTime>
             <xades:SigningCertificate>
               <xades:Cert>
                 <xades:CertDigest>
                   <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
                   <ds:DigestValue>
-                    StwY92Knhq425UwiWoCL8SAar2npIpooJZFKN4eUVN4=
+                    OKKRXQUSeNls34p5AhupKBTAgR7IHLlh41rIXLlUjzQ=
                   </ds:DigestValue>
                 </xades:CertDigest>
                 <xades:IssuerSerial>
@@ -71,7 +66,7 @@
                     ECDSA Root CA
                   </ds:X509IssuerName>
                   <ds:X509SerialNumber>
-                    15465535143442842015
+                    6142107836066230374
                   </ds:X509SerialNumber>
                 </xades:IssuerSerial>
               </xades:Cert>
@@ -133,11 +128,6 @@
         <xades:UnsignedProperties>
           <xades:UnsignedSignatureProperties></xades:UnsignedSignatureProperties>
         </xades:UnsignedProperties>
-      </xades:QualifyingProperties>
+        </xades:QualifyingProperties>
     </ds:Object>
-  </ds:Signature>
-  <ContentExport>
-    <SignatureContent URL="https://documents.brifle.de/2341ac23HAbcA" id="data-2341ac23HAbcA">document1</SignatureContent>
-    <SignatureContent URL="https://documents.brifle.de/671ac23HAbcA" id="data-671ac23HAbcA">document2</SignatureContent>
-  </ContentExport>
-</SignatureDocument>
+</ds:Signature>

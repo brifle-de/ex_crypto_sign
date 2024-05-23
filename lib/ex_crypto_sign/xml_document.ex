@@ -62,11 +62,11 @@ defmodule ExCryptoSign.XmlDocument do
   end
 
   def build_signature(xml_document) do
-    XmlBuilder.element("ds:Signature", %{id: xml_document.id}, [
+    XmlBuilder.element("ds:Signature", %{Id: xml_document.id}, [
       SignedInfo.build(xml_document.signed_info),
       SignatureValue.build(xml_document.signature_value),
-      PropertiesObject.build(xml_document.object, xml_document.id),
-      KeyInfo.build(xml_document.key_info)
+      KeyInfo.build(xml_document.key_info),
+      PropertiesObject.build(xml_document.object, xml_document.id)
     ])
   end
 
@@ -83,6 +83,7 @@ defmodule ExCryptoSign.XmlDocument do
       "xmlns:xsd" => "http://www.w3.org/2001/XMLSchema",
       "xmlns" => "http://uri.etsi.org/01903/v1.1.1\#",
       "xmlns:ds" => "http://www.w3.org/2000/09/xmldsig\#",
+      "xmlns:xades" => "http://uri.etsi.org/01903/v1.3.2\#",
       "elementFormDefault" => "qualified"
     }
 
@@ -181,7 +182,7 @@ defmodule ExCryptoSign.XmlDocument do
     meta = parse_metadata(xml_document)
     embedded_documents = SweetXml.xpath(xml_document, SweetXml.sigil_x("//SignatureContents/SignatureContent", 'l'))
       |> Enum.map(fn doc ->
-        id = SweetXml.xpath(doc, SweetXml.sigil_x("@ID", 's')) |> String.replace("data-content-", "")
+        id = SweetXml.xpath(doc, SweetXml.sigil_x("@Id", 's')) |> String.replace("data-content-", "")
         content = SweetXml.xpath(doc, SweetXml.sigil_x("text()", 's'))
         %{id: id, content: content}
       end)

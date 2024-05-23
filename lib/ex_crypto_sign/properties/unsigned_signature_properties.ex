@@ -28,15 +28,15 @@ defmodule ExCryptoSign.Properties.UnsignedSignatureProperties do
   end
 
   def parse_document(xml_document) do
-    base = "//ds:Signature/ds:Object/ds:QualifyingProperties/ds:UnsignedProperties/ds:UnsignedSignatureProperties"
-    signature_time_stamps = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/ds:SignatureTimeStamp"))
-    complete_certificate_refs = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/ds:CompleteCertificateRefs"))
-    complete_revocation_refs = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/ds:CompleteRevocationRefs"))
-    sig_and_ref_time_stamps = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/ds:SigAndRefsTimeStamp"))
-    archive_time_stamps = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/ds:ArchiveTimeStamp"))
-    certificate_values = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/ds:CertificateValues"))
-    revocation_values = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/ds:RevocationValues"))
-    counter_signatures = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/ds:CounterSignature"))
+    base = "//ds:Signature/ds:Object/xades:QualifyingProperties/xades:UnsignedProperties/xades:UnsignedSignatureProperties"
+    signature_time_stamps = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:SignatureTimeStamp"))
+    complete_certificate_refs = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:CompleteCertificateRefs"))
+    complete_revocation_refs = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:CompleteRevocationRefs"))
+    sig_and_ref_time_stamps = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:SigAndRefsTimeStamp"))
+    archive_time_stamps = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:ArchiveTimeStamp"))
+    certificate_values = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:CertificateValues"))
+    revocation_values = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:RevocationValues"))
+    counter_signatures = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:CounterSignature"))
 
 
     %{
@@ -185,7 +185,7 @@ defmodule ExCryptoSign.Properties.UnsignedSignatureProperties do
   def build(nil), do: build(new())
 
   def build(unsigned_signature_properties) do
-    xml = XmlBuilder.element("UnsignedSignatureProperties", [
+    xml = XmlBuilder.element("xades:UnsignedSignatureProperties", [
       unsigned_signature_properties.signature_time_stamps,
       unsigned_signature_properties.complete_certificate_refs,
       unsigned_signature_properties.complete_revocation_refs,

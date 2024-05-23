@@ -20,29 +20,33 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
 
   defp parse_data_object_format(xml_document) do
 
-    base = "//ds:Signature/ds:Object/QualifyingProperties/SignedProperties/SignedDataObjectProperties"
-
-    count = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat", 'l')) |> Enum.count()
 
 
-    data_object_format = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/DataObjectFormat", 'l')) |> Enum.map(fn element ->
+    base = "//ds:Signature/ds:Object/xades:QualifyingProperties/xades:SignedProperties/xades:SignedDataObjectProperties"
+
+    count = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:DataObjectFormat", 'l')) |> Enum.count()
+
+
+
+    data_object_format = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:DataObjectFormat", 'l')) |> Enum.map(fn element ->
 
       reference_exist? = SweetXml.xpath(element, SweetXml.sigil_x("./@ObjectReference")) != nil
-      identifier_exist? = SweetXml.xpath(element, SweetXml.sigil_x("./ObjectIdentifier/Identifier/text()")) != nil
-      mime_type_exist? = SweetXml.xpath(element, SweetXml.sigil_x("./MimeType/text()")) != nil
-      encoding_exist? = SweetXml.xpath(element, SweetXml.sigil_x("./Encoding/text()")) != nil
-      description_exist? = SweetXml.xpath(element, SweetXml.sigil_x("./ObjectIdentifier/Description/text()")) != nil
+      identifier_exist? = SweetXml.xpath(element, SweetXml.sigil_x("./xades:ObjectIdentifier/xades:Identifier/text()")) != nil
+      mime_type_exist? = SweetXml.xpath(element, SweetXml.sigil_x("./xades:MimeType/text()")) != nil
+      encoding_exist? = SweetXml.xpath(element, SweetXml.sigil_x("./xades:Encoding/text()")) != nil
+      description_exist? = SweetXml.xpath(element, SweetXml.sigil_x("./xades:ObjectIdentifier/xades:Description/text()")) != nil
 
 
 
       object_reference = if reference_exist?, do:  SweetXml.xpath(element, SweetXml.sigil_x("./@ObjectReference", 's')) |> String.trim(), else: nil
-      object_identifier = if identifier_exist?, do: SweetXml.xpath(element, SweetXml.sigil_x("./ObjectIdentifier/Identifier/text()", 's')) |> String.trim(), else: nil
-      mime_type = if mime_type_exist?, do: SweetXml.xpath(element, SweetXml.sigil_x("./MimeType/text()", 's')) |> String.trim(), else: nil
-      encoding = if encoding_exist?, do: SweetXml.xpath(element, SweetXml.sigil_x("./Encoding/text()", 's')) |> String.trim(), else: nil
-      description = if description_exist?, do: SweetXml.xpath(element, SweetXml.sigil_x("./ObjectIdentifier/Description/text()", 's')) |> String.trim(), else: nil
+      object_identifier = if identifier_exist?, do: SweetXml.xpath(element, SweetXml.sigil_x("./xades:ObjectIdentifier/xades:Identifier/text()", 's')) |> String.trim(), else: nil
+      mime_type = if mime_type_exist?, do: SweetXml.xpath(element, SweetXml.sigil_x("./xades:MimeType/text()", 's')) |> String.trim(), else: nil
+      encoding = if encoding_exist?, do: SweetXml.xpath(element, SweetXml.sigil_x("./xades:Encoding/text()", 's')) |> String.trim(), else: nil
+      description = if description_exist?, do: SweetXml.xpath(element, SweetXml.sigil_x("./xades:ObjectIdentifier/xades:Description/text()", 's')) |> String.trim(), else: nil
 
 
       has_any? = reference_exist? || identifier_exist? || mime_type_exist? || encoding_exist? || description_exist?
+
 
 
       case has_any? do
@@ -64,13 +68,13 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
   end
 
   defp parse_commitment_type_indication(xml_document) do
-    base = "//ds:Signature/ds:Object/QualifyingProperties/SignedProperties/SignedDataObjectProperties"
+    base = "//ds:Signature/ds:Object/xades:QualifyingProperties/xades:SignedProperties/xades:SignedDataObjectProperties"
 
-    type_identifier_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/CommitmentTypeIndication/CommitmentTypeId/Identifier/text()")) != nil
-    type_qualifier_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/CommitmentTypeIndication/CommitmentTypeId/Description/text()")) != nil
+    type_identifier_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:CommitmentTypeIndication/xades:CommitmentTypeId/xades:Identifier/text()")) != nil
+    type_qualifier_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:CommitmentTypeIndication/xades:CommitmentTypeId/xades:Description/text()")) != nil
 
-    commitment_type_identifier = if type_identifier_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/CommitmentTypeIndication/CommitmentTypeId/Identifier/text()", 's')) |> String.trim(), else: nil
-    commitment_type_qualifier = if type_qualifier_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/CommitmentTypeIndication/CommitmentTypeId/Description/text()", 's')) |> String.trim(), else: nil
+    commitment_type_identifier = if type_identifier_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:CommitmentTypeIndication/xades:CommitmentTypeId/xades:Identifier/text()", 's')) |> String.trim(), else: nil
+    commitment_type_qualifier = if type_qualifier_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:CommitmentTypeIndication/xades:CommitmentTypeId/xades:Description/text()", 's')) |> String.trim(), else: nil
 
     has_any? = type_identifier_exist? || type_qualifier_exist?
     case has_any? do
@@ -85,11 +89,11 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
 
   defp parse_all_data_objects_time_stamp(xml_document) do
 
-    base = "//ds:Signature/ds:Object/QualifyingProperties/SignedProperties/SignedDataObjectProperties"
+    base = "//ds:Signature/ds:Object/xades:QualifyingProperties/xades:SignedProperties/xades:SignedDataObjectProperties"
 
-    time_stamp_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/AllDataObjectsTimeStamp/EncapsulatedTimeStamp/text()")) != nil
+    time_stamp_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:AllDataObjectsTimeStamp/xades:EncapsulatedTimeStamp/text()")) != nil
 
-    time_stamp = if time_stamp_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/AllDataObjectsTimeStamp/EncapsulatedTimeStamp/text()", 's')) |> String.trim(), else: nil
+    time_stamp = if time_stamp_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:AllDataObjectsTimeStamp/xades:EncapsulatedTimeStamp/text()", 's')) |> String.trim(), else: nil
 
     has_any? = time_stamp_exist?
 
@@ -104,13 +108,13 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
 
   defp parse_individual_data_objects_time_stamp(xml_document) do
 
-    base = "//ds:Signature/ds:Object/QualifyingProperties/SignedProperties/SignedDataObjectProperties"
+    base = "//ds:Signature/ds:Object/xades:QualifyingProperties/xades:SignedProperties/xades:SignedDataObjectProperties"
 
-    reference_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/IndividualDataObjectsTimeStamp/@ObjectReference")) != nil
-    time_stamp_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/IndividualDataObjectsTimeStamp/EncapsulatedTimeStamp/text()")) != nil
+    reference_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:IndividualDataObjectsTimeStamp/@ObjectReference")) != nil
+    time_stamp_exist? = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:IndividualDataObjectsTimeStamp/xades:EncapsulatedTimeStamp/text()")) != nil
 
-    object_reference = if reference_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/IndividualDataObjectsTimeStamp/@ObjectReference", 's')) |> String.trim(), else: nil
-    time_stamp = if time_stamp_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/IndividualDataObjectsTimeStamp/EncapsulatedTimeStamp/text()", 's')) |> String.trim(), else: nil
+    object_reference = if reference_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:IndividualDataObjectsTimeStamp/@ObjectReference", 's')) |> String.trim(), else: nil
+    time_stamp = if time_stamp_exist?, do: SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:IndividualDataObjectsTimeStamp/xades:EncapsulatedTimeStamp/text()", 's')) |> String.trim(), else: nil
 
 
     has_any? = reference_exist? || time_stamp_exist?
@@ -187,7 +191,7 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
       end
 
       mime = if element.mime_type != nil do
-        XmlBuilder.element("MimeType", [
+        XmlBuilder.element("xades:MimeType", [
           element.mime_type
         ])
       else
@@ -195,7 +199,7 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
       end
 
       encoding = if element.encoding != nil do
-        XmlBuilder.element("Encoding", [
+        XmlBuilder.element("xades:Encoding", [
           element.encoding
         ])
       else
@@ -203,7 +207,7 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
       end
 
       identifier = if element.object_identifier != nil do
-        XmlBuilder.element("Identifier", [
+        XmlBuilder.element("xades:Identifier", [
           element.object_identifier
         ])
       else
@@ -211,7 +215,7 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
       end
 
       description = if element.description != nil do
-        XmlBuilder.element("Description", [
+        XmlBuilder.element("xades:Description", [
           element.description
         ])
       else
@@ -219,14 +223,14 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
       end
 
 
-      xml = XmlBuilder.element("DataObjectFormat",
+      xml = XmlBuilder.element("xades:DataObjectFormat",
       [
         ObjectReference: obj_ref
       ],
       [
         mime,
         encoding,
-        XmlBuilder.element("ObjectIdentifier", [
+        XmlBuilder.element("xades:ObjectIdentifier", [
           [identifier, description] |> Enum.filter(fn x -> x != nil end)
         ])
       ] |> Enum.filter(fn x -> x != nil end)
@@ -261,7 +265,7 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
     if signed_data_object_properties.commitment_type_indication != nil do
       identifier = if signed_data_object_properties.commitment_type_indication.commitment_type_identifier != nil
       do
-        XmlBuilder.element("Identifier", [
+        XmlBuilder.element("xades:Identifier", [
           signed_data_object_properties.commitment_type_indication.commitment_type_identifier
         ])
       else
@@ -270,22 +274,22 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
 
       description = if signed_data_object_properties.commitment_type_indication.commitment_type_qualifier != nil
       do
-        XmlBuilder.element("Description", [
+        XmlBuilder.element("xades:Description", [
           signed_data_object_properties.commitment_type_indication.commitment_type_qualifier
         ])
       else
         nil
       end
 
-      type_id = [XmlBuilder.element("Identifier", [
+      type_id = [XmlBuilder.element("xades:Identifier", [
         identifier
       ]),
-      XmlBuilder.element("Description", [
+      XmlBuilder.element("xades:Description", [
         description
       ])] |> Enum.filter(fn x -> x != nil end)
 
-      XmlBuilder.element("CommitmentTypeIndication", [
-        XmlBuilder.element("CommitmentTypeId", type_id)
+      XmlBuilder.element("xades:CommitmentTypeIndication", [
+        XmlBuilder.element("xades:CommitmentTypeId", type_id)
       ])
     else
       nil
@@ -307,8 +311,8 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
     if signed_data_object_properties.all_data_objects_time_stamp == nil do
       nil
     else
-      xml = XmlBuilder.element("AllDataObjectsTimeStamp", [
-        XmlBuilder.element("EncapsulatedTimeStamp", [
+      xml = XmlBuilder.element("xades:AllDataObjectsTimeStamp", [
+        XmlBuilder.element("xades:EncapsulatedTimeStamp", [
           signed_data_object_properties.all_data_objects_time_stamp.time_stamp
         ])
       ])
@@ -337,11 +341,11 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
       nil
 
     else
-      xml = XmlBuilder.element("IndividualDataObjectsTimeStamp", [
-        XmlBuilder.element("ObjectReference", [
+      xml = XmlBuilder.element("xades:IndividualDataObjectsTimeStamp", [
+        XmlBuilder.element("xades:ObjectReference", [
           signed_data_object_properties.individual_data_objects_time_stamp.object_reference
         ]),
-        XmlBuilder.element("EncapsulatedTimeStamp", [
+        XmlBuilder.element("xades:EncapsulatedTimeStamp", [
           signed_data_object_properties.individual_data_objects_time_stamp.time_stamp
         ])
       ])
@@ -357,7 +361,7 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
 
 
 
-    xml = XmlBuilder.element("SignedDataObjectProperties", [
+    xml = XmlBuilder.element("xades:SignedDataObjectProperties", [
       build_data_object_format(signed_data_object_properties),
       build_commitment_type_indication(signed_data_object_properties),
       build_all_data_objects_time_stamp(signed_data_object_properties),

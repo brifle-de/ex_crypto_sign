@@ -9,7 +9,7 @@ defmodule ExCryptoSign.Properties.SignedSignatureProperties do
     %{
       signing_time: nil,
       signing_certificate: nil,
-      signature_policy_identifier: "SignaturePolicyImplied",
+      signature_policy_identifier: "xades:SignaturePolicyImplied",
       signature_production_place: nil,
       signer_role: nil
     }
@@ -34,11 +34,11 @@ defmodule ExCryptoSign.Properties.SignedSignatureProperties do
   end
 
   defp parse_certificate(xml_document) do
-    base = "//ds:Signature/ds:Object/QualifyingProperties/SignedProperties/SignedSignatureProperties/SigningCertificate/Cert"
-    digest_method = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/CertDigest/DigestMethod/@Algorithm", 's')) |> HashMethods.from_w3_url()
-    digest_value = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/CertDigest/DigestValue/text()", 's')) |> String.trim()
-    issuer_name = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/IssuerSerial/X509IssuerName/text()", 's')) |> String.trim()
-    serial_number = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/IssuerSerial/X509SerialNumber/text()", 's')) |> String.trim()
+    base = "//ds:Signature/ds:Object/xades:QualifyingProperties/xades:SignedProperties/xades:SignedSignatureProperties/xades:SigningCertificate/xades:Cert"
+    digest_method = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:CertDigest/ds:DigestMethod/@Algorithm", 's')) |> HashMethods.from_w3_url()
+    digest_value = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:CertDigest/ds:DigestValue/text()", 's')) |> String.trim()
+    issuer_name = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:IssuerSerial/ds:X509IssuerName/text()", 's')) |> String.trim()
+    serial_number = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:IssuerSerial/ds:X509SerialNumber/text()", 's')) |> String.trim()
 
     %{
       digest_type: digest_method,
@@ -50,14 +50,14 @@ defmodule ExCryptoSign.Properties.SignedSignatureProperties do
 
   def parse_document(xml_document) do
 
-    base = "//ds:Signature/ds:Object/QualifyingProperties/SignedProperties/SignedSignatureProperties"
+    base = "//ds:Signature/ds:Object/xades:QualifyingProperties/xades:SignedProperties/xades:SignedSignatureProperties"
 
-    signing_time = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/SigningTime/text()", 's')) |> String.trim()
+    signing_time = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:SigningTime/text()", 's')) |> String.trim()
     signing_certificate = parse_certificate(xml_document)
-    signature_production_place_city = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/SignatureProductionPlace/City/text()", 's')) |> String.trim()
-    signature_production_place_country = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/SignatureProductionPlace/CountryName/text()", 's')) |> String.trim()
-    signer_roles_claimed = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/SignerRole/ClaimedRoles/ClaimedRole", 'l'))
-    signer_roles_certified = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/SignerRole/CertifiedRoles/CertifiedRole", 'l'))
+    signature_production_place_city = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:SignatureProductionPlace/xades:City/text()", 's')) |> String.trim()
+    signature_production_place_country = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:SignatureProductionPlace/xades:CountryName/text()", 's')) |> String.trim()
+    signer_roles_claimed = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:SignerRole/xades:ClaimedRoles/xades:ClaimedRole", 'l'))
+    signer_roles_certified = SweetXml.xpath(xml_document, SweetXml.sigil_x("#{base}/xades:SignerRole/xades:CertifiedRoles/xades:CertifiedRole", 'l'))
 
     signer_role = %{
       claimed_roles: Enum.map(signer_roles_claimed, fn role -> SweetXml.xpath(role, SweetXml.sigil_x("./text()", 's')) |> String.trim() end),
@@ -91,7 +91,7 @@ defmodule ExCryptoSign.Properties.SignedSignatureProperties do
     if signed_signature_properties.signing_time == nil do
       nil
     else
-      XmlBuilder.element("SigningTime", [
+      XmlBuilder.element("xades:SigningTime", [
         signed_signature_properties.signing_time
       ])
     end
@@ -117,19 +117,19 @@ defmodule ExCryptoSign.Properties.SignedSignatureProperties do
     if signed_signature_properties.signing_certificate == nil do
       nil
     else
-      xml = XmlBuilder.element("SigningCertificate", [
-        XmlBuilder.element("Cert", [
-          XmlBuilder.element("CertDigest", [
-            XmlBuilder.element("DigestMethod", %{Algorithm: HashMethods.get_w3_url(signed_signature_properties.signing_certificate.digest_type)}, []),
-            XmlBuilder.element("DigestValue", [
+      xml = XmlBuilder.element("xades:SigningCertificate", [
+        XmlBuilder.element("xades:Cert", [
+          XmlBuilder.element("xades:CertDigest", [
+            XmlBuilder.element("ds:DigestMethod", %{Algorithm: HashMethods.get_w3_url(signed_signature_properties.signing_certificate.digest_type)}, []),
+            XmlBuilder.element("ds:DigestValue", [
               signed_signature_properties.signing_certificate.digest
             ])
           ]),
-          XmlBuilder.element("IssuerSerial", [
-            XmlBuilder.element("X509IssuerName", [
+          XmlBuilder.element("xades:IssuerSerial", [
+            XmlBuilder.element("ds:X509IssuerName", [
               signed_signature_properties.signing_certificate.issuer
             ]),
-            XmlBuilder.element("X509SerialNumber", [
+            XmlBuilder.element("ds:X509SerialNumber", [
               signed_signature_properties.signing_certificate.serial
             ])
           ])
@@ -159,11 +159,11 @@ defmodule ExCryptoSign.Properties.SignedSignatureProperties do
     if(signed_signature_properties.signature_production_place == nil) do
       nil
     else
-      XmlBuilder.element("SignatureProductionPlace", [
-        XmlBuilder.element("City", [
+      XmlBuilder.element("xades:SignatureProductionPlace", [
+        XmlBuilder.element("xades:City", [
           signed_signature_properties.signature_production_place.city_name
         ]),
-        XmlBuilder.element("CountryName", [
+        XmlBuilder.element("xades:CountryName", [
           signed_signature_properties.signature_production_place.country
         ])
       ])
@@ -197,12 +197,12 @@ defmodule ExCryptoSign.Properties.SignedSignatureProperties do
       if claimed_roles == nil && certified_roles == nil do
         nil
       else
-        xml = XmlBuilder.element("SignerRole", [
-          XmlBuilder.element("ClaimedRoles", [
-            Enum.map(claimed_roles, fn role -> XmlBuilder.element("ClaimedRole", [role]) end)
+        xml = XmlBuilder.element("xades:SignerRole", [
+          XmlBuilder.element("xades:ClaimedRoles", [
+            Enum.map(claimed_roles, fn role -> XmlBuilder.element("xades:ClaimedRole", [role]) end)
           ]),
-          XmlBuilder.element("CertifiedRoles", [
-            Enum.map(certified_roles, fn role -> XmlBuilder.element("CertifiedRole", [role]) end)
+          XmlBuilder.element("xades:CertifiedRoles", [
+            Enum.map(certified_roles, fn role -> XmlBuilder.element("xades:CertifiedRole", [role]) end)
           ])
         ])
         xml
@@ -216,12 +216,12 @@ defmodule ExCryptoSign.Properties.SignedSignatureProperties do
   def build(signed_signature_properties) do
 
 
-    signature_policy_identifier = XmlBuilder.element("SignaturePolicyIdentifier", [
+    signature_policy_identifier = XmlBuilder.element("xades:SignaturePolicyIdentifier", [
       XmlBuilder.element(signed_signature_properties.signature_policy_identifier, [])
     ])
 
 
-    xml = XmlBuilder.element("SignedSignatureProperties", [
+    xml = XmlBuilder.element("xades:SignedSignatureProperties", [
       build_signing_time(signed_signature_properties),
       build_x590_certificate(signed_signature_properties),
       signature_policy_identifier,

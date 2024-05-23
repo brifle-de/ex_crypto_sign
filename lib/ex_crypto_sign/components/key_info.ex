@@ -17,7 +17,11 @@ defmodule ExCryptoSign.Components.KeyInfo do
   puts the x509 data in the key info
   """
   def put_x509_data(key_info, x509_data_pem) do
-    Map.put(key_info, :x509_data, x509_data_pem)
+       # clean the x509 data
+
+    x509_data = x509_data_pem |> String.replace("\n", "") |> String.trim() |> String.replace("-----BEGIN CERTIFICATE-----", "") |> String.replace("-----END CERTIFICATE-----", "")
+
+    Map.put(key_info, :x509_data, x509_data)
   end
 
   @doc """
@@ -25,6 +29,8 @@ defmodule ExCryptoSign.Components.KeyInfo do
   """
   def build(key_info) do
     x509_data = Map.get(key_info, :x509_data)
+
+
 
     x509_data_xml = XmlBuilder.element("ds:X509Data", [
       XmlBuilder.element("ds:X509Certificate", [
