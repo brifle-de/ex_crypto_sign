@@ -2,6 +2,12 @@
 
 This libary allows it to generate signatures in xml format.
 
+## Note
+
+This is the signature algorithm which is used by Brifle for generating XaDES signatures. It can only generate and validate those signatures yet.
+
+You can use any xADES validator library to validate the produced signature. However, that libary needs to support XPATH Transformation. 
+
 ## Example
 
 ```elixir
@@ -72,21 +78,4 @@ This libary allows it to generate signatures in xml format.
 
 
 ```
-
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `ex_crypto_sign` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:ex_crypto_sign, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/ex_crypto_sign>.
 
