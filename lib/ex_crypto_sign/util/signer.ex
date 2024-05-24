@@ -5,28 +5,70 @@ defmodule ExCryptoSign.Util.Signer do
     # parse the xml document
     xml_document = ExCryptoSign.XmlDocument.parse_document(xml_string)
 
-
-
-    # compute the signature value
+      # compute the signature value
     signature = compute_signature_value(xml_string, private_key)
 
+    # convert the signature to raw (r, s) values
+    raw_signature = to_raw_signature(signature)
 
     # put the signature value in the xml document
-    xml_document = ExCryptoSign.XmlDocument.put_signature_value(xml_document, signature)
+    xml_document = ExCryptoSign.XmlDocument.put_signature_value(xml_document, raw_signature)
 
     # build the xml document
     xml_document_string = ExCryptoSign.XmlDocument.build_xml(xml_document)
 
-
     {:ok, {xml_document_string, signature}}
   end
+
+  def to_raw_signature(base64_signature) do
+
+    curve_size_bytes = 32
+
+    %EllipticCurve.Signature{
+      r: r,
+      s: s
+    }  = EllipticCurve.Signature.fromBase64!(base64_signature)
+
+    # convert r number to a byte list using big endian and unsigned
+
+    r_bytes = integer_to_bytes(r, curve_size_bytes)
+    s_bytes = integer_to_bytes(s, curve_size_bytes)
+    signature_bytes = <<r_bytes::binary, s_bytes::binary>>
+
+
+    base64_string = signature_bytes |> Base.encode64()
+
+    base64_string
+  end
+
+  defp integer_to_bytes(integer, byte_length) do
+    :binary.encode_unsigned(integer)
+    |> pad_left(byte_length)
+  end
+
+  defp pad_left(binary, byte_length) do
+    padding_length = byte_length - byte_size(binary)
+    padding = :binary.copy(<<0>>, padding_length)
+    <<padding::binary, binary::binary>>
+  end
+
+
 
   @doc """
   adds the signature to the xml document
   """
   def add_signature(xml_string, signature) do
+    signature_value = case Base.decode64(signature) do
+      {:ok, binary_sig} -> signature_length = byte_size(binary_sig)
+        case signature_length do
+          64 -> Base.encode64(signature)
+          _ -> to_raw_signature(signature)
+        end
+      _ -> ""
+    end
+
     xml_document = ExCryptoSign.XmlDocument.parse_document(xml_string)
-    xml_document = ExCryptoSign.XmlDocument.put_signature_value(xml_document, signature)
+    xml_document = ExCryptoSign.XmlDocument.put_signature_value(xml_document, signature_value)
     ExCryptoSign.XmlDocument.build_xml(xml_document)
   end
 
@@ -63,8 +105,11 @@ defmodule ExCryptoSign.Util.Signer do
     # canonicalize the signed info
     canon = canonicalize(signed_info, canonicalized_method)
 
+
+
     # canon contains the default namespace, this causes frontend problems
     # remove the default namespace by applying a regex on the signedinfo node
+    # python canon is removing it as well
     String.replace(canon, ~r/ xmlns=\"([^\"]*)\"/, "")
   end
 

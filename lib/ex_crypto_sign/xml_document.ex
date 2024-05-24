@@ -112,7 +112,7 @@ defmodule ExCryptoSign.XmlDocument do
 
     if has_embedded_documents? do
         embs = Enum.map(xml_document.embedded_documents, fn doc ->
-          XmlBuilder.element("SignatureContent", [ID: "data-content-#{doc.id}"],  doc.content)
+          XmlBuilder.element("SignatureContent", [Id: "data-content-#{doc.id}"],  doc.content)
         end)
         xml_embs = XmlBuilder.element("SignatureContents", embs)
         XmlBuilder.element("SignatureDocument", type_def, [meta, xml_embs, signature] ++ export_data)
@@ -174,7 +174,7 @@ defmodule ExCryptoSign.XmlDocument do
   def parse_document(xml_string) do
     xml_document = SweetXml.parse(xml_string, namespace_conformant: true, document: true)
 
-    id = SweetXml.xpath(xml_document, SweetXml.sigil_x("//ds:Signature/@id", 's'))
+    id = SweetXml.xpath(xml_document, SweetXml.sigil_x("//ds:Signature/@Id", 's'))
     signed_info = SignedInfo.parse_document(id, xml_document)
     signature_value = SignatureValue.parse_document(xml_document)
     key_info = KeyInfo.parse_document(xml_document)

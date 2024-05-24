@@ -1,0 +1,37 @@
+<ds:SignedInfo xmlns="http://uri.etsi.org/01903/v1.1.1#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+      <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:CanonicalizationMethod>
+      <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"></ds:SignatureMethod>
+      <ds:Reference Id="doc-1" URI="#data-2341ac23HAbcA">
+        <ds:Transforms>
+          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+          <ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116">
+            <ds:XPath>//text()</ds:XPath>
+          </ds:Transform>
+        </ds:Transforms>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
+        <ds:DigestValue>
+          9/rc+uGpJU5DtFG32TKp4IhgdYqPwFbW3SRNo9T+yYdDpgNkJead18A0hgfHuqiNmGRUUzab5yjY3JRl9/JPFw==
+        </ds:DigestValue>
+      </ds:Reference>
+      <ds:Reference Id="doc-2" URI="#data-671ac23HAbcA">
+        <ds:Transforms>
+          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+          <ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116">
+            <ds:XPath>//text()</ds:XPath>
+          </ds:Transform>
+        </ds:Transforms>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
+        <ds:DigestValue>
+          ugt5zYrMB6JJG6kxdN6FE/jl5/AY4HsAsmZEJQ76CMvvAKm6xHtbF57c7wka3yah+sH6Ny5nNilFkejEHA53EA==
+        </ds:DigestValue>
+      </ds:Reference>
+      <ds:Reference URI="#SignedProperties">
+        <ds:Transforms>
+          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+        </ds:Transforms>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
+        <ds:DigestValue>
+          ZYn9YY3Yb++2Tkv6FpB9QNuZqJOxABmylKq5PbAqX7asj65a9QacokxFb8BQBXphW+hvpDhyUp/gv1+kDR6txQ==
+        </ds:DigestValue>
+      </ds:Reference>
+    </ds:SignedInfo>

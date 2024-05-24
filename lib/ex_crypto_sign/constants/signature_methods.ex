@@ -60,7 +60,7 @@ defmodule ExCryptoSign.Constants.SignatureMethods do
   end
 
   def ecdsa_sha256 do
-    @ecdsa_sha1
+    @ecdsa_sha256
   end
 
   def ecdsa_sha512 do

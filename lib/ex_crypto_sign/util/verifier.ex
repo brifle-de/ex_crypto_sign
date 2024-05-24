@@ -44,7 +44,17 @@ alias ExCryptoSign.Util.PemCertificate
     signature_method = signed_info.signature_method
 
     # get the signature value
-    signature_value = signature.value |> Base.decode64!()
+
+    raw_signature = signature.value |> Base.decode64!() |> Base.encode16()
+    r = raw_signature |> String.slice(0, 64) |> String.to_integer(16)
+    s = raw_signature |> String.slice(64, 64) |> String.to_integer(16)
+
+    signature_value = %EllipticCurve.Signature{
+      r: r,
+      s: s
+    }
+      |> EllipticCurve.Signature.toBase64()
+      |> Base.decode64!()
 
     # compute validation digest
     xml_string = ExCryptoSign.XmlDocument.build_xml(xml_document)

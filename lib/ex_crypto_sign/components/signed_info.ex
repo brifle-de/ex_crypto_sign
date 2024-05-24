@@ -90,12 +90,15 @@ defmodule ExCryptoSign.Components.SignedInfo do
     digest_value = :crypto.hash(digest_method, content)
     digest_method_name = HashMethods.get_w3_url(digest_method)
 
+    xpath_id = uri |> String.replace("#", "")
+    xpath = "//*[@id='#{xpath_id}']/text()"
+
     document_digest = %{
       id: id,
       uri: uri,
       digest_method: digest_method_name,
       digest_value: digest_value,
-      transforms: [:c14n, {:xpath, "//text()"}]
+      transforms: [:c14n, {:xpath, xpath}]
     }
 
     document_digests = Map.get(signed_info, :documents_digest) ++ [document_digest]

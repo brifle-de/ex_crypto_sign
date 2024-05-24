@@ -32,7 +32,6 @@ defmodule ExCryptoSign.Components.SignatureValue do
       v -> v
     end
 
-
     signature_value_xml = XmlBuilder.element("ds:SignatureValue", [
       signature_val
     ])

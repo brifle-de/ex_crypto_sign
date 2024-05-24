@@ -27,7 +27,8 @@ defmodule ExCryptoSign do
       {_, signed_info} ->
         signed_info
       end
-    |> SignedInfo.put_signature_method(:ecdsa_sha3_512)
+   # |> SignedInfo.put_signature_method(:ecdsa_sha3_512)
+    |> SignedInfo.put_signature_method(:ecdsa_sha256)
     |> SignedInfo.put_signed_property_digest(:sha3_512, get_properties_object(doc_opts))
 
 

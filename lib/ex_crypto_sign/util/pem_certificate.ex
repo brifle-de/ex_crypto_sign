@@ -28,7 +28,7 @@ defmodule ExCryptoSign.Util.PemCertificate do
       pem_data = cond do
         String.contains?(pem_data, "-----END CERTIFICATE-----") -> pem_data
         true -> pem_data <> "\n-----END CERTIFICATE-----"
-      end |> IO.inspect()
+      end
   end
 
   def get_certificate_issuer(pem_data) do

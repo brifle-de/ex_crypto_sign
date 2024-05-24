@@ -28,7 +28,8 @@ defmodule ExCryptoSign.MixProject do
       {:xml_builder, "~> 2.2"},
       {:xmerl_c14n, "~> 0.2.0"},
       {:x509, "~> 0.8.8"},
-      {:sweet_xml, "~> 0.7.4"}
+      {:sweet_xml, "~> 0.7.4"},
+      {:starkbank_ecdsa, "~> 1.1"}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
