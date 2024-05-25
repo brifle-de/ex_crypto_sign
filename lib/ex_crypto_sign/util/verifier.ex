@@ -4,7 +4,7 @@ alias ElixirSense.Providers.Signature
 alias ExCryptoSign.Util.Signer
 alias ExCryptoSign.Util.PemCertificate
 
-  defp certificate_matches?(xml_document) do
+  def certificate_matches?(xml_document) do
     # get the certificate from the xml document
 
 
@@ -71,7 +71,17 @@ alias ExCryptoSign.Util.PemCertificate
     :public_key.verify(valdidate_string, used_digest, signature_value, public_key)
   end
 
-  def verifies_document(xml_string, document_contents) do
+  @doc """
+  verifies the signature of an exported xml document
+  """
+  def verify_exported_signature(xml_string) do
+    xml_document = ExCryptoSign.XmlDocument.parse_document(xml_string)
+    # get the embedded documents
+    documents = xml_document.embedded_documents
+    ExCryptoSign.Util.Verifier.verifies_document(xml_string, documents)
+  end
+
+  def verifies_document(xml_string, documents) do
     xml_document = ExCryptoSign.XmlDocument.parse_document(xml_string)
     signed_info = xml_document.signed_info
 
@@ -81,19 +91,14 @@ alias ExCryptoSign.Util.PemCertificate
     |> ExCryptoSign.Components.PropertiesObject.build_signature_xml()
 
     # check whether the documents are contained in signed info
-    contains_documents = ExCryptoSign.Components.SignedInfo.contains_documents?(signed_info, document_contents)
+    contains_documents = ExCryptoSign.Components.SignedInfo.contains_documents?(signed_info, documents)
     # check whether the signed properties are contained in signed info
 
-
-
     contains_signed_property = ExCryptoSign.Components.SignedInfo.contains_signed_property?(signed_info, signed_properties_xml)
-
-
 
     cert_match = certificate_matches?(xml_document)
 
     cert_valid_at_signing = cert_valid_at_signing?(xml_document)
-
 
     with {:doc, true} <- {:doc, contains_documents},
           {:signed_props, true} <- {:signed_props, contains_signed_property},

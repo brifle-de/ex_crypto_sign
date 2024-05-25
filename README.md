@@ -6,7 +6,10 @@ This libary allows it to generate signatures in xml format.
 
 This is the signature algorithm which is used by Brifle for generating XaDES signatures. It can only generate and validate those signatures yet.
 
-You can use any xADES validator library to validate the produced signature. However, that libary needs to support XPATH Transformation. 
+It uses SHA-256, SHA3-512 and ECDSA with a 256 bit key. No other algorithm are fully supported yet.
+
+TODO: Add larger key length
+ 
 
 ## Example
 

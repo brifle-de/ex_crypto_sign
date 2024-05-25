@@ -8,8 +8,11 @@ with open("ca.pem", "rb") as fh:
     ca_pem = fh.read()
 
 
+
+
 ca_pem_file = "./ca.pem"
 signed_root = open('./debug/test-export.xml').read()
+
 verified_data = XMLVerifier().verify(signed_root, ca_pem_file=ca_pem_file).signed_xml
 
 

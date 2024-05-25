@@ -8,16 +8,32 @@ defmodule VerifierTest do
     {key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert()
     key = Support.CertCreator.private_key_from_pem(key_pem)
     signature_xml_string = create_signature(cert_pem, key_pem)
-    res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string, ["document1", "document2"])
+    res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string, [%{content: "document1", id: "2341ac23HAbcA"}, %{content: "document2", id: "671ac23HAbcA"}])
 
     assert {:ok, true} = res
+  end
+
+
+  test "verifies exported successul" do
+    xml = File.read!("test/files/exported_valid_signature.xml")
+    assert {:ok, true} = ExCryptoSign.Util.Verifier.verify_exported_signature(xml)
+  end
+
+  test "invalid signature exported successul" do
+    xml = File.read!("test/files/exported_invalid_signature.xml")
+    assert {:error, :signature} = ExCryptoSign.Util.Verifier.verify_exported_signature(xml)
+  end
+
+  test "invalid digest exported successul" do
+    xml = File.read!("test/files/exported_invalid_digest_signature.xml")
+    assert {:error, :doc} = ExCryptoSign.Util.Verifier.verify_exported_signature(xml)
   end
 
   test "error wrong documents" do
     {key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert()
     _key = Support.CertCreator.private_key_from_pem(key_pem)
     signature_xml_string = create_signature(cert_pem, key_pem)
-    res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string, ["document3", "document5"])
+    res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string, [%{content: "document3", id: "2341ac23HAbcA"}, %{content: "document5", id: "671ac23HAbcA"}])
 
     assert {:error, :doc} = res
   end
@@ -26,7 +42,7 @@ defmodule VerifierTest do
     {key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert()
     _key = Support.CertCreator.private_key_from_pem(key_pem)
     signature_xml_string = create_signature_old(cert_pem, key_pem)
-    res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string, ["document1", "document2"])
+    res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string, [%{content: "document1", id: "2341ac23HAbcA"}, %{content: "document2", id: "671ac23HAbcA"}])
 
     assert {:error, :cert_validy_date} = res
 
@@ -36,7 +52,7 @@ defmodule VerifierTest do
     {key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert()
     _key = Support.CertCreator.private_key_from_pem(key_pem)
     signature_xml_string = create_signature_wrong_cert(cert_pem, key_pem)
-    res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string, ["document1", "document2"])
+    res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string, [%{content: "document1", id: "2341ac23HAbcA"}, %{content: "document2", id: "671ac23HAbcA"}])
 
     assert {:error, :cert_digest} = res
 
@@ -63,7 +79,7 @@ defmodule VerifierTest do
 
     signature_xml_string_manipulated = XmlDocument.build_xml(doc)
 
-    res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string_manipulated, ["document1", "document2"])
+    res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string_manipulated, [%{content: "document1", id: "2341ac23HAbcA"}, %{content: "document2", id: "671ac23HAbcA"}])
 
     assert {:error, :signed_props} = res
 
@@ -73,7 +89,7 @@ defmodule VerifierTest do
     {key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert()
     key = Support.CertCreator.private_key_from_pem(key_pem)
     signature_xml_string = create_signature_wrong_key(cert_pem, key_pem)
-    res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string, ["document1", "document2"])
+    res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string, [%{content: "document1", id: "2341ac23HAbcA"}, %{content: "document2", id: "671ac23HAbcA"}])
 
     assert {:error, :signature} = res
   end

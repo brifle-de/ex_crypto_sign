@@ -103,7 +103,7 @@ defmodule ExCryptoSign.XmlDocument do
       export_content = Keyword.get(opts, :export_content, %{})
       exp = Enum.map(export_content, fn {doc_url, doc_data} ->
         doc_id = doc_url |> String.split("/") |> List.last()
-        XmlBuilder.element("SignatureContent", [URL: doc_url, id: "data-#{doc_id}"],  doc_data)
+        XmlBuilder.element("SignatureContent", [id: "data-#{doc_id}"],  doc_data)
       end)
       [XmlBuilder.element("ContentExport", exp)]
     else
@@ -112,7 +112,7 @@ defmodule ExCryptoSign.XmlDocument do
 
     if has_embedded_documents? do
         embs = Enum.map(xml_document.embedded_documents, fn doc ->
-          XmlBuilder.element("SignatureContent", [Id: "data-content-#{doc.id}"],  doc.content)
+          XmlBuilder.element("SignatureContent", [id: "data-#{doc.id}"],  doc.content)
         end)
         xml_embs = XmlBuilder.element("SignatureContents", embs)
         XmlBuilder.element("SignatureDocument", type_def, [meta, xml_embs, signature] ++ export_data)
@@ -135,6 +135,18 @@ defmodule ExCryptoSign.XmlDocument do
   def parse_document_urls(xml_string) do
     urls = SweetXml.xpath(xml_string, SweetXml.sigil_x("//ds:SignedInfo/ds:Reference/@URI", 'ls')) || []
     Enum.filter(urls, fn url -> url != "#SignedProperties" end)
+  end
+
+  @doc """
+  gets the embedded document urls from the xml document
+  """
+  def parse_embedded_document_urls(xml_string) do
+    SweetXml.xpath(xml_string, SweetXml.sigil_x("//SignatureContent", 'l'))
+      |> Enum.map(fn doc ->
+        id = SweetXml.xpath(doc, SweetXml.sigil_x("@id", 's')) |> String.replace("data-content-", "") |> String.replace("data-", "")
+        content = SweetXml.xpath(doc, SweetXml.sigil_x("text()", 's'))
+        %{id: id, content: content}
+      end)
   end
 
 
@@ -180,12 +192,7 @@ defmodule ExCryptoSign.XmlDocument do
     key_info = KeyInfo.parse_document(xml_document)
     object = PropertiesObject.parse_document(xml_document)
     meta = parse_metadata(xml_document)
-    embedded_documents = SweetXml.xpath(xml_document, SweetXml.sigil_x("//SignatureContents/SignatureContent", 'l'))
-      |> Enum.map(fn doc ->
-        id = SweetXml.xpath(doc, SweetXml.sigil_x("@Id", 's')) |> String.replace("data-content-", "")
-        content = SweetXml.xpath(doc, SweetXml.sigil_x("text()", 's'))
-        %{id: id, content: content}
-      end)
+    embedded_documents = parse_embedded_document_urls(xml_string)
 
     new(id,
       signed_info: signed_info,

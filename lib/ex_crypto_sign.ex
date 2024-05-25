@@ -59,7 +59,7 @@ defmodule ExCryptoSign do
       {_, signed_info} ->
         signed_info
       end
-    |> SignedInfo.put_signature_method(:ecdsa_sha3_512)
+    |> SignedInfo.put_signature_method(:ecdsa_sha256)
     |> SignedInfo.put_signed_property_digest(:sha3_512, get_properties_object(doc_opts))
 
 
@@ -92,9 +92,9 @@ defmodule ExCryptoSign do
     xml = prepare_document(signature_id, documents, x509_pem_certificate, doc_opts)
       |> ExCryptoSign.Util.Signer.add_signature(signature_base64)
 
-    document_contents = documents |> Enum.map(fn document -> document.content end)
 
-    case ExCryptoSign.Util.Verifier.verifies_document(xml, document_contents) do
+
+    case ExCryptoSign.Util.Verifier.verifies_document(xml, documents) do
       {:ok, true} -> {:ok, xml}
       {:error, error_type} -> {:error, error_type}
     end
@@ -126,6 +126,10 @@ defmodule ExCryptoSign do
   defdelegate get_document_ids(xml_string), to:  XmlDocument, as: :parse_document_urls
 
 
+  @doc """
+  exports the document signatures to the xml document and returns the xml as a string
+  it appends the SignatureContent nodes to the xml, which allows to validate without the need of the original documents
+  """
   def export_document_signatures(xml_string, documents) do
     xml = xml_string |> XmlDocument.parse_document()
 

@@ -10,25 +10,19 @@
       <ds:Reference Id="doc-1" URI="#data-2341ac23HAbcA">
         <ds:Transforms>
           <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
-          <ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116">
-            <ds:XPath>//*[@id='data-2341ac23HAbcA']/text()</ds:XPath>
-          </ds:Transform>
         </ds:Transforms>
         <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
         <ds:DigestValue>
-          9/rc+uGpJU5DtFG32TKp4IhgdYqPwFbW3SRNo9T+yYdDpgNkJead18A0hgfHuqiNmGRUUzab5yjY3JRl9/JPFw==
+          Lm1XgFBVWK+dRSVTb+YYWc8XvqTemGRJiEpXI51CGFVw32M3KNwMrf9R2wD1H2cXuLzRcGyTGUVZxnAF/QridA==
         </ds:DigestValue>
       </ds:Reference>
       <ds:Reference Id="doc-2" URI="#data-671ac23HAbcA">
         <ds:Transforms>
           <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
-          <ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116">
-            <ds:XPath>//*[@id='data-671ac23HAbcA']/text()</ds:XPath>
-          </ds:Transform>
         </ds:Transforms>
         <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
         <ds:DigestValue>
-          ugt5zYrMB6JJG6kxdN6FE/jl5/AY4HsAsmZEJQ76CMvvAKm6xHtbF57c7wka3yah+sH6Ny5nNilFkejEHA53EA==
+          GCIJ8ibIDW4azJbsSTM9/RpLkETt4Da7U+CI3coz5iUOJ5S6/oM5UTsKrYIRQhCA/fN0ZZSc3tGOSHde3QhGcg==
         </ds:DigestValue>
       </ds:Reference>
       <ds:Reference URI="#SignedProperties">
@@ -37,17 +31,17 @@
         </ds:Transforms>
         <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
         <ds:DigestValue>
-          AfNLnU+vROLZMDzoahEk9oVBh2NjSnkWAAAgNMwJ+TMGr7l1mxMxQ1810OEaLd34dUeonVsmbNGsLxhKQgzw4A==
+          ztxFLxHJ48ZK9MJeMiQZ7UvTmkxYX2j/b8/ZHMq2XIhwiTmnpvlYDVsDjvi+arteRSAA9tkxp/q7fhJrs6dj9A==
         </ds:DigestValue>
       </ds:Reference>
     </ds:SignedInfo>
     <ds:SignatureValue>
-      sTZdkqs/SV5BwBE1+LBwgdOYGOFd7XnUvZTaVk10guXgGpO7qZR0g7aV+ZZf8i2pxxpQzBek4yogffNuNzwEpg==
+      dcx28Ymyvp80oCBZcTpuskYHJ7Ar0+yFvFarszbBgi+r3aXXUoeEPPTxdGFEpoPuQb7DpVaVIDQ9dnUPbGJedQ==
     </ds:SignatureValue>
     <ds:KeyInfo>
       <ds:X509Data>
         <ds:X509Certificate>
-          MIICSjCCAe+gAwIBAgIJAKAr+mcQrfGlMAoGCCqGSM49BAMCMFkxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwEQWNtZTEWMBQGA1UEAwwNRUNEU0EgUm9vdCBDQTAeFw0yNDA1MjQyMDI1MjVaFw0yNTA2MjMyMDMwMjVaMFIxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwEQWNtZTEPMA0GA1UEAwwGU2FtcGxlMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmcmbbZZJq4vCOw7llwEwd0aoMJA+f1FFCNWmOIINvwMVNlqCE8M8q4CiPu8w2Yed0rfE5nPuhcSUXai6UfYKh6OBpjCBozAJBgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwHQYDVR0OBBYEFPmUhORlXyR0LpNtnivxAUXlBGEKMB8GA1UdIwQYMBaAFGw4dP0/n4MVkSwlZkHWOKXz3Ml7MCcGA1UdEQQgMB6CC2V4YW1wbGUub3Jngg93d3cuZXhhbXBsZS5vcmcwCgYIKoZIzj0EAwIDSQAwRgIhALwS22jOVaOaWm5IRIJMnF+GjfEn3KasSp4d6uFrdl2NAiEA191MVM2lkwWyhJvNpdMiags8kWZx9vb1nWplC+re1CA=
+          MIICSDCCAe+gAwIBAgIJAPH/5fgR7ma9MAoGCCqGSM49BAMCMFkxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwEQWNtZTEWMBQGA1UEAwwNRUNEU0EgUm9vdCBDQTAeFw0yNDA1MjUxODMzMTVaFw0yNTA2MjQxODM4MTVaMFIxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwEQWNtZTEPMA0GA1UEAwwGU2FtcGxlMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEij8BIuAtYDAoNwM7JYGnds/739W8+q3w7wiUKjhNQUUKONIaqLUDlDWEYqMu3BUh+jCCx0j1kDHhDCIUuKMNvKOBpjCBozAJBgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwHQYDVR0OBBYEFNp9RPeILu82DbCVesnQt4rUK3d8MB8GA1UdIwQYMBaAFGw4dP0/n4MVkSwlZkHWOKXz3Ml7MCcGA1UdEQQgMB6CC2V4YW1wbGUub3Jngg93d3cuZXhhbXBsZS5vcmcwCgYIKoZIzj0EAwIDRwAwRAIgBlKkj6E/KC2Lcj1sfKTyaCd2zSJa3W+qJMUdWcftg4QCIBCyvxSDSD/FvY4oceIHy0JcCUUi40ZGvYgcjgpbgBCZ
         </ds:X509Certificate>
       </ds:X509Data>
     </ds:KeyInfo>
@@ -56,14 +50,14 @@
         <xades:SignedProperties Id="SignedProperties">
           <xades:SignedSignatureProperties>
             <xades:SigningTime>
-              2024-05-24 21:30:25.103529Z
+              2024-05-25 19:38:15.724556Z
             </xades:SigningTime>
             <xades:SigningCertificate>
               <xades:Cert>
                 <xades:CertDigest>
                   <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
                   <ds:DigestValue>
-                    sm7LHSoEDppOhuEbv42Fl00yCFSM/gbhEQNFvaF8oqk=
+                    6B9r+3ov3LhKi/VvhRmrqk4azeAk7aWfOzAC30B3H2Y=
                   </ds:DigestValue>
                 </xades:CertDigest>
                 <xades:IssuerSerial>
@@ -71,7 +65,7 @@
                     ECDSA Root CA
                   </ds:X509IssuerName>
                   <ds:X509SerialNumber>
-                    11541593790635438501
+                    17437909135817336509
                   </ds:X509SerialNumber>
                 </xades:IssuerSerial>
               </xades:Cert>

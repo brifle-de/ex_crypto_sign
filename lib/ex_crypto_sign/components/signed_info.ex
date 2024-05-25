@@ -1,5 +1,6 @@
 defmodule ExCryptoSign.Components.SignedInfo do
 
+  alias EllipticCurve.Utils.Base64
   alias ExCryptoSign.Constants.TransformMethods
   alias ExCryptoSign.Constants.CanonicalizationMethods
   alias ExCryptoSign.Constants.{HashMethods, SignatureMethods}
@@ -87,18 +88,20 @@ defmodule ExCryptoSign.Components.SignedInfo do
 
   def add_document_digest(signed_info, id, uri, digest_method, content) do
 
-    digest_value = :crypto.hash(digest_method, content)
+    data_id = uri |> String.split("/") |> List.last() |> String.replace_prefix("#", "") |> String.replace_prefix("data-", "")
+    document = %{
+      id: data_id,
+      content: content,
+    }
+    digest_value = compute_document_hash(document, digest_method)
     digest_method_name = HashMethods.get_w3_url(digest_method)
-
-    xpath_id = uri |> String.replace("#", "")
-    xpath = "//*[@id='#{xpath_id}']/text()"
 
     document_digest = %{
       id: id,
       uri: uri,
       digest_method: digest_method_name,
       digest_value: digest_value,
-      transforms: [:c14n, {:xpath, xpath}]
+      transforms: [:c14n]
     }
 
     document_digests = Map.get(signed_info, :documents_digest) ++ [document_digest]
@@ -125,7 +128,7 @@ defmodule ExCryptoSign.Components.SignedInfo do
           optional(any) => any
         }
   def put_signed_property_digest(signed_info, digest_method, signed_properties_map) when is_map(signed_properties_map) do
-    xml = PropertiesObject.build_signature_xml(signed_properties_map)
+    xml = compute_signed_prop_xml(signed_properties_map)
 
     put_signed_property_digest(signed_info, digest_method, xml)
   end
@@ -160,9 +163,51 @@ defmodule ExCryptoSign.Components.SignedInfo do
     |> Enum.all?(fn document ->
       # check if the document in contains in any of the digests of the signed info
       Enum.any?(digests, fn {digest_method, digest_value} ->
-        digest_value == :crypto.hash(digest_method, document)
+        digest_value == compute_document_hash(document, digest_method)
       end)
     end)
+  end
+
+  defp compute_document_hash(document, digest_method) do
+    content = XmlBuilder.element("SignatureContent", [id: "data-#{document.id}"],  document.content)
+    |> XmlBuilder.generate(encoding: "UTF-8")
+    |> String.replace("<SignatureContent", "<SignatureContent xmlns=\"http://uri.etsi.org/01903/v1.1.1#\"")
+    |> XmerlC14n.canonicalize!()
+    hash = :crypto.hash(digest_method, content)
+    hash
+  end
+
+  defp compute_signed_prop_xml(%{} = signed_properties_map) do
+
+    xml = PropertiesObject.build_signature_xml(signed_properties_map)
+      |> String.replace("<xades:SignedProperties", "<?xml version=\"1.0\"?><xades:SignedProperties xmlns:xades=\"http://uri.etsi.org/01903/v1.3.2#\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\"")
+      # prepend xml utf-8 encoding
+      |> String.replace("<?xml version=\"1.0\"?>", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+      |> SweetXml.parse(namespace_conformant: true, document: true)
+      |> XmerlC14n.canonicalize!(false)
+
+      # add intend, for fixing the canonicalization problem
+      intend = String.replace(xml, "\n", "\n        ")
+
+      File.write!("signed_prop.xml", intend)
+
+      intend
+  end
+
+  defp compute_signed_prop_xml(signed_properties_xml) do
+
+
+    xml = signed_properties_xml
+    |> String.replace("<xades:SignedProperties", "<?xml version=\"1.0\"?><xades:SignedProperties xmlns:xades=\"http://uri.etsi.org/01903/v1.3.2#\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\"")
+    |> String.replace("<?xml version=\"1.0\"?>", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+    |> SweetXml.parse(namespace_conformant: true, document: true)
+    |> XmerlC14n.canonicalize!(false)
+
+    # add intend, for fixing the canonicalization problem
+    intend = String.replace(xml, "\n", "\n        ")
+
+    intend
+
   end
 
   @doc """
@@ -173,7 +218,7 @@ defmodule ExCryptoSign.Components.SignedInfo do
     signed_property_digest_value = signed_property_digest.digest_value |> Base.encode64()
     signed_property_digest_method = signed_property_digest.digest_method |> HashMethods.from_w3_url()
 
-    expected_digest = :crypto.hash(signed_property_digest_method, signed_properties_xml) |> Base.encode64()
+    expected_digest = :crypto.hash(signed_property_digest_method, compute_signed_prop_xml(signed_properties_xml)) |> Base.encode64()
 
     signed_property_digest_value == expected_digest
   end

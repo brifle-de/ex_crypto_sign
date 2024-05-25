@@ -13,13 +13,9 @@ defmodule ExCryptoSignTest do
 
     xml = generate_xml_document(docs, city_name, signing_time, cert_pem)
 
-
-
     {:ok, {doc_correct, sign}} = ExCryptoSign.Util.Signer.sign(xml, key_pem)
 
-    doc_contents = docs |> Enum.map(fn document -> document.content end)
-
-    assert ExCryptoSign.Util.Verifier.verifies_document(doc_correct, doc_contents)
+    assert ExCryptoSign.Util.Verifier.verifies_document(doc_correct, docs)
 
     # simulate signing by other party
     opts = get_ops(docs, city_name, signing_time, cert_pem)
@@ -30,7 +26,7 @@ defmodule ExCryptoSignTest do
     assert {:ok, signed_xml} = res
 
     File.write!("test/files/test-create.xml", signed_xml)
-    assert ExCryptoSign.Util.Verifier.verifies_document(signed_xml, doc_contents)
+    assert ExCryptoSign.Util.Verifier.verifies_document(signed_xml, docs)
 
   end
 
@@ -46,17 +42,11 @@ defmodule ExCryptoSignTest do
     city_name = "Stuttgart"
     signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_string
 
-
-
     xml = generate_xml_document(docs, city_name, signing_time, cert_pem)
-
-
 
     {:ok, {doc_correct, sign}} = ExCryptoSign.Util.Signer.sign(xml, key_pem)
 
-    doc_contents = docs |> Enum.map(fn document -> document.content end)
-
-    assert ExCryptoSign.Util.Verifier.verifies_document(doc_correct, doc_contents)
+    assert ExCryptoSign.Util.Verifier.verifies_document(doc_correct, docs)
 
     # simulate signing by other party
     opts = get_ops(docs, city_name, signing_time, cert_pem)
@@ -65,7 +55,6 @@ defmodule ExCryptoSignTest do
     res = ExCryptoSign.sign_and_verify("signature_id", docs, cert_pem, signature_new, opts)
 
     assert {:error, :signature} = res
-
 
   end
 
@@ -87,9 +76,8 @@ defmodule ExCryptoSignTest do
 
     {:ok, {doc_correct, sign}} = ExCryptoSign.Util.Signer.sign(xml, key_pem)
 
-    doc_contents = docs |> Enum.map(fn document -> document.content end)
 
-    assert ExCryptoSign.Util.Verifier.verifies_document(doc_correct, doc_contents)
+    assert ExCryptoSign.Util.Verifier.verifies_document(doc_correct, docs)
 
     # simulate signing by other party
     opts = get_ops(docs_wrong, city_name, signing_time, cert_pem)
@@ -116,9 +104,7 @@ defmodule ExCryptoSignTest do
 
       {:ok, {doc_correct, sign}} = ExCryptoSign.Util.Signer.sign(xml, key_pem)
 
-      doc_contents = docs |> Enum.map(fn document -> document.content end)
-
-      assert ExCryptoSign.Util.Verifier.verifies_document(doc_correct, doc_contents)
+      assert ExCryptoSign.Util.Verifier.verifies_document(doc_correct, docs)
 
       # simulate signing by other party
       opts = get_ops(docs, city_name, signing_time, cert_pem)
@@ -128,7 +114,7 @@ defmodule ExCryptoSignTest do
 
       assert {:ok, signed_xml} = res
 
-      assert ExCryptoSign.Util.Verifier.verifies_document(signed_xml, doc_contents)
+      assert ExCryptoSign.Util.Verifier.verifies_document(signed_xml, docs)
 
       assert ["#data-2341ac23HAbcA", "#data-671ac23HAbcA"] == ExCryptoSign.get_document_ids(signed_xml)
 
@@ -149,9 +135,7 @@ defmodule ExCryptoSignTest do
 
        {:ok, {doc_correct, sign}} = ExCryptoSign.Util.Signer.sign(xml, key_pem)
 
-       doc_contents = docs |> Enum.map(fn document -> document.content end)
-
-       assert ExCryptoSign.Util.Verifier.verifies_document(doc_correct, doc_contents)
+       assert ExCryptoSign.Util.Verifier.verifies_document(doc_correct, docs)
 
        # simulate signing by other party
        opts = get_ops(docs, city_name, signing_time, cert_pem)
@@ -161,7 +145,7 @@ defmodule ExCryptoSignTest do
 
        assert {:ok, signed_xml} = res
 
-       assert ExCryptoSign.Util.Verifier.verifies_document(signed_xml, doc_contents)
+       assert ExCryptoSign.Util.Verifier.verifies_document(signed_xml, docs)
 
        assert ["#data-2341ac23HAbcA", "#data-671ac23HAbcA"] == ExCryptoSign.get_document_ids(signed_xml)
 

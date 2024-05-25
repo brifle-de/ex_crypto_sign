@@ -10,25 +10,19 @@
       <ds:Reference Id="doc-1" URI="#data-2341ac23HAbcA">
         <ds:Transforms>
           <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
-          <ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116">
-            <ds:XPath>//*[@id='data-2341ac23HAbcA']/text()</ds:XPath>
-          </ds:Transform>
         </ds:Transforms>
         <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
         <ds:DigestValue>
-          9/rc+uGpJU5DtFG32TKp4IhgdYqPwFbW3SRNo9T+yYdDpgNkJead18A0hgfHuqiNmGRUUzab5yjY3JRl9/JPFw==
+          Lm1XgFBVWK+dRSVTb+YYWc8XvqTemGRJiEpXI51CGFVw23M3KNwMrf9R2wD1H2cXuLzRcGyTGUVZxnAF/QridA==
         </ds:DigestValue>
       </ds:Reference>
       <ds:Reference Id="doc-2" URI="#data-671ac23HAbcA">
         <ds:Transforms>
           <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
-          <ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116">
-            <ds:XPath>//*[@id='data-671ac23HAbcA']/text()</ds:XPath>
-          </ds:Transform>
         </ds:Transforms>
         <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
         <ds:DigestValue>
-          ugt5zYrMB6JJG6kxdN6FE/jl5/AY4HsAsmZEJQ76CMvvAKm6xHtbF57c7wka3yah+sH6Ny5nNilFkejEHA53EA==
+          GCIJ8ibIDW4azJbsSTM9/RpLkETt4Da7U+CI3coz5iUOJ5S6/oM5UTsKrYIRQhCA/fN0ZZSc3tGOSHde3QhGcg==
         </ds:DigestValue>
       </ds:Reference>
       <ds:Reference URI="#SignedProperties">
@@ -37,17 +31,17 @@
         </ds:Transforms>
         <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
         <ds:DigestValue>
-          v55cSxkoqiZlk0u1vRPXm2ijhzK33rDlQUoDIJH2De5+4MXgHyGZfgF1ZkmCcmqSex2uOvJhhqWATD9zhaHKMQ==
+          y4QMMP0NfibroMYnhnnLIvHOwlIdADtqlDQFvLEG4HYfz67uv5uGFTBho0vRuz2O8CV+e2ObPPecFC5+ehJyJQ==
         </ds:DigestValue>
       </ds:Reference>
     </ds:SignedInfo>
     <ds:SignatureValue>
-      MdY3Y7urkZtCs/bYuab8OwUxXjLZgB23iAZfMQ6YAx/vXD/oxb2VXDD9KSNoRTEwZlJAvFJt9HkudBqUTx54xg==
+      1B9dwS0kdL3WkVV3cfg9ZZbYGbXmumk7MzvNzqf1xuG7ypbSU+yugkCAdJmkZwTvjuTDOOK3nFp5MqhGew5/2w==
     </ds:SignatureValue>
     <ds:KeyInfo>
       <ds:X509Data>
         <ds:X509Certificate>
-          MIICSTCCAe+gAwIBAgIJAPahTmxafPqIMAoGCCqGSM49BAMCMFkxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwEQWNtZTEWMBQGA1UEAwwNRUNEU0EgUm9vdCBDQTAeFw0yNDA1MjQyMDI1MjVaFw0yNTA2MjMyMDMwMjVaMFIxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwEQWNtZTEPMA0GA1UEAwwGU2FtcGxlMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2CZgU8AawhfruHCSMKUc+XTCHOZEeMscXdhQh8O4xqrWAwaHpBLY7Y00eIbJzomimtN0yhWguWBHKbgC6dHDS6OBpjCBozAJBgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwHQYDVR0OBBYEFBJgGoHHxcbJqvA6fMSVeTKt1eGBMB8GA1UdIwQYMBaAFGw4dP0/n4MVkSwlZkHWOKXz3Ml7MCcGA1UdEQQgMB6CC2V4YW1wbGUub3Jngg93d3cuZXhhbXBsZS5vcmcwCgYIKoZIzj0EAwIDSAAwRQIgM/v8fFgmYYxH1rdAfyjIK5P6ObusOwZc7Dc1fd7DqgUCIQDBWhj8teeu8R6UoY0UeEuJCTg91n9Sr3VOb6eBl2hiPg==
+          MIICSDCCAe+gAwIBAgIJAL95wadKgjrGMAoGCCqGSM49BAMCMFkxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwEQWNtZTEWMBQGA1UEAwwNRUNEU0EgUm9vdCBDQTAeFw0yNDA1MjUxMDU4NDFaFw0yNTA2MjQxMTAzNDFaMFIxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwEQWNtZTEPMA0GA1UEAwwGU2FtcGxlMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAESxWBGqIJe9ihyRKPXDtbiLl3wfkkO5inCTcierFgkfCjuG9tlcmB42SE84Dhv65qtBxkkZuYOtm7/2oCmWSoWKOBpjCBozAJBgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwHQYDVR0OBBYEFNJDG3q/HAN7CGNsKGiLqMqKEdirMB8GA1UdIwQYMBaAFGw4dP0/n4MVkSwlZkHWOKXz3Ml7MCcGA1UdEQQgMB6CC2V4YW1wbGUub3Jngg93d3cuZXhhbXBsZS5vcmcwCgYIKoZIzj0EAwIDRwAwRAIgd+mvrgvprDhHA0uMkiTLyidCrtCd//1ZQjJtTVEjHZ0CIGiAnI8JiT9Fjg1LShYHYehAkgsQJq+Wy4s0jmk7Lnjh
         </ds:X509Certificate>
       </ds:X509Data>
     </ds:KeyInfo>
@@ -56,14 +50,14 @@
         <xades:SignedProperties Id="SignedProperties">
           <xades:SignedSignatureProperties>
             <xades:SigningTime>
-              2024-05-24 21:30:25.850846Z
+              2024-05-25 12:03:41.368278Z
             </xades:SigningTime>
             <xades:SigningCertificate>
               <xades:Cert>
                 <xades:CertDigest>
                   <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
                   <ds:DigestValue>
-                    cWnbLRtA/v/CJJxGyGFHbYpAwovkWB1g2VB/Rv5lY3w=
+                    Kun/XsZOIPRnUiA9ACur1P/+0eoMs8mMGM8LbEzBnNs=
                   </ds:DigestValue>
                 </xades:CertDigest>
                 <xades:IssuerSerial>
@@ -71,7 +65,7 @@
                     ECDSA Root CA
                   </ds:X509IssuerName>
                   <ds:X509SerialNumber>
-                    17771571831862262408
+                    13797271857679973062
                   </ds:X509SerialNumber>
                 </xades:IssuerSerial>
               </xades:Cert>
@@ -90,7 +84,7 @@
             <xades:SignerRole>
               <xades:ClaimedRoles>
                 <xades:ClaimedRole>
-                  role1
+                  role with ä
                 </xades:ClaimedRole>
                 <xades:ClaimedRole>
                   role2
@@ -102,7 +96,7 @@
             </xades:SignerRole>
           </xades:SignedSignatureProperties>
           <xades:SignedDataObjectProperties>
-            <xades:DataObjectFormat ObjectReference="document1">
+            <xades:DataObjectFormat ObjectReference="#doc-1">
               <xades:MimeType>
                 text/xml
               </xades:MimeType>
@@ -115,7 +109,7 @@
                 </xades:Description>
               </xades:ObjectIdentifier>
             </xades:DataObjectFormat>
-            <xades:DataObjectFormat ObjectReference="document2">
+            <xades:DataObjectFormat ObjectReference="#doc-2">
               <xades:MimeType>
                 text/xml
               </xades:MimeType>
@@ -136,4 +130,8 @@
       </xades:QualifyingProperties>
     </ds:Object>
   </ds:Signature>
+  <ContentExport>
+    <SignatureContent id="data-2341ac23HAbcA">document1</SignatureContent>
+    <SignatureContent id="data-671ac23HAbcA">document2</SignatureContent>
+  </ContentExport>
 </SignatureDocument>
