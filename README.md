@@ -9,6 +9,7 @@ This is the signature algorithm which is used by Brifle for generating XaDES sig
 It uses SHA-256, SHA3-512 and ECDSA with a 256 bit key. No other algorithm are fully supported yet.
 
 TODO: Add larger key length
+TODO: Add Docker File for setup of a validation server
  
 
 ## Example
@@ -39,12 +40,12 @@ TODO: Add larger key length
 
     docs_opts = [
       signature_properties: %{
-        signing_time: "2019-01-01T00:00:00Z",
+        signing_time: DateTime.now!("Etc/UTC") |> DateTime.to_iso8601(),
         signing_certificate: %{
-          issuer: "issuer",
-          serial: "serial",
+          issuer: ExCryptoSign.Util.PemCertificate.get_certificate_issuer(pem_cert),
+          serial: ExCryptoSign.Util.PemCertificate.get_certificate_serial(pem_cert),
           digest_type: :sha256,
-          digest: :crypto.hash(:sha256, "digest") |> Base.encode64()
+          digest: ExCryptoSign.Util.PemCertificate.get_certificate_digest(pem_cert, :sha256)
         },
         signature_production_place: %{
           city_name: "Stuttgart",
@@ -81,8 +82,146 @@ TODO: Add larger key length
 
     # store the signature document
     export_path = "./export-signature.xml"
-    ExCryptoSign.write_to_file!(doc, export)
-
+    
+    File.write!(export_path, export)
 
 ```
 
+
+This example produces the following signature
+
+```xml
+<SignatureDocument xmlns="http://uri.etsi.org/01903/v1.1.1#" elementFormDefault="qualified" targetNamespace="http://uri.etsi.org/01903/v1.1.1#">
+  <Metadata>
+    <baseUrl>https://documents.brifle.de/</baseUrl>
+    <version>1.0</version>
+  </Metadata>
+  <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="signature_id">
+    <ds:SignedInfo>
+      <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:CanonicalizationMethod>
+      <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"></ds:SignatureMethod>
+      <ds:Reference Id="doc-1" URI="#data-2341ac23HAbcA">
+        <ds:Transforms>
+          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+        </ds:Transforms>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
+        <ds:DigestValue>
+          Lm1XgFBVWK+dRSVTb+YYWc8XvqTemGRJiEpXI51CGFVw32M3KNwMrf9R2wD1H2cXuLzRcGyTGUVZxnAF/QridA==
+        </ds:DigestValue>
+      </ds:Reference>
+      <ds:Reference Id="doc-2" URI="#data-671ac23HAbcA">
+        <ds:Transforms>
+          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+        </ds:Transforms>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
+        <ds:DigestValue>
+          GCIJ8ibIDW4azJbsSTM9/RpLkETt4Da7U+CI3coz5iUOJ5S6/oM5UTsKrYIRQhCA/fN0ZZSc3tGOSHde3QhGcg==
+        </ds:DigestValue>
+      </ds:Reference>
+      <ds:Reference URI="#SignedProperties">
+        <ds:Transforms>
+          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+        </ds:Transforms>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
+        <ds:DigestValue>
+          /oEwoeboq2FTY2fnUffDole2VCiFA3p1j6evJS8oFh6AR2rLb26V96jDb5hxu5rx+0mSPR3zzjMpXIjWy52Jrg==
+        </ds:DigestValue>
+      </ds:Reference>
+    </ds:SignedInfo>
+    <ds:SignatureValue>
+      Yrjmagdsmk0ODweGbwrpBF2nrqV4EW1qmvFdBM6UnoLVUZlg+zqpx3wtkHrfJwWgStG6D6/DozyIlesLCtCH1w==
+    </ds:SignatureValue>
+    <ds:KeyInfo>
+      <ds:X509Data>
+        <ds:X509Certificate>
+          MIICSDCCAe6gAwIBAgIIGtWW0h9GdQUwCgYIKoZIzj0EAwIwWTELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAkNBMRYwFAYDVQQHDA1TYW4gRnJhbmNpc2NvMQ0wCwYDVQQKDARBY21lMRYwFAYDVQQDDA1FQ0RTQSBSb290IENBMB4XDTI0MDUyNTE5MTkzNVoXDTI1MDYyNDE5MjQzNVowUjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAkNBMRYwFAYDVQQHDA1TYW4gRnJhbmNpc2NvMQ0wCwYDVQQKDARBY21lMQ8wDQYDVQQDDAZTYW1wbGUwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAQsdFN2703z7ZEMAzSBPwcmfiVCZV0sMfTJyery2UF+NlWgUmv5Zyk3vHvzjvSbtouXj5bbS9yrW+Mmc4zCuJNdo4GmMIGjMAkGA1UdEwQCMAAwDgYDVR0PAQH/BAQDAgWgMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjAdBgNVHQ4EFgQUMbtZPD8l00SbyJWLj/4Rb5ouKTAwHwYDVR0jBBgwFoAUs2vrryeDEDqz0amAreXc10EFm9cwJwYDVR0RBCAwHoILZXhhbXBsZS5vcmeCD3d3dy5leGFtcGxlLm9yZzAKBggqhkjOPQQDAgNIADBFAiAYcNUut5K70/fM6iZmrAB4nrH9BrtKgRwSdF13ohUS6AIhAJ2pGaOfmxEHrZfq9puIBigF+QzDaQ9a8q/PD4fNGCir
+        </ds:X509Certificate>
+      </ds:X509Data>
+    </ds:KeyInfo>
+    <ds:Object>
+      <xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#signature_id">
+        <xades:SignedProperties Id="SignedProperties">
+          <xades:SignedSignatureProperties>
+            <xades:SigningTime>
+              2024-05-25T19:45:56.571073Z
+            </xades:SigningTime>
+            <xades:SigningCertificate>
+              <xades:Cert>
+                <xades:CertDigest>
+                  <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+                  <ds:DigestValue>
+                    jNgN3T4rKYQc8FBuZvY8NPwEwQbOO7FpsnnYPQQfO1w=
+                  </ds:DigestValue>
+                </xades:CertDigest>
+                <xades:IssuerSerial>
+                  <ds:X509IssuerName>
+                    ECDSA Root CA
+                  </ds:X509IssuerName>
+                  <ds:X509SerialNumber>
+                    1933617444237505797
+                  </ds:X509SerialNumber>
+                </xades:IssuerSerial>
+              </xades:Cert>
+            </xades:SigningCertificate>
+            <xades:SignaturePolicyIdentifier>
+              <xades:SignaturePolicyImplied></xades:SignaturePolicyImplied>
+            </xades:SignaturePolicyIdentifier>
+            <xades:SignatureProductionPlace>
+              <xades:City>
+                Stuttgart
+              </xades:City>
+              <xades:CountryName>
+                Germany
+              </xades:CountryName>
+            </xades:SignatureProductionPlace>
+            <xades:SignerRole>
+              <xades:ClaimedRoles>
+                <xades:ClaimedRole>
+                  role1
+                </xades:ClaimedRole>
+                <xades:ClaimedRole>
+                  role2
+                </xades:ClaimedRole>
+              </xades:ClaimedRoles>
+              <xades:CertifiedRoles>
+
+              </xades:CertifiedRoles>
+            </xades:SignerRole>
+          </xades:SignedSignatureProperties>
+          <xades:SignedDataObjectProperties>
+            <xades:DataObjectFormat ObjectReference="">
+              <xades:MimeType>
+                text/xml
+              </xades:MimeType>
+              <xades:Encoding>
+                UTF-8
+              </xades:Encoding>
+              <xades:ObjectIdentifier>
+                <xades:Description>
+                  Die Beschreibung
+                </xades:Description>
+              </xades:ObjectIdentifier>
+            </xades:DataObjectFormat>
+          </xades:SignedDataObjectProperties>
+        </xades:SignedProperties>
+        <xades:UnsignedProperties>
+          <xades:UnsignedSignatureProperties></xades:UnsignedSignatureProperties>
+        </xades:UnsignedProperties>
+      </xades:QualifyingProperties>
+    </ds:Object>
+  </ds:Signature>
+  <ContentExport>
+    <SignatureContent id="data-2341ac23HAbcA">document1</SignatureContent>
+    <SignatureContent id="data-671ac23HAbcA">document2</SignatureContent>
+  </ContentExport>
+</SignatureDocument>
+```
+To validate this signature you can run
+
+```elixir
+export_path = "./export-signature.xml"
+xml_string = File.read!(export_path)
+
+{:ok, true} = ExCryptoSign.Util.Verifier.verify_exported_signature(xml_string)
+
+```
