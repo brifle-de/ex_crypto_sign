@@ -74,10 +74,14 @@ TODO: Add larger key length
 
     {:ok, {doc, sign}} = ExCryptoSign.Util.Signer.sign(signature_document, pem_key)
 
+    # it must match with the configured base_url, default: "https://documents.brifle.de/"
+    export_data = %{"https://documents.brifle.de/2341ac23HAbcA" => "document1", "https://documents.brifle.de/671ac23HAbcA" => "document2"}
+
+    export = ExCryptoSign.export_document_signatures(doc, export_data)
 
     # store the signature document
     export_path = "./export-signature.xml"
-    ExCryptoSign.write_to_file!(doc, export_path)
+    ExCryptoSign.write_to_file!(doc, export)
 
 
 ```

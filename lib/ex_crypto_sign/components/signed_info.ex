@@ -189,7 +189,6 @@ defmodule ExCryptoSign.Components.SignedInfo do
       # add intend, for fixing the canonicalization problem
       intend = String.replace(xml, "\n", "\n        ")
 
-      File.write!("signed_prop.xml", intend)
 
       intend
   end

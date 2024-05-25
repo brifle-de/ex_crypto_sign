@@ -1,0 +1,64 @@
+<xades:SignedProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="SignedProperties">
+          <xades:SignedSignatureProperties>
+            <xades:SigningTime>
+              2019-01-01T00:00:00Z
+            </xades:SigningTime>
+            <xades:SigningCertificate>
+              <xades:Cert>
+                <xades:CertDigest>
+                  <ds:DigestMethod xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+                  <ds:DigestValue xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                    C/R0iWNjUF5epeXWrOjr+xOnYKQJsftGfUKPxxb58oQ=
+                  </ds:DigestValue>
+                </xades:CertDigest>
+                <xades:IssuerSerial>
+                  <ds:X509IssuerName xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                    issuer
+                  </ds:X509IssuerName>
+                  <ds:X509SerialNumber xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                    serial
+                  </ds:X509SerialNumber>
+                </xades:IssuerSerial>
+              </xades:Cert>
+            </xades:SigningCertificate>
+            <xades:SignaturePolicyIdentifier>
+              <xades:SignaturePolicyImplied></xades:SignaturePolicyImplied>
+            </xades:SignaturePolicyIdentifier>
+            <xades:SignatureProductionPlace>
+              <xades:City>
+                Stuttgart
+              </xades:City>
+              <xades:CountryName>
+                Germany
+              </xades:CountryName>
+            </xades:SignatureProductionPlace>
+            <xades:SignerRole>
+              <xades:ClaimedRoles>
+                <xades:ClaimedRole>
+                  role1
+                </xades:ClaimedRole>
+                <xades:ClaimedRole>
+                  role2
+                </xades:ClaimedRole>
+              </xades:ClaimedRoles>
+              <xades:CertifiedRoles>
+        
+              </xades:CertifiedRoles>
+            </xades:SignerRole>
+          </xades:SignedSignatureProperties>
+          <xades:SignedDataObjectProperties>
+            <xades:DataObjectFormat ObjectReference="">
+              <xades:MimeType>
+                text/xml
+              </xades:MimeType>
+              <xades:Encoding>
+                UTF-8
+              </xades:Encoding>
+              <xades:ObjectIdentifier>
+                <xades:Description>
+                  Die Beschreibung
+                </xades:Description>
+              </xades:ObjectIdentifier>
+            </xades:DataObjectFormat>
+          </xades:SignedDataObjectProperties>
+        </xades:SignedProperties>
