@@ -13,6 +13,16 @@ defmodule VerifierTest do
     assert {:ok, true} = res
   end
 
+  test "verifies invalid root ca" do
+
+    {key, cert} = Support.CertCreator.generate_ca()
+    cert_pem = cert |> X509.Certificate.to_pem()
+    root_certs = [cert_pem]
+
+
+    xml = File.read!("test/files/exported_valid_signature.xml")
+    assert {:error, :root_cert} = ExCryptoSign.Util.Verifier.verify_exported_signature(xml, allowed_root_certificates: root_certs)
+  end
 
   test "verifies exported successul" do
     xml = File.read!("test/files/exported_valid_signature.xml")

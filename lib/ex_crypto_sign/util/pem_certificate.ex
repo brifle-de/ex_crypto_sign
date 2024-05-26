@@ -1,8 +1,6 @@
 defmodule ExCryptoSign.Util.PemCertificate do
   @spec get_certificate_digest(binary, any) :: binary
   def get_certificate_digest(pem_data, digest_method) do
-
-
       get_expanded_pem(pem_data)
       |> X509.Certificate.from_pem!
       |> X509.Certificate.to_der()
@@ -44,6 +42,59 @@ defmodule ExCryptoSign.Util.PemCertificate do
     |> X509.Certificate.from_pem!()
     |> X509.Certificate.serial()
     |> to_string()
+  end
+
+    # Function to parse a PEM string into a list of certificates
+  def parse_pem(pem_string) do
+    pem_string
+    |> :public_key.pem_decode()
+    |> Enum.map(& :public_key.pem_entry_decode/1)
+  end
+
+  def verify_fun(_, {:extension, _}, state) do
+    {:unknown, state}
+  end
+
+  def verify_fun(_, {:bad_cert, reason}, _state) do
+    {:fail, reason}
+  end
+
+  def verify_fun(_, {:revoked, _}, _state) do
+    {:fail, :revoked}
+  end
+
+  def verify_fun(_cert, _event, state) do
+    {:unknown, state}
+  end
+
+
+
+
+
+  @doc """
+  validates the certificate chain.
+  """
+  def validate_certificate_chain(root_cert, certifcate_chain) do
+
+    {:ok, root_cert_raw} = X509.Certificate.from_pem(root_cert)
+
+    cert_chain = :public_key.pem_decode(certifcate_chain)
+
+    cert_chain_decoded =
+      Enum.map(
+        cert_chain,
+        fn {_, bin, _} -> bin end
+      )
+
+    case :public_key.pkix_path_validation(root_cert_raw, cert_chain_decoded, [
+      {:verify_fun, {&verify_fun/3, {}}}
+    ]) do
+      {:ok, {_public_key_info, _policy_tree}} ->
+        {:ok, cert_chain_decoded}
+
+      {:error, {:bad_cert, reason}} ->
+        {:error, reason}
+    end
   end
 
 

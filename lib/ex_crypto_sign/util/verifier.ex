@@ -36,6 +36,19 @@ alias ExCryptoSign.Util.PemCertificate
     PemCertificate.is_cert_valid_at?(cert, parsed_date)
   end
 
+
+  def validate_root_cert(_xml_document, []), do: true
+  def validate_root_cert(xml_document, allowed_root_certificates) do
+    cert = xml_document.key_info.x509_data
+    root_cert = PemCertificate.get_expanded_pem(cert)
+    Enum.any?(allowed_root_certificates, fn cert ->
+      case PemCertificate.validate_certificate_chain(root_cert, cert) do
+        {:ok, _} -> true
+        {:error, _} -> false
+      end
+    end)
+  end
+
   def signature_valid?(xml_document) do
     signature = xml_document.signature_value
     signed_info = xml_document.signed_info
@@ -74,15 +87,19 @@ alias ExCryptoSign.Util.PemCertificate
   @doc """
   verifies the signature of an exported xml document
   """
-  def verify_exported_signature(xml_string) do
+  def verify_exported_signature(xml_string, opts \\ []) do
     xml_document = ExCryptoSign.XmlDocument.parse_document(xml_string)
     # get the embedded documents
     documents = xml_document.embedded_documents
-    ExCryptoSign.Util.Verifier.verifies_document(xml_string, documents)
+    ExCryptoSign.Util.Verifier.verifies_document(xml_string, documents, opts)
   end
 
-  def verifies_document(xml_string, documents) do
+
+  def verifies_document(xml_string, documents, opts \\ []) do
     xml_document = ExCryptoSign.XmlDocument.parse_document(xml_string)
+
+    allowed_root_certificates = Keyword.get(opts, :allowed_root_certificates, [])
+
     signed_info = xml_document.signed_info
 
     signature_properties = ExCryptoSign.Components.PropertiesObject.parse_document(xml_string)
@@ -104,7 +121,8 @@ alias ExCryptoSign.Util.PemCertificate
           {:signed_props, true} <- {:signed_props, contains_signed_property},
           {:cert_digest, true} <- {:cert_digest, cert_match},
           {:cert_validy_date, true} <- {:cert_validy_date, cert_valid_at_signing},
-          {:signature, true} <- {:signature, signature_valid?(xml_document)}
+          {:signature, true} <- {:signature, signature_valid?(xml_document)},
+          {:root_cert, true} <- {:root_cert, validate_root_cert(xml_document, allowed_root_certificates)}
           do
         {:ok, true}
       else
