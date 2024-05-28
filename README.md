@@ -9,7 +9,10 @@ This is the signature algorithm which is used by Brifle for generating XaDES sig
 It uses SHA-256, SHA3-512 and ECDSA with a 256 bit key. No other algorithm are fully supported yet.
 
 TODO: Add larger key length
+
 TODO: Add Docker File for setup of a validation server
+
+The documentation can be found on github pages.
  
 
 ## Example
