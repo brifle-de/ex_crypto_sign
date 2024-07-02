@@ -28,7 +28,7 @@ defmodule Support.CertCreator do
   end
 
   def generate_certifcate_from_ca({ca_key, ca}, subject) do
-    my_key = X509.PrivateKey.new_ec(:secp256r1)
+    my_key =  X509.PrivateKey.new_ec(:secp384r1)
     my_cert = my_key |>
     X509.PublicKey.derive()
     |> X509.Certificate.new(

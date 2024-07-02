@@ -169,10 +169,11 @@ defmodule ExCryptoSign.Components.SignedInfo do
   end
 
   defp compute_document_hash(document, digest_method) do
+
     content = XmlBuilder.element("SignatureContent", [id: "data-#{document.id}"],  document.content)
     |> XmlBuilder.generate(encoding: "UTF-8")
-    |> String.replace("<SignatureContent", "<SignatureContent xmlns=\"http://uri.etsi.org/01903/v1.1.1#\"")
-    |> XmerlC14n.canonicalize!()
+    |> String.replace("<SignatureContent", "<SignatureContent xmlns=\"http://uri.etsi.org/01903/v1.1.1#\"") # Avoids whole canonicalization process and increases performance
+
     hash = :crypto.hash(digest_method, content)
     hash
   end

@@ -30,6 +30,48 @@ defmodule ExCryptoSignTest do
 
   end
 
+
+  test "create and verify long signature (2MB in less than 1s)" do
+
+    # generate a key pair
+    {key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert()
+
+
+    # get current time in UTC
+    start_time = DateTime.utc_now()
+
+    content = String.duplicate("a", 2000000)
+
+    docs = [%{content: content, id: "671ac23HAbcA"}]
+    city_name = "Stuttgart"
+    signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_string
+
+    xml = generate_xml_document(docs, city_name, signing_time, cert_pem)
+
+    {:ok, {doc_correct, sign}} = ExCryptoSign.Util.Signer.sign(xml, key_pem)
+
+    # get current time in UTC
+    end_time = DateTime.utc_now()
+
+    # get the difference in milliseconds
+    duration = DateTime.diff(end_time, start_time, :millisecond)
+    assert duration < 1000
+
+    assert ExCryptoSign.Util.Verifier.verifies_document(doc_correct, docs)
+
+    # simulate signing by other party
+    opts = get_ops(docs, city_name, signing_time, cert_pem)
+    {:ok, {_doc, signature_new}} = ExCryptoSign.Util.Signer.sign(xml, key_pem)
+
+    res = ExCryptoSign.sign_and_verify("signature_id", docs, cert_pem, signature_new, opts)
+
+    assert {:ok, signed_xml} = res
+
+    File.write!("test/files/test-create.xml", signed_xml)
+    assert ExCryptoSign.Util.Verifier.verifies_document(signed_xml, docs)
+
+  end
+
   test "wrong signature" do
 
 
@@ -196,7 +238,8 @@ defmodule ExCryptoSignTest do
       },
       unsigned_signature_properties: %{
 
-      }
+      },
+      # hash_algorithm: :sha256
     ]
   end
 

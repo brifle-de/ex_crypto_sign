@@ -17,10 +17,12 @@ defmodule ExCryptoSign do
   def prepare_document(signature_id, documents, x509_pem_certificate, doc_opts) do
     key_info = KeyInfo.new() |> KeyInfo.put_x509_data(x509_pem_certificate)
 
+    hash_alg = Keyword.get(doc_opts, :hash_algorithm, :sha3_512)
+
 
     s_info = documents
     |> Enum.reduce({1, SignedInfo.new(signature_id)}, fn document, {index, signed_info} ->
-      next_info = signed_info |> SignedInfo.add_document_digest("doc-#{index}", "\#data-#{document.id}", :sha3_512, document.content)
+      next_info = signed_info |> SignedInfo.add_document_digest("doc-#{index}", "\#data-#{document.id}", hash_alg, document.content)
       {index + 1, next_info}
     end)
     |> case do
@@ -29,7 +31,7 @@ defmodule ExCryptoSign do
       end
    # |> SignedInfo.put_signature_method(:ecdsa_sha3_512)
     |> SignedInfo.put_signature_method(:ecdsa_sha256)
-    |> SignedInfo.put_signed_property_digest(:sha3_512, get_properties_object(doc_opts))
+    |> SignedInfo.put_signed_property_digest(hash_alg, get_properties_object(doc_opts))
 
 
 
