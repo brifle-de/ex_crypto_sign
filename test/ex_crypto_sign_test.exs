@@ -226,20 +226,23 @@ defmodule ExCryptoSignTest do
           mime_type: "text/xml",
           encoding: "UTF-8",
           description: "Die Beschreibung",
-          object_reference: "#doc-1"
+          object_reference: "#doc-1",
+          object_identifier: "https://docs.brifle.de/2341ac23HAbcA"
         },
           %{
           mime_type: "text/xml",
           encoding: "UTF-8",
           description: "Die Beschreibung",
-          object_reference: "#doc-2"
+          object_reference: "#doc-2",
+          object_identifier: "https://docs.brifle.de/671ac23HAbcA"
         }
       ]
       },
       unsigned_signature_properties: %{
 
       },
-      # hash_algorithm: :sha256
+      hash_algorithm: :sha256,
+      signature_algorithm: :ecdsa_sha256
     ]
   end
 

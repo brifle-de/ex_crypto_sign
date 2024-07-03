@@ -180,18 +180,9 @@ defmodule ExCryptoSign.Components.SignedInfo do
 
   defp compute_signed_prop_xml(%{} = signed_properties_map) do
 
-    xml = PropertiesObject.build_signature_xml(signed_properties_map)
-      |> String.replace("<xades:SignedProperties", "<?xml version=\"1.0\"?><xades:SignedProperties xmlns:xades=\"http://uri.etsi.org/01903/v1.3.2#\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\"")
-      # prepend xml utf-8 encoding
-      |> String.replace("<?xml version=\"1.0\"?>", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
-      |> SweetXml.parse(namespace_conformant: true, document: true)
-      |> XmerlC14n.canonicalize!(false)
+    PropertiesObject.build_signature_xml(signed_properties_map)
+      |> compute_signed_prop_xml()
 
-      # add intend, for fixing the canonicalization problem
-      intend = String.replace(xml, "\n", "\n        ")
-
-
-      intend
   end
 
   defp compute_signed_prop_xml(signed_properties_xml) do
@@ -204,9 +195,18 @@ defmodule ExCryptoSign.Components.SignedInfo do
     |> XmerlC14n.canonicalize!(false)
 
     # add intend, for fixing the canonicalization problem
-    intend = String.replace(xml, "\n", "\n        ")
+    # only intend if is not an empty line
+    indent_char = "        "
+    regex = ~r/^.+/m
+    String.replace(xml, regex, fn line ->
+      # skip the first line
+      if String.contains?(line, "<xades:SignedProperties xmlns:xades=\"http://uri.etsi.org/01903/v1.3.2#\"") do
+        line
+      else
+      indent_char <> line
+      end
+    end)
 
-    intend
 
   end
 

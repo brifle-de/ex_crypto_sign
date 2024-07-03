@@ -49,6 +49,19 @@ alias ExCryptoSign.Util.PemCertificate
     end)
   end
 
+   @doc """
+  computes the length of the key in bytes
+  """
+  defp compute_ecc_key_length(private_key) do
+    curve_name = PrivateKey.fromPem!(private_key).curve.name
+    cond do
+      curve_name.contains?("256") -> 32
+      curve_name.contains?("384") -> 48
+      curve_name.contains?("521") -> 66
+      true -> 32
+    end
+  end
+
   def signature_valid?(xml_document) do
     signature = xml_document.signature_value
     signed_info = xml_document.signed_info
@@ -56,11 +69,17 @@ alias ExCryptoSign.Util.PemCertificate
     # get the signature method
     signature_method = signed_info.signature_method
 
-    # get the signature value
+    # get public key curve
+    {{:ECPoint, pk}, _} = xml_document.key_info.x509_data |> PemCertificate.get_public_key()
 
+    # comput the bytes size of the public key
+    # division by two can be skipped based on the following hex encoding
+    signature_component_size = (byte_size(pk) - 1)
+
+    # get the signature value
     raw_signature = signature.value |> Base.decode64!() |> Base.encode16()
-    r = raw_signature |> String.slice(0, 64) |> String.to_integer(16)
-    s = raw_signature |> String.slice(64, 64) |> String.to_integer(16)
+    r = raw_signature |> String.slice(0, signature_component_size) |> String.to_integer(16)
+    s = raw_signature |> String.slice(signature_component_size, signature_component_size) |> String.to_integer(16)
 
     signature_value = %EllipticCurve.Signature{
       r: r,

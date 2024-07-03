@@ -1,4 +1,6 @@
 defmodule ExCryptoSign.Util.Signer do
+  alias X509.PublicKey
+  alias EllipticCurve.PrivateKey
   alias ExCryptoSign.Constants.{CanonicalizationMethods, SignatureMethods}
   def sign(xml_string, private_key) when is_binary(xml_string) do
 
@@ -8,8 +10,8 @@ defmodule ExCryptoSign.Util.Signer do
       # compute the signature value
     signature = compute_signature_value(xml_string, private_key)
 
-    # convert the signature to raw (r, s) values
-    raw_signature = to_raw_signature(signature)
+   # convert the signature to raw (r, s) values
+    raw_signature = to_raw_signature(signature, compute_ecc_key_length(private_key))
 
     # put the signature value in the xml document
     xml_document = ExCryptoSign.XmlDocument.put_signature_value(xml_document, raw_signature)
@@ -20,9 +22,18 @@ defmodule ExCryptoSign.Util.Signer do
     {:ok, {xml_document_string, signature}}
   end
 
-  def to_raw_signature(base64_signature) do
+  @doc """
+  computes the length of the key in bytes
+  """
+  defp compute_ecc_key_length(private_key) do
+    :public_key.pem_decode(private_key)
+    |> hd()
+    |> :public_key.pem_entry_decode()
+    |> then(fn {:ECPrivateKey, 1, key, _, _, _} -> key end)
+    |> byte_size()
+  end
 
-    curve_size_bytes = 32
+  def to_raw_signature(base64_signature, curve_size_bytes \\ 32) do
 
     %EllipticCurve.Signature{
       r: r,
@@ -104,6 +115,8 @@ defmodule ExCryptoSign.Util.Signer do
 
     # canonicalize the signed info
     canon = canonicalize(signed_info, canonicalized_method)
+
+    File.write!("test/files/canonicalized.xml", canon)
 
 
 

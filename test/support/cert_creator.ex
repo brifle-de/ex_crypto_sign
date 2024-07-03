@@ -1,20 +1,21 @@
 defmodule Support.CertCreator do
 
-  @ca_key "-----BEGIN EC PRIVATE KEY-----\nMHcCAQEEIJjL6EO8W8LfdIe+dC9ewMNcOvRNGIyhwaIeHh00GmoAoAoGCCqGSM49\nAwEHoUQDQgAEcgP4FbahIwB022cg4GGJs9fFUCFY3EpW3c4XMMM+yiy4f90bZpnb\nBXvP7yVv/Ui9sYs+bbh+FmUSdJ8/M2clYw==\n-----END EC PRIVATE KEY-----\n\n"
-  @ca_cert "-----BEGIN CERTIFICATE-----\nMIICDTCCAbSgAwIBAgIIZV6AfxPz0JkwCgYIKoZIzj0EAwIwWTELMAkGA1UEBhMC\nVVMxCzAJBgNVBAgMAkNBMRYwFAYDVQQHDA1TYW4gRnJhbmNpc2NvMQ0wCwYDVQQK\nDARBY21lMRYwFAYDVQQDDA1FQ0RTQSBSb290IENBMB4XDTI0MDUyNDE3MjUzMloX\nDTQ5MDUyNDE3MzAzMlowWTELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAkNBMRYwFAYD\nVQQHDA1TYW4gRnJhbmNpc2NvMQ0wCwYDVQQKDARBY21lMRYwFAYDVQQDDA1FQ0RT\nQSBSb290IENBMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEcgP4FbahIwB022cg\n4GGJs9fFUCFY3EpW3c4XMMM+yiy4f90bZpnbBXvP7yVv/Ui9sYs+bbh+FmUSdJ8/\nM2clY6NmMGQwEgYDVR0TAQH/BAgwBgEB/wIBATAOBgNVHQ8BAf8EBAMCAYYwHQYD\nVR0OBBYEFGw4dP0/n4MVkSwlZkHWOKXz3Ml7MB8GA1UdIwQYMBaAFGw4dP0/n4MV\nkSwlZkHWOKXz3Ml7MAoGCCqGSM49BAMCA0cAMEQCIFZ1BPiAGPrhW0gFOdZV2cBA\naoo4nyvRFUHDqDWMqTWDAiB3jIS4h2hA6GfmQyvddG6RqXvi9GpgGQzJ0BoUF78E\nlw==\n-----END CERTIFICATE-----\n\n"
+  @ca_key "-----BEGIN EC PRIVATE KEY-----\nMHcCAQEEIP1M6KFzK0kGpYxWdOAaRAyTl0KI03xmbOZNsodRRkuhoAoGCCqGSM49\nAwEHoUQDQgAERceuXj8HQ27w8IA+JKIhYNOi+S3Ks3SLhlxFYxUuRsRHLStN2f5t\n/Dt4MiXEbFi5izZi/CVYbWeaLXqRvv2wiA==\n-----END EC PRIVATE KEY-----\n\n"
+  @ca_cert "-----BEGIN CERTIFICATE-----\nMIICIjCCAcigAwIBAgIILnSWXkiUiygwCgYIKoZIzj0EAwIwYzELMAkGA1UEBhMC\nREUxCzAJBgNVBAgMAkJXMRIwEAYDVQQHDAlTdHV0dGdhcnQxDzANBgNVBAoMBkJy\naWZsZTEiMCAGA1UEAwwZRUNEU0EgQnJpZmxlIFRlc3QgUm9vdCBDQTAeFw0yNDA3\nMDMyMDAwMTFaFw00OTA3MDMyMDA1MTFaMGMxCzAJBgNVBAYTAkRFMQswCQYDVQQI\nDAJCVzESMBAGA1UEBwwJU3R1dHRnYXJ0MQ8wDQYDVQQKDAZCcmlmbGUxIjAgBgNV\nBAMMGUVDRFNBIEJyaWZsZSBUZXN0IFJvb3QgQ0EwWTATBgcqhkjOPQIBBggqhkjO\nPQMBBwNCAARFx65ePwdDbvDwgD4koiFg06L5LcqzdIuGXEVjFS5GxEctK03Z/m38\nO3gyJcRsWLmLNmL8JVhtZ5otepG+/bCIo2YwZDASBgNVHRMBAf8ECDAGAQH/AgEB\nMA4GA1UdDwEB/wQEAwIBhjAdBgNVHQ4EFgQUT6SZIOOzGgMvKRYivNwhXj5c5HMw\nHwYDVR0jBBgwFoAUT6SZIOOzGgMvKRYivNwhXj5c5HMwCgYIKoZIzj0EAwIDSAAw\nRQIhAMfUPrHUaKxmBZnexxg0vyTNyUWhr48vssXT/I8bl/RdAiAyiX5MVoYF5UWT\naNjsfCUt5WfTlYYmEt19BcD+yzQGkA==\n-----END CERTIFICATE-----\n\n"
 
 
-  def generate_dummy_cert() do
+
+  def generate_dummy_cert(curve \\ :secp256r1) do
     ca_key = X509.PrivateKey.from_pem!(@ca_key)
     ca = X509.Certificate.from_pem!(@ca_cert)
 
 
-    my_key = X509.PrivateKey.new_ec(:secp256r1)
+    my_key = X509.PrivateKey.new_ec(curve)
     my_cert = my_key |>
 
     X509.PublicKey.derive()
     |> X509.Certificate.new(
-      "/C=US/ST=CA/L=San Francisco/O=Acme/CN=Sample",
+      "/C=DE/ST=BW/L=Stuttgart/O=Brifle/CN=Brifle Test",
       ca, ca_key,
       extensions: [
         subject_alt_name: X509.Certificate.Extension.subject_alt_name(["example.org", "www.example.org"])
@@ -47,7 +48,7 @@ defmodule Support.CertCreator do
 
   def generate_ca() do
     ca_key = X509.PrivateKey.new_ec(:secp256r1)
-    ca = X509.Certificate.self_signed(ca_key,"/C=US/ST=CA/L=San Francisco/O=Acme/CN=ECDSA Root CA", template: :root_ca)
+    ca = X509.Certificate.self_signed(ca_key,"/C=DE/ST=BW/L=Stuttgart/O=Brifle/CN=ECDSA Brifle Test Root CA", template: :root_ca)
 
     {ca_key, ca}
   end

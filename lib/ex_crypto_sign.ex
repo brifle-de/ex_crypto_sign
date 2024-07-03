@@ -18,6 +18,7 @@ defmodule ExCryptoSign do
     key_info = KeyInfo.new() |> KeyInfo.put_x509_data(x509_pem_certificate)
 
     hash_alg = Keyword.get(doc_opts, :hash_algorithm, :sha3_512)
+    signature_alg = Keyword.get(doc_opts, :signature_algorithm, :ecdsa_sha256)
 
 
     s_info = documents
@@ -30,7 +31,7 @@ defmodule ExCryptoSign do
         signed_info
       end
    # |> SignedInfo.put_signature_method(:ecdsa_sha3_512)
-    |> SignedInfo.put_signature_method(:ecdsa_sha256)
+    |> SignedInfo.put_signature_method(signature_alg)
     |> SignedInfo.put_signed_property_digest(hash_alg, get_properties_object(doc_opts))
 
 

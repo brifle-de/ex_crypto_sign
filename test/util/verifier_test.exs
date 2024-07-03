@@ -5,7 +5,25 @@ defmodule VerifierTest do
 
 
   test "verifies successul" do
-    {key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert()
+    #{key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert(:secp384r1)
+    {key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert(:secp256r1)
+    key = Support.CertCreator.private_key_from_pem(key_pem)
+    signature_xml_string = create_signature(cert_pem, key_pem)
+    res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string, [%{content: "document1", id: "2341ac23HAbcA"}, %{content: "document2", id: "671ac23HAbcA"}])
+
+    assert {:ok, true} = res
+  end
+
+  test "verifies successul larger key" do
+    {key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert(:secp384r1)
+    key = Support.CertCreator.private_key_from_pem(key_pem)
+    signature_xml_string = create_signature(cert_pem, key_pem)
+    res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string, [%{content: "document1", id: "2341ac23HAbcA"}, %{content: "document2", id: "671ac23HAbcA"}])
+
+    assert {:ok, true} = res
+
+
+    {key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert(:secp521r1)
     key = Support.CertCreator.private_key_from_pem(key_pem)
     signature_xml_string = create_signature(cert_pem, key_pem)
     res = ExCryptoSign.Util.Verifier.verifies_document(signature_xml_string, [%{content: "document1", id: "2341ac23HAbcA"}, %{content: "document2", id: "671ac23HAbcA"}])
@@ -130,6 +148,8 @@ defmodule VerifierTest do
           mime_type: "text/xml",
           encoding: "UTF-8",
           description: "Die Beschreibung",
+          object_reference: "document1",
+          object_identifier: "https://docs.brifle.de/2341ac23HAbcA"
         }
       },
       unsigned_signature_properties: %{
@@ -170,13 +190,15 @@ defmodule VerifierTest do
           mime_type: "text/xml",
           encoding: "UTF-8",
           description: "Die Beschreibung",
-          object_reference: "document1"
+          object_reference: "document1",
+          object_identifier: "https://docs.brifle.de/2341ac23HAbcA"
         },
         %{
           mime_type: "text/xml",
           encoding: "UTF-8",
           description: "Die Beschreibung",
-          object_reference: "document2"
+          object_reference: "document2",
+          object_identifier: "https://docs.brifle.de/671ac23HAbcA"
         }
       ]
       },
@@ -218,6 +240,8 @@ defmodule VerifierTest do
           mime_type: "text/xml",
           encoding: "UTF-8",
           description: "Die Beschreibung",
+          object_reference: "document1",
+          object_identifier: "https://docs.brifle.de/2341ac23HAbcA"
         }
       },
       unsigned_signature_properties: %{
@@ -258,6 +282,8 @@ defmodule VerifierTest do
           mime_type: "text/xml",
           encoding: "UTF-8",
           description: "Die Beschreibung",
+          object_reference: "document1",
+          object_identifier: "https://docs.brifle.de/2341ac23HAbcA"
         }
       },
       unsigned_signature_properties: %{

@@ -11,37 +11,37 @@
         <ds:Transforms>
           <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
         </ds:Transforms>
-        <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
         <ds:DigestValue>
-          Lm1XgFBVWK+dRSVTb+YYWc8XvqTemGRJiEpXI51CGFVw32M3KNwMrf9R2wD1H2cXuLzRcGyTGUVZxnAF/QridA==
+          HJkta1AHXBxZvCCusy+RxQzVS+LU2lj1eklx8jCt6ok=
         </ds:DigestValue>
       </ds:Reference>
       <ds:Reference Id="doc-2" URI="#data-671ac23HAbcA">
         <ds:Transforms>
           <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
         </ds:Transforms>
-        <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
         <ds:DigestValue>
-          GCIJ8ibIDW4azJbsSTM9/RpLkETt4Da7U+CI3coz5iUOJ5S6/oM5UTsKrYIRQhCA/fN0ZZSc3tGOSHde3QhGcg==
+          EC37eIt+JvnEjFS7wKkAmDeI7VsT4bi81/dK3uZnt9I=
         </ds:DigestValue>
       </ds:Reference>
       <ds:Reference URI="#SignedProperties">
         <ds:Transforms>
           <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
         </ds:Transforms>
-        <ds:DigestMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#sha3-512"></ds:DigestMethod>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
         <ds:DigestValue>
-          y4QMMP0NfibroMYnhnnLIvHOwlIdADtqlDQFvLEG4HYfz67uv5uGFTBho0vRuz2O8CV+e2ObPPecFC5+ehJyJQ==
+          CmS1hyidFUQbmB6F9jN7JJiVl2yJA6c0is+p2sJyQPk=
         </ds:DigestValue>
       </ds:Reference>
     </ds:SignedInfo>
     <ds:SignatureValue>
-      1B9dwS0kdL3WkVV3cfg9ZZbYGbXmumk7MzvNzqf1xuG7ypbSU+yugkCAdJmkZwTvjuTDOOK3nFp5MqhGew5/2w==
+      gjUFVwutB4AVkAknAf9n5TYrPrMb09C7SXg37kCiWJnHXMv0Me3UBglcfk5MSzHe3QIn0L6sFtuxNL2MZ2Mjpw==
     </ds:SignatureValue>
     <ds:KeyInfo>
       <ds:X509Data>
         <ds:X509Certificate>
-          MIICSDCCAe+gAwIBAgIJAL95wadKgjrGMAoGCCqGSM49BAMCMFkxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwEQWNtZTEWMBQGA1UEAwwNRUNEU0EgUm9vdCBDQTAeFw0yNDA1MjUxMDU4NDFaFw0yNTA2MjQxMTAzNDFaMFIxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwEQWNtZTEPMA0GA1UEAwwGU2FtcGxlMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAESxWBGqIJe9ihyRKPXDtbiLl3wfkkO5inCTcierFgkfCjuG9tlcmB42SE84Dhv65qtBxkkZuYOtm7/2oCmWSoWKOBpjCBozAJBgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwHQYDVR0OBBYEFNJDG3q/HAN7CGNsKGiLqMqKEdirMB8GA1UdIwQYMBaAFGw4dP0/n4MVkSwlZkHWOKXz3Ml7MCcGA1UdEQQgMB6CC2V4YW1wbGUub3Jngg93d3cuZXhhbXBsZS5vcmcwCgYIKoZIzj0EAwIDRwAwRAIgd+mvrgvprDhHA0uMkiTLyidCrtCd//1ZQjJtTVEjHZ0CIGiAnI8JiT9Fjg1LShYHYehAkgsQJq+Wy4s0jmk7Lnjh
+          MIICVTCCAfugAwIBAgIIdzRQSL8iAHMwCgYIKoZIzj0EAwIwYzELMAkGA1UEBhMCREUxCzAJBgNVBAgMAkJXMRIwEAYDVQQHDAlTdHV0dGdhcnQxDzANBgNVBAoMBkJyaWZsZTEiMCAGA1UEAwwZRUNEU0EgQnJpZmxlIFRlc3QgUm9vdCBDQTAeFw0yNDA3MDMyMDE1MDVaFw0yNTA4MDIyMDIwMDVaMFUxCzAJBgNVBAYTAkRFMQswCQYDVQQIDAJCVzESMBAGA1UEBwwJU3R1dHRnYXJ0MQ8wDQYDVQQKDAZCcmlmbGUxFDASBgNVBAMMC0JyaWZsZSBUZXN0MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQnCpt7GYyH3M2c6iMih+OXcJRWj3rQovfW8yAh9uMNQvcD1L1YCsx/Jc66jgo1gIL40DBmqr64qIM3goaagkr6OBpjCBozAJBgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwHQYDVR0OBBYEFPGNYAeZ38os5lvTMYZZelE81qkBMB8GA1UdIwQYMBaAFE+kmSDjsxoDLykWIrzcIV4+XORzMCcGA1UdEQQgMB6CC2V4YW1wbGUub3Jngg93d3cuZXhhbXBsZS5vcmcwCgYIKoZIzj0EAwIDSAAwRQIhAOpOc0Cakt1bEziFhzV4kS7K0lrb19ZUMHqGqYU4zlVQAiA6Qccs97R4m5BV9zaHfPkSe9RD0VFQ5LdOrshyMMOcJg==
         </ds:X509Certificate>
       </ds:X509Data>
     </ds:KeyInfo>
@@ -50,22 +50,22 @@
         <xades:SignedProperties Id="SignedProperties">
           <xades:SignedSignatureProperties>
             <xades:SigningTime>
-              2024-05-25 12:03:41.368278Z
+              2024-07-03 21:20:05.339665Z
             </xades:SigningTime>
             <xades:SigningCertificate>
               <xades:Cert>
                 <xades:CertDigest>
                   <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
                   <ds:DigestValue>
-                    Kun/XsZOIPRnUiA9ACur1P/+0eoMs8mMGM8LbEzBnNs=
+                    Dqujrd6/cOsE3ziaS2N5t3eW5pI9uNRB2m8s9mI0EYE=
                   </ds:DigestValue>
                 </xades:CertDigest>
                 <xades:IssuerSerial>
                   <ds:X509IssuerName>
-                    ECDSA Root CA
+                    ECDSA Brifle Test Root CA
                   </ds:X509IssuerName>
                   <ds:X509SerialNumber>
-                    13797271857679973062
+                    8589578662676922483
                   </ds:X509SerialNumber>
                 </xades:IssuerSerial>
               </xades:Cert>
@@ -104,6 +104,9 @@
                 UTF-8
               </xades:Encoding>
               <xades:ObjectIdentifier>
+                <xades:Identifier>
+                  https://docs.brifle.de/2341ac23HAbcA
+                </xades:Identifier>
                 <xades:Description>
                   Die Beschreibung
                 </xades:Description>
@@ -117,6 +120,9 @@
                 UTF-8
               </xades:Encoding>
               <xades:ObjectIdentifier>
+                <xades:Identifier>
+                  https://docs.brifle.de/671ac23HAbcA
+                </xades:Identifier>
                 <xades:Description>
                   Die Beschreibung
                 </xades:Description>
