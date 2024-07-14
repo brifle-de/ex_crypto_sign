@@ -116,10 +116,6 @@ defmodule ExCryptoSign.Util.Signer do
     # canonicalize the signed info
     canon = canonicalize(signed_info, canonicalized_method)
 
-    File.write!("test/files/canonicalized.xml", canon)
-
-
-
     # canon contains the default namespace, this causes frontend problems
     # remove the default namespace by applying a regex on the signedinfo node
     # python canon is removing it as well
