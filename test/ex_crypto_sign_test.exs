@@ -9,7 +9,7 @@ defmodule ExCryptoSignTest do
 
     docs = [%{content: "document1", id: "2341ac23HAbcA"}, %{content: "document2", id: "671ac23HAbcA"}]
     city_name = "Stuttgart"
-    signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_string
+    signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_iso8601()
 
     xml = generate_xml_document(docs, city_name, signing_time, cert_pem)
 
@@ -44,7 +44,7 @@ defmodule ExCryptoSignTest do
 
     docs = [%{content: content, id: "671ac23HAbcA"}]
     city_name = "Stuttgart"
-    signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_string
+    signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_iso8601()
 
     xml = generate_xml_document(docs, city_name, signing_time, cert_pem)
 
@@ -82,7 +82,7 @@ defmodule ExCryptoSignTest do
 
     docs = [%{content: "document1", id: "2341ac23HAbcA"}, %{content: "document2", id: "671ac23HAbcA"}]
     city_name = "Stuttgart"
-    signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_string
+    signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_iso8601()
 
     xml = generate_xml_document(docs, city_name, signing_time, cert_pem)
 
@@ -109,7 +109,7 @@ defmodule ExCryptoSignTest do
     docs = [%{content: "document1", id: "2341ac23HAbcA"}, %{content: "document2", id: "671ac23HAbcA"}]
     docs_wrong = [%{content: "document55551", id: "2341ac23HAbcA"}, %{content: "document99992", id: "671ac23HAbcA"}]
     city_name = "Stuttgart"
-    signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_string
+    signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_iso8601()
 
     xml = generate_xml_document(docs, city_name, signing_time, cert_pem)
 
@@ -138,7 +138,7 @@ defmodule ExCryptoSignTest do
 
       docs = [%{content: "document1", id: "2341ac23HAbcA"}, %{content: "document2", id: "671ac23HAbcA"}]
       city_name = "Stuttgart"
-      signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_string
+      signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_iso8601()
 
       xml = generate_xml_document(docs, city_name, signing_time, cert_pem)
 
@@ -169,7 +169,7 @@ defmodule ExCryptoSignTest do
 
        docs = [%{content: "document1", id: "2341ac23HAbcA"}, %{content: "document2", id: "671ac23HAbcA"}]
        city_name = "Stuttgart"
-       signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_string
+       signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_iso8601()
 
        xml = generate_xml_document(docs, city_name, signing_time, cert_pem)
 
@@ -206,6 +206,8 @@ defmodule ExCryptoSignTest do
   end
 
 
+
+
   test "export large" do
 
 
@@ -214,7 +216,7 @@ defmodule ExCryptoSignTest do
 
      docs = [%{content: data, id: "2341ac23HAbcA"}]
      city_name = "Stuttgart"
-     signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_string
+     signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_iso8601()
 
      xml = generate_xml_document(docs, city_name, signing_time, cert_pem)
 

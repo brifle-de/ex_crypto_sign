@@ -228,11 +228,11 @@ defmodule ExCryptoSign.Properties.SignedDataObjectProperties do
         ObjectReference: obj_ref
       ],
       [
-        mime,
-        encoding,
         XmlBuilder.element("xades:ObjectIdentifier", [
           [identifier, description] |> Enum.filter(fn x -> x != nil end)
-        ])
+        ]),
+        mime,
+        encoding,
       ] |> Enum.filter(fn x -> x != nil end)
       )
       xml

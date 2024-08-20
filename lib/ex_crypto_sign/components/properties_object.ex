@@ -84,8 +84,9 @@ defmodule ExCryptoSign.Components.PropertiesObject do
 
     # build unsigned signature properties xml
 
-    unsigned_props = XmlBuilder.element("xades:UnsignedProperties", [
-      UnsignedSignatureProperties.build(properties_object.unsigned_signature_properties)
+    props_unsigned = UnsignedSignatureProperties.build(properties_object.unsigned_signature_properties)
+    unsigned_props = if props_unsigned == nil, do: nil, else: XmlBuilder.element("xades:UnsignedProperties", [
+      props_unsigned
       ]
     )
 
@@ -99,7 +100,8 @@ defmodule ExCryptoSign.Components.PropertiesObject do
     qualifying_properties = XmlBuilder.element("xades:QualifyingProperties", attr_qualifying_properties, [
       signed_properties,
       unsigned_props
-    ])
+    ] |> Enum.filter(fn x -> x != nil end)
+    )
 
     # build properties object xml
 

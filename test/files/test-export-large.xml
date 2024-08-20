@@ -12,27 +12,21 @@
           <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
         </ds:Transforms>
         <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
-        <ds:DigestValue>
-          5kOnYTbNHwUF1VS1+TsWhtDCoQoIgDxu673iRyxAq/Q=
-        </ds:DigestValue>
+        <ds:DigestValue>5kOnYTbNHwUF1VS1+TsWhtDCoQoIgDxu673iRyxAq/Q=</ds:DigestValue>
       </ds:Reference>
-      <ds:Reference URI="#SignedProperties">
+      <ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties">
         <ds:Transforms>
           <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
         </ds:Transforms>
         <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
-        <ds:DigestValue>
-          O0WpkC4b/j6j9hgxyoES/q4EU/jx5pKAgbIQBqpBJpo=
-        </ds:DigestValue>
+        <ds:DigestValue>PhKPiWO/UimUIsB3sy6bDGRaSRPskTxBm7S5Yol01K4=</ds:DigestValue>
       </ds:Reference>
     </ds:SignedInfo>
-    <ds:SignatureValue>
-      fySkouZbs/A+GZ9JTMg4Ak6bhxkkJt+PHO6iiyT41/E8O0sMYh7YUgOZw3RhIgzSPKKXcH7rn0FnTlsMZgE1Og==
-    </ds:SignatureValue>
+    <ds:SignatureValue>gOMM18ttWgaIDtiu8XPkbQI+r7jOGSaNeAbUxH3J9+ZR7GjBMwphanI4dafeHVoSe4nnZHe0saIaIYwCHkzkeA==</ds:SignatureValue>
     <ds:KeyInfo>
       <ds:X509Data>
         <ds:X509Certificate>
-          MIICVTCCAfugAwIBAgIIJw6fJwD269IwCgYIKoZIzj0EAwIwYzELMAkGA1UEBhMCREUxCzAJBgNVBAgMAkJXMRIwEAYDVQQHDAlTdHV0dGdhcnQxDzANBgNVBAoMBkJyaWZsZTEiMCAGA1UEAwwZRUNEU0EgQnJpZmxlIFRlc3QgUm9vdCBDQTAeFw0yNDA4MjAxMDA1MDlaFw0yNTA5MTkxMDEwMDlaMFUxCzAJBgNVBAYTAkRFMQswCQYDVQQIDAJCVzESMBAGA1UEBwwJU3R1dHRnYXJ0MQ8wDQYDVQQKDAZCcmlmbGUxFDASBgNVBAMMC0JyaWZsZSBUZXN0MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEPTmC67H04lqtWxU335Ig9meOopfGbg4v6U2WYRsiBQZ1ji1YR7KS/69tCTmooiwfej76xb4QT9IDe535BdEs9qOBpjCBozAJBgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwHQYDVR0OBBYEFNScs7agyS93BQYS0NMDXvFTQUQnMB8GA1UdIwQYMBaAFE+kmSDjsxoDLykWIrzcIV4+XORzMCcGA1UdEQQgMB6CC2V4YW1wbGUub3Jngg93d3cuZXhhbXBsZS5vcmcwCgYIKoZIzj0EAwIDSAAwRQIhANZjZ1lcpdb+uo2Z/QJJazKV8LIDmDCNWfVfrtsHFQGPAiBxvaJOhnJCZePyuaYUMR18yqoUVj1f5ZRMFtK+184a5Q==
+          MIICVjCCAfygAwIBAgIJAOKYG+Db4UlBMAoGCCqGSM49BAMCMGMxCzAJBgNVBAYTAkRFMQswCQYDVQQIDAJCVzESMBAGA1UEBwwJU3R1dHRnYXJ0MQ8wDQYDVQQKDAZCcmlmbGUxIjAgBgNVBAMMGUVDRFNBIEJyaWZsZSBUZXN0IFJvb3QgQ0EwHhcNMjQwODIwMTIzMTE4WhcNMjUwOTE5MTIzNjE4WjBVMQswCQYDVQQGEwJERTELMAkGA1UECAwCQlcxEjAQBgNVBAcMCVN0dXR0Z2FydDEPMA0GA1UECgwGQnJpZmxlMRQwEgYDVQQDDAtCcmlmbGUgVGVzdDBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABLtIeax1/Q8zg34fGZFcPswnDIEFZny5xjzwBVG2kSu0YDLS4lJDtQ0ViolDmSnEQPxIfZsCwGsHhMuw035BV0mjgaYwgaMwCQYDVR0TBAIwADAOBgNVHQ8BAf8EBAMCBaAwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMB0GA1UdDgQWBBSqBwoTpfz2M1la5CxE+rVWg4MMkjAfBgNVHSMEGDAWgBRPpJkg47MaAy8pFiK83CFePlzkczAnBgNVHREEIDAeggtleGFtcGxlLm9yZ4IPd3d3LmV4YW1wbGUub3JnMAoGCCqGSM49BAMCA0gAMEUCIGim3SdAKIEETEHy7D+nikUb9TlJCVLSIDsiQm8tJzdaAiEA1+hGzLXYz1P4VafGo7tJcbDIl4yYCSufKsVCYlXwEKY=
         </ds:X509Certificate>
       </ds:X509Data>
     </ds:KeyInfo>
@@ -40,24 +34,16 @@
       <xades:QualifyingProperties Target="#signature_id">
         <xades:SignedProperties Id="SignedProperties">
           <xades:SignedSignatureProperties>
-            <xades:SigningTime>
-              2024-08-20 11:10:09.395744Z
-            </xades:SigningTime>
+            <xades:SigningTime>2024-08-20T13:36:18.529305Z</xades:SigningTime>
             <xades:SigningCertificate>
               <xades:Cert>
                 <xades:CertDigest>
                   <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
-                  <ds:DigestValue>
-                    2xRaSEhZ9UlK4+Aeb1wSVtUjlT83eUQV7S+EyknKkvU=
-                  </ds:DigestValue>
+                  <ds:DigestValue>3L0O832WmvW2VD9on4p0zzwsZf+GP8HwZjT3bJQfgGQ=</ds:DigestValue>
                 </xades:CertDigest>
                 <xades:IssuerSerial>
-                  <ds:X509IssuerName>
-                    ECDSA Brifle Test Root CA
-                  </ds:X509IssuerName>
-                  <ds:X509SerialNumber>
-                    2814361807021861842
-                  </ds:X509SerialNumber>
+                  <ds:X509IssuerName>ECDSA Brifle Test Root CA</ds:X509IssuerName>
+                  <ds:X509SerialNumber>16327831101607332161</ds:X509SerialNumber>
                 </xades:IssuerSerial>
               </xades:Cert>
             </xades:SigningCertificate>
@@ -81,19 +67,10 @@
                   role2
                 </xades:ClaimedRole>
               </xades:ClaimedRoles>
-              <xades:CertifiedRoles>
-
-              </xades:CertifiedRoles>
             </xades:SignerRole>
           </xades:SignedSignatureProperties>
           <xades:SignedDataObjectProperties>
             <xades:DataObjectFormat ObjectReference="#doc-1">
-              <xades:MimeType>
-                text/xml
-              </xades:MimeType>
-              <xades:Encoding>
-                UTF-8
-              </xades:Encoding>
               <xades:ObjectIdentifier>
                 <xades:Identifier>
                   https://docs.brifle.de/2341ac23HAbcA
@@ -102,14 +79,14 @@
                   Die Beschreibung
                 </xades:Description>
               </xades:ObjectIdentifier>
-            </xades:DataObjectFormat>
-            <xades:DataObjectFormat ObjectReference="#doc-2">
               <xades:MimeType>
                 text/xml
               </xades:MimeType>
               <xades:Encoding>
                 UTF-8
               </xades:Encoding>
+            </xades:DataObjectFormat>
+            <xades:DataObjectFormat ObjectReference="#doc-2">
               <xades:ObjectIdentifier>
                 <xades:Identifier>
                   https://docs.brifle.de/671ac23HAbcA
@@ -118,12 +95,15 @@
                   Die Beschreibung
                 </xades:Description>
               </xades:ObjectIdentifier>
+              <xades:MimeType>
+                text/xml
+              </xades:MimeType>
+              <xades:Encoding>
+                UTF-8
+              </xades:Encoding>
             </xades:DataObjectFormat>
           </xades:SignedDataObjectProperties>
         </xades:SignedProperties>
-        <xades:UnsignedProperties>
-          <xades:UnsignedSignatureProperties/>
-        </xades:UnsignedProperties>
       </xades:QualifyingProperties>
     </ds:Object>
   </ds:Signature>

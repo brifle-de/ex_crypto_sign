@@ -250,9 +250,9 @@ defmodule ExCryptoSign.Components.SignedInfo do
 
       digest_method_xml = XmlBuilder.element("ds:DigestMethod",%{"Algorithm" => digest_method})
 
-      digest_value_xml = XmlBuilder.element("ds:DigestValue", [
+      digest_value_xml = XmlBuilder.element("ds:DigestValue",
         digest_value |> Base.encode64()
-      ])
+      )
 
       # transforms
       transforms = Enum.map(ref.transforms, fn transform ->
@@ -274,6 +274,14 @@ defmodule ExCryptoSign.Components.SignedInfo do
         nil -> %{"URI" => uri}
         _ -> %{"URI" => uri, "Id" => id}
       end
+
+      # if if the Uri is #SignedProperties, then add the type attribute: Type="http://uri.etsi.org/01903#SignedProperties"
+      attributes = if uri == "#SignedProperties" do
+        Map.put(attributes, "Type", "http://uri.etsi.org/01903#SignedProperties")
+      else
+        attributes
+      end
+
 
       XmlBuilder.element("ds:Reference", attributes, [
         transform,

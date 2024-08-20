@@ -91,9 +91,9 @@ defmodule ExCryptoSign.Properties.SignedSignatureProperties do
     if signed_signature_properties.signing_time == nil do
       nil
     else
-      XmlBuilder.element("xades:SigningTime", [
+      XmlBuilder.element("xades:SigningTime",
         signed_signature_properties.signing_time
-      ])
+      )
     end
 
   end
@@ -121,17 +121,17 @@ defmodule ExCryptoSign.Properties.SignedSignatureProperties do
         XmlBuilder.element("xades:Cert", [
           XmlBuilder.element("xades:CertDigest", [
             XmlBuilder.element("ds:DigestMethod", %{Algorithm: HashMethods.get_w3_url(signed_signature_properties.signing_certificate.digest_type)}, []),
-            XmlBuilder.element("ds:DigestValue", [
+            XmlBuilder.element("ds:DigestValue",
               signed_signature_properties.signing_certificate.digest
-            ])
+            )
           ]),
           XmlBuilder.element("xades:IssuerSerial", [
-            XmlBuilder.element("ds:X509IssuerName", [
+            XmlBuilder.element("ds:X509IssuerName",
               signed_signature_properties.signing_certificate.issuer
-            ]),
-            XmlBuilder.element("ds:X509SerialNumber", [
+            ),
+            XmlBuilder.element("ds:X509SerialNumber",
               signed_signature_properties.signing_certificate.serial
-            ])
+            )
           ])
         ])
       ])
@@ -197,14 +197,18 @@ defmodule ExCryptoSign.Properties.SignedSignatureProperties do
       if claimed_roles == nil && certified_roles == nil do
         nil
       else
+
+        certified = if length(certified_roles) == 0, do: nil, else: XmlBuilder.element("xades:CertifiedRoles", [
+          Enum.map(certified_roles, fn role -> XmlBuilder.element("xades:CertifiedRole", [role]) end)
+        ])
+
         xml = XmlBuilder.element("xades:SignerRole", [
           XmlBuilder.element("xades:ClaimedRoles", [
             Enum.map(claimed_roles, fn role -> XmlBuilder.element("xades:ClaimedRole", [role]) end)
           ]),
-          XmlBuilder.element("xades:CertifiedRoles", [
-            Enum.map(certified_roles, fn role -> XmlBuilder.element("xades:CertifiedRole", [role]) end)
-          ])
-        ])
+          certified
+        ] |> Enum.filter(fn x -> x != nil end)
+        )
         xml
       end
     end

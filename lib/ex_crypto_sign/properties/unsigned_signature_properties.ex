@@ -58,9 +58,9 @@ defmodule ExCryptoSign.Properties.UnsignedSignatureProperties do
   end
   def put_signature_time_stamp(unsigned_signature_properties, time_stamp) do
     xml = XmlBuilder.element("SignatureTimeStamp", [
-      XmlBuilder.element("EncapsulatedTimeStamp", [
+      XmlBuilder.element("EncapsulatedTimeStamp",
         time_stamp
-      ])
+      )
     ])
     Map.put(unsigned_signature_properties, :signature_time_stamps, xml)
   end
@@ -75,17 +75,17 @@ defmodule ExCryptoSign.Properties.UnsignedSignatureProperties do
         XmlBuilder.element("Cert", [
           XmlBuilder.element("CertDigest", [
             XmlBuilder.element("DigestMethod", %{"Algorithm" => HashMethods.get_w3_url(digest_method)}),
-            XmlBuilder.element("DigestValue", [
+            XmlBuilder.element("DigestValue",
               digest_value
-            ])
+            )
           ]),
           XmlBuilder.element("IssuerSerial", [
-            XmlBuilder.element("X509IssuerName", [
+            XmlBuilder.element("X509IssuerName",
               issuer_name
-            ]),
-            XmlBuilder.element("X509SerialNumber", [
+            ),
+            XmlBuilder.element("X509SerialNumber",
               serial_number
-            ])
+            )
           ])
         ])
       ])
@@ -185,7 +185,8 @@ defmodule ExCryptoSign.Properties.UnsignedSignatureProperties do
   def build(nil), do: build(new())
 
   def build(unsigned_signature_properties) do
-    xml = XmlBuilder.element("xades:UnsignedSignatureProperties", [
+
+    props = [
       unsigned_signature_properties.signature_time_stamps,
       unsigned_signature_properties.complete_certificate_refs,
       unsigned_signature_properties.complete_revocation_refs,
@@ -197,8 +198,12 @@ defmodule ExCryptoSign.Properties.UnsignedSignatureProperties do
     ]
       |> Enum.filter(fn x -> x != nil end)
       |> Enum.filter(fn x -> x != [] end)
-    )
-    xml
+
+    if length(props) == 0 do
+      nil
+    else
+      XmlBuilder.element("xades:UnsignedSignatureProperties", props)
+    end
   end
 
   def build_xml(unsigned_signature_properties), do: build(unsigned_signature_properties) |> XmlBuilder.generate()
