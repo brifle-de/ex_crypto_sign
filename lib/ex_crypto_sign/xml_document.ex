@@ -103,7 +103,7 @@ defmodule ExCryptoSign.XmlDocument do
       export_content = Keyword.get(opts, :export_content, %{})
       exp = Enum.map(export_content, fn {doc_url, doc_data} ->
         doc_id = doc_url |> String.split("/") |> List.last()
-        XmlBuilder.element("SignatureContent", [id: "data-#{doc_id}"],  doc_data)
+        XmlBuilder.element("SignatureContent", [id: "data-#{doc_id}"],  {:cdata, doc_data})
       end)
       [XmlBuilder.element("ContentExport", exp)]
     else
@@ -112,7 +112,7 @@ defmodule ExCryptoSign.XmlDocument do
 
     if has_embedded_documents? do
         embs = Enum.map(xml_document.embedded_documents, fn doc ->
-          XmlBuilder.element("SignatureContent", [id: "data-#{doc.id}"],  doc.content)
+          XmlBuilder.element("SignatureContent", [id: "data-#{doc.id}"],  {:cdata, doc.content})
         end)
         xml_embs = XmlBuilder.element("SignatureContents", embs)
         XmlBuilder.element("SignatureDocument", type_def, [meta, xml_embs, signature] ++ export_data)
@@ -126,7 +126,7 @@ defmodule ExCryptoSign.XmlDocument do
   """
   def export(xml_document, content) do
     run_build(xml_document, export_enabled: true, export_content: content)
-    |> to_xml_string()
+    |> XmlBuilder.generate(encoding: "UTF-8")
   end
 
   @doc """

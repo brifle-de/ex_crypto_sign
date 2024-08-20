@@ -137,7 +137,7 @@
     </ds:Object>
   </ds:Signature>
   <ContentExport>
-    <SignatureContent id="data-2341ac23HAbcA">document1</SignatureContent>
-    <SignatureContent id="data-671ac23HAbcA">document2</SignatureContent>
+    <SignatureContent id="data-2341ac23HAbcA"><![CDATA[document1]]></SignatureContent>
+    <SignatureContent id="data-671ac23HAbcA"><![CDATA[document2]]></SignatureContent>
   </ContentExport>
 </SignatureDocument>

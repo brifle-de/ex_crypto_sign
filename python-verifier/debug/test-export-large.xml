@@ -1,63 +1,54 @@
-<SignatureDocument xmlns="http://uri.etsi.org/01903/v1.1.1#" elementFormDefault="qualified" targetNamespace="http://uri.etsi.org/01903/v1.1.1#">
+<SignatureDocument elementFormDefault="qualified" targetNamespace="http://uri.etsi.org/01903/v1.1.1#" xmlns="http://uri.etsi.org/01903/v1.1.1#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Metadata>
     <baseUrl>https://documents.brifle.de/</baseUrl>
     <version>1.0</version>
   </Metadata>
-  <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="signature_id">
+  <ds:Signature Id="signature_id">
     <ds:SignedInfo>
-      <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:CanonicalizationMethod>
-      <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"></ds:SignatureMethod>
+      <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+      <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/>
       <ds:Reference Id="doc-1" URI="#data-2341ac23HAbcA">
         <ds:Transforms>
-          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
         </ds:Transforms>
-        <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
         <ds:DigestValue>
-          HJkta1AHXBxZvCCusy+RxQzVS+LU2lj1eklx8jCt6ok=
-        </ds:DigestValue>
-      </ds:Reference>
-      <ds:Reference Id="doc-2" URI="#data-671ac23HAbcA">
-        <ds:Transforms>
-          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
-        </ds:Transforms>
-        <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
-        <ds:DigestValue>
-          EC37eIt+JvnEjFS7wKkAmDeI7VsT4bi81/dK3uZnt9I=
+          5kOnYTbNHwUF1VS1+TsWhtDCoQoIgDxu673iRyxAq/Q=
         </ds:DigestValue>
       </ds:Reference>
       <ds:Reference URI="#SignedProperties">
         <ds:Transforms>
-          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
         </ds:Transforms>
-        <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
         <ds:DigestValue>
-          pcIGOcvavTufAXWTbrn+ovjDbrMKOPPByMpSEL/ox/U=
+          vGa7e/oWn7sOoVcFQnF+I857wbCie+JwpqvLW2cHn/s=
         </ds:DigestValue>
       </ds:Reference>
     </ds:SignedInfo>
     <ds:SignatureValue>
-      otXJ8Uf+8VyXSIWg9FpEpln0u3spkqRJdO5LJoSDitIqfHTTqOsMRK2UlNsj7L5Wvybc0fBvapOE7XDXkY2ouQ==
+      PvHmG2Oz7PS0sLC1zXNZWkR3MMDJtcNSQFZ7z9rwssns2YIgDPK6JcpI68t+zSikEawLuCwDIPZLUJmHbsBvGw==
     </ds:SignatureValue>
     <ds:KeyInfo>
       <ds:X509Data>
         <ds:X509Certificate>
-          MIICVjCCAfygAwIBAgIJAJ2gsKfyqjYYMAoGCCqGSM49BAMCMGMxCzAJBgNVBAYTAkRFMQswCQYDVQQIDAJCVzESMBAGA1UEBwwJU3R1dHRnYXJ0MQ8wDQYDVQQKDAZCcmlmbGUxIjAgBgNVBAMMGUVDRFNBIEJyaWZsZSBUZXN0IFJvb3QgQ0EwHhcNMjQwNzAzMjAwMzI4WhcNMjUwODAyMjAwODI4WjBVMQswCQYDVQQGEwJERTELMAkGA1UECAwCQlcxEjAQBgNVBAcMCVN0dXR0Z2FydDEPMA0GA1UECgwGQnJpZmxlMRQwEgYDVQQDDAtCcmlmbGUgVGVzdDBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABDaGWmLZx+sKtfIBrqHY5OtR+lJ21J7Fbvh8AAhZcBFO25JhVjgqi1d4kdSjSPznwuHK9QsOkFx3WLG6v7+MUPGjgaYwgaMwCQYDVR0TBAIwADAOBgNVHQ8BAf8EBAMCBaAwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMB0GA1UdDgQWBBSzhjHLFt6w5xDYMuYJUg3f2Dn5qzAfBgNVHSMEGDAWgBRPpJkg47MaAy8pFiK83CFePlzkczAnBgNVHREEIDAeggtleGFtcGxlLm9yZ4IPd3d3LmV4YW1wbGUub3JnMAoGCCqGSM49BAMCA0gAMEUCIAnZCRX242dwGjFHk5RJr0+t3BrFrvJw8Ms016ZKqKtJAiEAstyys2mKJCEw+Lw6y12OmUsnjTmSlPfGz0cACzLSxOo=
+          MIICVzCCAfygAwIBAgIJAOXiJteiVKe+MAoGCCqGSM49BAMCMGMxCzAJBgNVBAYTAkRFMQswCQYDVQQIDAJCVzESMBAGA1UEBwwJU3R1dHRnYXJ0MQ8wDQYDVQQKDAZCcmlmbGUxIjAgBgNVBAMMGUVDRFNBIEJyaWZsZSBUZXN0IFJvb3QgQ0EwHhcNMjQwODIwMTAwNDUzWhcNMjUwOTE5MTAwOTUzWjBVMQswCQYDVQQGEwJERTELMAkGA1UECAwCQlcxEjAQBgNVBAcMCVN0dXR0Z2FydDEPMA0GA1UECgwGQnJpZmxlMRQwEgYDVQQDDAtCcmlmbGUgVGVzdDBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABLKr0epT64SLjclpVecXR5U5MHhW8F9yYWLcuCDYw0IdG7g1eaSIUlmHbM3pAXqWcBP1JoZgW+sh9OIysLTuOd6jgaYwgaMwCQYDVR0TBAIwADAOBgNVHQ8BAf8EBAMCBaAwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMB0GA1UdDgQWBBSWzohG3F+7r5FgM2HeHMEN3BoBgDAfBgNVHSMEGDAWgBRPpJkg47MaAy8pFiK83CFePlzkczAnBgNVHREEIDAeggtleGFtcGxlLm9yZ4IPd3d3LmV4YW1wbGUub3JnMAoGCCqGSM49BAMCA0kAMEYCIQCqkxVN66BR+E4rWUmRSGLBTtja8pBsQQIZNyNhVzRlZQIhAIJh8WtIiMFp1ZCkMv+3hElRjQIzZNnBcK5Er5jf9BSI
         </ds:X509Certificate>
       </ds:X509Data>
     </ds:KeyInfo>
     <ds:Object>
-      <xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#signature_id">
+      <xades:QualifyingProperties Target="#signature_id">
         <xades:SignedProperties Id="SignedProperties">
           <xades:SignedSignatureProperties>
             <xades:SigningTime>
-              2024-07-03 21:08:28.292060Z
+              2024-08-20 11:09:53.047412Z
             </xades:SigningTime>
             <xades:SigningCertificate>
               <xades:Cert>
                 <xades:CertDigest>
-                  <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+                  <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
                   <ds:DigestValue>
-                    O3SQBIB96t5hSwzZzvFSzbFqgdrBguhue8r+h4YhmD4=
+                    8p8GqROVOFi9MUs4mbJ+kirHkleP4Wb/csT26Q8Gsso=
                   </ds:DigestValue>
                 </xades:CertDigest>
                 <xades:IssuerSerial>
@@ -65,13 +56,13 @@
                     ECDSA Brifle Test Root CA
                   </ds:X509IssuerName>
                   <ds:X509SerialNumber>
-                    11358272495605659160
+                    16564845087005386686
                   </ds:X509SerialNumber>
                 </xades:IssuerSerial>
               </xades:Cert>
             </xades:SigningCertificate>
             <xades:SignaturePolicyIdentifier>
-              <xades:SignaturePolicyImplied></xades:SignaturePolicyImplied>
+              <xades:SignaturePolicyImplied/>
             </xades:SignaturePolicyIdentifier>
             <xades:SignatureProductionPlace>
               <xades:City>
@@ -131,13 +122,12 @@
           </xades:SignedDataObjectProperties>
         </xades:SignedProperties>
         <xades:UnsignedProperties>
-          <xades:UnsignedSignatureProperties></xades:UnsignedSignatureProperties>
+          <xades:UnsignedSignatureProperties/>
         </xades:UnsignedProperties>
       </xades:QualifyingProperties>
     </ds:Object>
   </ds:Signature>
   <ContentExport>
-    <SignatureContent id="data-2341ac23HAbcA"><![CDATA[document1]]></SignatureContent>
-    <SignatureContent id="data-671ac23HAbcA"><![CDATA[document2]]></SignatureContent>
+    <SignatureContent id="data-2341ac23HAbcA"><![CDATA[{"content": {"data":<jallow attribute="world">hello"</jallow>}}]]></SignatureContent>
   </ContentExport>
 </SignatureDocument>

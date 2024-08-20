@@ -200,7 +200,51 @@ defmodule ExCryptoSignTest do
        File.write!("test/files/test-export.xml", export)
 
 
+
+
+
   end
+
+
+  test "export large" do
+
+
+     data = "{\"content\": {\"data\":<jallow attribute=\"world\">hello\"</jallow>}}"
+     {key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert()
+
+     docs = [%{content: data, id: "2341ac23HAbcA"}]
+     city_name = "Stuttgart"
+     signing_time = DateTime.now!("Etc/UTC") |> DateTime.add(3600, :second) |> DateTime.to_string
+
+     xml = generate_xml_document(docs, city_name, signing_time, cert_pem)
+
+    {:ok, {doc_correct, sign}} = ExCryptoSign.Util.Signer.sign(xml, key_pem)
+
+    assert ExCryptoSign.Util.Verifier.verifies_document(doc_correct, docs)
+
+    # simulate signing by other party
+    opts = get_ops(docs, city_name, signing_time, cert_pem)
+    {:ok, {_doc, signature_new}} = ExCryptoSign.Util.Signer.sign(xml, key_pem)
+
+    res = ExCryptoSign.sign_and_verify("signature_id", docs, cert_pem, signature_new, opts)
+
+    assert {:ok, signed_xml} = res
+
+    assert ExCryptoSign.Util.Verifier.verifies_document(signed_xml, docs)
+
+    assert ["#data-2341ac23HAbcA",] == ExCryptoSign.get_document_ids(signed_xml)
+
+    export_data = %{"https://documents.brifle.de/2341ac23HAbcA" => data}
+
+    export = ExCryptoSign.export_document_signatures(signed_xml, export_data)
+
+
+
+
+
+    File.write!("test/files/test-export-large.xml", export)
+
+    end
 
   defp get_ops(documents, city_name, signing_time, cert_pem) do
     docs_opts = [

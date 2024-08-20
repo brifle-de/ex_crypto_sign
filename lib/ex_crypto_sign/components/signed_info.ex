@@ -170,9 +170,10 @@ defmodule ExCryptoSign.Components.SignedInfo do
 
   defp compute_document_hash(document, digest_method) do
 
-    content = XmlBuilder.element("SignatureContent", [id: "data-#{document.id}"],  document.content)
+    content = XmlBuilder.element("SignatureContent", [id: "data-#{document.id}"], document.content)
     |> XmlBuilder.generate(encoding: "UTF-8")
-    |> String.replace("<SignatureContent", "<SignatureContent xmlns=\"http://uri.etsi.org/01903/v1.1.1#\"") # Avoids whole canonicalization process and increases performance
+    |> String.replace("<SignatureContent", "<SignatureContent xmlns=\"http://uri.etsi.org/01903/v1.1.1#\"") # Av
+    |> String.replace("&quot;","\"") # workarrond for the xml parser, this supports simple xml which is sufficient for our use case for now
 
     hash = :crypto.hash(digest_method, content)
     hash

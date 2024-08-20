@@ -1,0 +1,7 @@
+openssl verify -CAfile ca_cert.crt test_cert.crt
+openssl verify -CAfile ca_cert.crt test_cert2.crt
+
+openssl verify -CAfile root.crt ca_cert.crt
+
+
+cat ca_cert.crt root.crt > chain.pem

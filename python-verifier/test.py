@@ -5,16 +5,17 @@ import base64
 import struct
 
 
-with open("ca.pem", "rb") as fh:
-    ca_pem = fh.read()
 
 
 
 
 ca_pem_file = "./ca.pem"
-signed_root = open('./debug/test-export.xml').read()
+#ca_pem_file = "./ca_test.pem"
+#signed_root = open('./debug/export_sign.xml').read()
+signed_root = open('./debug/test-export-large.xml').read()
 config = SignatureConfiguration(
-    expect_references=3,
+   #  expect_references=3,
+     expect_references=2,
 )
 
 verified_data = XMLVerifier().verify(signed_root, ca_pem_file=ca_pem_file, expect_config=config)
