@@ -41,9 +41,9 @@ defmodule ExCryptoSign.Util.PemCertificate do
     get_expanded_pem(pem_data)
     |> X509.Certificate.from_pem!()
     |> X509.Certificate.serial()
-    |> Integer.parse()  # convert to hex string
-    |> then(fn {n,_} -> n end)
     |> Integer.to_string(16)
+    # padding with 0 if the length is odd
+    |> then(fn s -> if rem(String.length(s), 2) == 1, do: "0" <> s, else: s end)
   end
 
     # Function to parse a PEM string into a list of certificates
