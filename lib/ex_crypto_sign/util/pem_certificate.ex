@@ -23,7 +23,7 @@ defmodule ExCryptoSign.Util.PemCertificate do
         String.contains?(pem_data, "-----BEGIN CERTIFICATE-----") -> pem_data
         true -> "-----BEGIN CERTIFICATE-----\n" <> pem_data
       end
-      pem_data = cond do
+      _pem_data = cond do
         String.contains?(pem_data, "-----END CERTIFICATE-----") -> pem_data
         true -> pem_data <> "\n-----END CERTIFICATE-----"
       end
@@ -41,7 +41,9 @@ defmodule ExCryptoSign.Util.PemCertificate do
     get_expanded_pem(pem_data)
     |> X509.Certificate.from_pem!()
     |> X509.Certificate.serial()
-    |> to_string()
+    |> Integer.parse()  # convert to hex string
+    |> then(fn {n,_} -> n end)
+    |> Integer.to_string(16)
   end
 
     # Function to parse a PEM string into a list of certificates
