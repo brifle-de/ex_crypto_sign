@@ -9,8 +9,27 @@ defmodule Util.PemCertificateTest do
     ca_pem = ca_cert |> X509.Certificate.to_pem()
 
     assert {:ok, res } = PemCertificate.validate_certificate_chain(ca_pem, cert_pem)
+  end
 
+  test "get certificate RDN" do
+    {ca_key, ca_cert} = Support.CertCreator.generate_ca()
+    {key_pem, cert_pem} = Support.CertCreator.generate_certifcate_from_ca({ca_key, ca_cert}, "/C=DE/ST=BW/L=Stuttgart/O=Brifle GmbH/CN=Test and Development")
 
+    assert %{
+      "C" => ["DE"],
+      "CN" => ["Test and Development"],
+      "L" => ["Stuttgart"],
+      "O" => ["Brifle GmbH"],
+      "ST" => ["BW"]
+    } == PemCertificate.get_certificate_rdn(cert_pem)
+
+  end
+
+  test "get_certificate_rdn_string/1" do
+    {ca_key, ca_cert} = Support.CertCreator.generate_ca()
+    {key_pem, cert_pem} = Support.CertCreator.generate_certifcate_from_ca({ca_key, ca_cert}, "/C=DE/ST=BW/L=Stuttgart/O=Brifle GmbH/CN=Test and Development")
+
+    assert "C=DE, CN=Test and Development, L=Stuttgart, O=Brifle GmbH, ST=BW" == PemCertificate.get_certificate_rdn_string(cert_pem)
   end
 
   test "invalid chain" do

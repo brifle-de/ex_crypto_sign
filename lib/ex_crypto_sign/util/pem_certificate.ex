@@ -1,4 +1,17 @@
 defmodule ExCryptoSign.Util.PemCertificate do
+
+  @rn_fields [
+    "C", # country
+    "ST", # state or province
+    "L", # locality
+    "O", # organization
+    "OU", # organizational unit
+    "CN", # common name
+    "SN", # surname
+    "GN" # given name
+  ]
+
+
   @spec get_certificate_digest(binary, any) :: binary
   def get_certificate_digest(pem_data, digest_method) do
       get_expanded_pem(pem_data)
@@ -37,6 +50,42 @@ defmodule ExCryptoSign.Util.PemCertificate do
     |> Enum.at(0)
   end
 
+  @doc """
+  gets the RDN (Relative Distinguished Name) of the certificate subject
+  """
+  def get_certificate_rdn(pem_data) do
+    cert = get_expanded_pem(pem_data) |> X509.Certificate.from_pem!()
+    @rn_fields
+    |> Enum.map(
+       fn sub -> {sub, X509.Certificate.subject(cert, sub)} end
+    )
+    |> Enum.filter(fn {_k, v} -> v != [] end)
+    |> Enum.into(%{})
+  end
+
+  @doc """
+  gets the RDN (Relative Distinguished Name) of the certificate subject as string
+
+  options:
+    - :separator - separator between different RDN items (default: ", ")
+    - :item_separator - separator between multiple values of the same RDN item (default: ", ")
+  """
+  def get_certificate_rdn_string(pem_data, opts \\ []) do
+    separator = Keyword.get(opts, :separator, ", ")
+    item_separator = Keyword.get(opts, :item_separator, ", ")
+    rdn = get_certificate_rdn(pem_data)
+    rdn
+    |> Enum.sort(fn {k1, _}, {k2, _} ->
+      # compare alphabetically based on the key name
+      k1 < k2
+    end)
+    |> Enum.map(fn {k, v} -> "#{k}=#{Enum.join(v, item_separator)}" end)
+    |> Enum.join(separator)
+  end
+
+  @doc """
+  gets the certificate serial number as string
+  """
   def get_certificate_serial(pem_data, hex \\ false) do
     get_expanded_pem(pem_data)
     |> X509.Certificate.from_pem!()

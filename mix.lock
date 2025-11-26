@@ -7,7 +7,7 @@
   "nimble_parsec": {:hex, :nimble_parsec, "1.4.0", "51f9b613ea62cfa97b25ccc2c1b4216e81df970acd8e16e8d1bdc58fef21370d", [:mix], [], "hexpm", "9c565862810fb383e9838c1dd2d7d2c437b3d13b267414ba6af33e50d2d1cf28"},
   "starkbank_ecdsa": {:hex, :starkbank_ecdsa, "1.1.0", "4f5a700ef25dd4c8525d5aa9806ed36f63642cc74d9df606f6e5927b653a664b", [:mix], [], "hexpm", "c1677a9dcbf36fbd76bc1befae593514b3161ba49a4d22a83417014a41f64bf9"},
   "sweet_xml": {:hex, :sweet_xml, "0.7.4", "a8b7e1ce7ecd775c7e8a65d501bc2cd933bff3a9c41ab763f5105688ef485d08", [:mix], [], "hexpm", "e7c4b0bdbf460c928234951def54fe87edf1a170f6896675443279e2dbeba167"},
-  "x509": {:hex, :x509, "0.8.8", "aaf5e58b19a36a8e2c5c5cff0ad30f64eef5d9225f0fd98fb07912ee23f7aba3", [:mix], [], "hexpm", "ccc3bff61406e5bb6a63f06d549f3dba3a1bbb456d84517efaaa210d8a33750f"},
+  "x509": {:hex, :x509, "0.9.2", "a75aa605348abd905990f3d2dc1b155fcde4e030fa2f90c4a91534405dce0f6e", [:mix], [], "hexpm", "4c5ede75697e565d4b0f5be04c3b71bb1fd3a090ea243af4bd7dae144e48cfc7"},
   "xmerl_c14n": {:hex, :xmerl_c14n, "0.2.0", "21cab8edaa575ada6a5b5676aed7207ed48df12e532ae6e46e93af82ac0ea0ed", [:mix], [], "hexpm", "5231eba0cecba15bb5718e7692f19d9f94783ef371148b4f6c24f750c992974b"},
   "xml_builder": {:hex, :xml_builder, "2.2.0", "cc5f1eeefcfcde6e90a9b77fb6c490a20bc1b856a7010ce6396f6da9719cbbab", [:mix], [], "hexpm", "9d66d52fb917565d358166a4314078d39ef04d552904de96f8e73f68f64a62c9"},
 }
