@@ -18,8 +18,6 @@ defmodule ExCryptoSign.Util.Signer do
     signature = compute_signature_value(xml_string, private_key)
 
 
-    IO.inspect(key_length, label: "Key length bytes")
-    IO.inspect(signature_method, label: "Signature method")
     signature_value = prepare_signature_value!(signature_method, signature, key_length)
 
 
@@ -86,7 +84,6 @@ defmodule ExCryptoSign.Util.Signer do
     xml_object
     |> SweetXml.xpath(SweetXml.sigil_x("//ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm"))
     |> to_string()
-    |> IO.inspect(label: "Signature Method URL")
     |> SignatureMethods.from_w3_url()
   end
 

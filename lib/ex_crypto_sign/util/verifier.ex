@@ -66,7 +66,6 @@ alias ExCryptoSign.Util.PemCertificate
       _ -> :rsa
     end
 
-
     # get the signature value
     signature_value = SignatureValueEncoder.parse_signature_value!(key_type, signature.value)
       |> SignatureValueEncoder.to_binary()
