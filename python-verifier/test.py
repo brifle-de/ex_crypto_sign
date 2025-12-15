@@ -9,13 +9,13 @@ import struct
 
 
 
-#ca_pem_file = "./ca.pem"
-ca_pem_file = "./ca_test.pem"
-signed_root = open('./debug/signature(3).xml').read()
+ca_pem_file = "./ca.pem"
+#ca_pem_file = "./ca_test.pem"
+signed_root = open('./debug/signature_rsa_exported.xml').read()
 #signed_root = open('./debug/test-export-large.xml').read()
 config = SignatureConfiguration(
    #  expect_references=3,
-     expect_references=2,
+     expect_references=3,
 )
 
 verified_data = XMLVerifier().verify(signed_root, ca_pem_file=ca_pem_file, expect_config=config)

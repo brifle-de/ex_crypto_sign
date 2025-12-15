@@ -3,6 +3,22 @@ defmodule VerifierTest do
   use ExUnit.Case
 
 
+  test "validate all v1 ecdsa signatures" do
+    # those signature use the raw encoding
+    files = [
+      "test/files/v1/ecdsa/signature_raw_1.xml",
+      "test/files/v1/ecdsa/signature_raw_2.xml",
+      "test/files/v1/ecdsa/signature_raw_3.xml"
+    ]
+
+    data = [%{content: "document1", id: "2341ac23HAbcA"}, %{content: "document2", id: "671ac23HAbcA"}]
+
+    Enum.each(files, fn file ->
+      xml = File.read!(file)
+      assert {:ok, true} = ExCryptoSign.Util.Verifier.verifies_document(xml, data)
+    end)
+
+  end
 
   test "verifies successul" do
     #{key_pem, cert_pem} = Support.CertCreator.generate_dummy_cert(:secp384r1)

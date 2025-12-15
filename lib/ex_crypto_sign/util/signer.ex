@@ -1,20 +1,30 @@
 defmodule ExCryptoSign.Util.Signer do
-  alias X509.PublicKey
-  alias EllipticCurve.PrivateKey
+  alias ExCryptoSign.Util.SignatureValueEncoder
   alias ExCryptoSign.Constants.{CanonicalizationMethods, SignatureMethods}
+
+  alias ExCryptoSign.Util.PemCertificate
   def sign(xml_string, private_key) when is_binary(xml_string) do
 
     # parse the xml document
     xml_document = ExCryptoSign.XmlDocument.parse_document(xml_string)
 
+    xml = SweetXml.parse(xml_string, namespace_conformant: true, document: true)
+
+    signature_method = get_signature_method(xml)
+
+    key_length = get_key_length_bytes(xml_document)
+
       # compute the signature value
     signature = compute_signature_value(xml_string, private_key)
 
-   # convert the signature to raw (r, s) values
-    raw_signature = to_raw_signature(signature, compute_ecc_key_length(private_key))
+
+    IO.inspect(key_length, label: "Key length bytes")
+    IO.inspect(signature_method, label: "Signature method")
+    signature_value = prepare_signature_value!(signature_method, signature, key_length)
+
 
     # put the signature value in the xml document
-    xml_document = ExCryptoSign.XmlDocument.put_signature_value(xml_document, raw_signature)
+    xml_document = ExCryptoSign.XmlDocument.put_signature_value(xml_document, signature_value)
 
     # build the xml document
     xml_document_string = ExCryptoSign.XmlDocument.build_xml(xml_document)
@@ -22,65 +32,42 @@ defmodule ExCryptoSign.Util.Signer do
     {:ok, {xml_document_string, signature}}
   end
 
-  @doc """
-  computes the length of the key in bytes
-  """
-  defp compute_ecc_key_length(private_key) do
-    :public_key.pem_decode(private_key)
-    |> hd()
-    |> :public_key.pem_entry_decode()
-    |> then(fn {:ECPrivateKey, 1, key, _, _, _} -> key end)
-    |> byte_size()
-  end
-
-  def to_raw_signature(base64_signature, curve_size_bytes \\ 32) do
-
-    %EllipticCurve.Signature{
-      r: r,
-      s: s
-    }  = EllipticCurve.Signature.fromBase64!(base64_signature)
-
-    # convert r number to a byte list using big endian and unsigned
-
-    r_bytes = integer_to_bytes(r, curve_size_bytes)
-    s_bytes = integer_to_bytes(s, curve_size_bytes)
-    signature_bytes = <<r_bytes::binary, s_bytes::binary>>
-
-
-    base64_string = signature_bytes |> Base.encode64()
-
-    base64_string
-  end
-
-  defp integer_to_bytes(integer, byte_length) do
-    :binary.encode_unsigned(integer)
-    |> pad_left(byte_length)
-  end
-
-  defp pad_left(binary, byte_length) do
-    padding_length = byte_length - byte_size(binary)
-    padding = :binary.copy(<<0>>, padding_length)
-    <<padding::binary, binary::binary>>
-  end
-
-
 
   @doc """
   adds the signature to the xml document
   """
   def add_signature(xml_string, signature) do
-    signature_value = case Base.decode64(signature) do
-      {:ok, binary_sig} -> signature_length = byte_size(binary_sig)
-        case signature_length do
-          64 -> Base.encode64(signature)
-          _ -> to_raw_signature(signature)
-        end
-      _ -> ""
-    end
 
     xml_document = ExCryptoSign.XmlDocument.parse_document(xml_string)
+
+    signature_method = get_signature_method(xml_document)
+    key_length = get_key_length_bytes(xml_document)
+    signature_value = prepare_signature_value!(signature_method, signature, key_length)
+
     xml_document = ExCryptoSign.XmlDocument.put_signature_value(xml_document, signature_value)
     ExCryptoSign.XmlDocument.build_xml(xml_document)
+  end
+
+  defp prepare_signature_value!(signature_method, signature, key_length) do
+
+    signature_method
+      |> SignatureMethods.get_signature_method()
+      |> SignatureValueEncoder.parse_signature_value!(signature)
+      |> SignatureValueEncoder.to_raw_signature(key_length)
+  end
+
+  def get_key_length_bytes(xml_object) do
+    public_key = xml_object.key_info.x509_data |> PemCertificate.get_public_key()
+
+    case public_key do
+      {{:ECPoint, pk}, _} ->
+        # division by two can be skipped based on the following hex encoding
+        byte_size(pk) - 1
+      {{:RSAPublicKey, n, _e}, _} ->
+        byte_size(:public_key.der_encode(:RSAPublicKey, {:RSAPublicKey, n, :undefined}))
+      _ ->
+        0
+    end
   end
 
 
@@ -99,6 +86,7 @@ defmodule ExCryptoSign.Util.Signer do
     xml_object
     |> SweetXml.xpath(SweetXml.sigil_x("//ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm"))
     |> to_string()
+    |> IO.inspect(label: "Signature Method URL")
     |> SignatureMethods.from_w3_url()
   end
 
@@ -153,6 +141,12 @@ defmodule ExCryptoSign.Util.Signer do
     digest_method = SignatureMethods.get_digest_method(signature_method)
 
     :public_key.sign(canonicalized_string, digest_method, private_key)
+  end
+
+  def compute_sign_hash(canonicalized_string, signature_method) do
+    digest_method = SignatureMethods.get_digest_method(signature_method)
+
+    :crypto.hash(digest_method, canonicalized_string)
   end
 
   def canonicalize(xml, :exclusive), do: xml |> XmerlC14n.canonicalize!()

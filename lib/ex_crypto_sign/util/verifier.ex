@@ -1,8 +1,9 @@
 defmodule ExCryptoSign.Util.Verifier do
 alias ExCryptoSign.Constants.SignatureMethods
-alias ElixirSense.Providers.Signature
+alias ExCryptoSign.Util.SignatureValueEncoder
 alias ExCryptoSign.Util.Signer
 alias ExCryptoSign.Util.PemCertificate
+
 
   def certificate_matches?(xml_document) do
     # get the certificate from the xml document
@@ -49,18 +50,7 @@ alias ExCryptoSign.Util.PemCertificate
     end)
   end
 
-   @doc """
-  computes the length of the key in bytes
-  """
-  defp compute_ecc_key_length(private_key) do
-    curve_name = PrivateKey.fromPem!(private_key).curve.name
-    cond do
-      curve_name.contains?("256") -> 32
-      curve_name.contains?("384") -> 48
-      curve_name.contains?("521") -> 66
-      true -> 32
-    end
-  end
+
 
   def signature_valid?(xml_document) do
     signature = xml_document.signature_value
@@ -69,24 +59,18 @@ alias ExCryptoSign.Util.PemCertificate
     # get the signature method
     signature_method = signed_info.signature_method
 
-    # get public key curve
-    {{:ECPoint, pk}, _} = xml_document.key_info.x509_data |> PemCertificate.get_public_key()
+    # get public key type
+    key_type = case xml_document.key_info.x509_data |> PemCertificate.get_public_key() do
+      {{:ECPoint, _pk}, _} -> :ecdsa
+      {{:RSAPublicKey, _n, _e}, _} -> :rsa
+      _ -> :rsa
+    end
 
-    # comput the bytes size of the public key
-    # division by two can be skipped based on the following hex encoding
-    signature_component_size = (byte_size(pk) - 1)
 
     # get the signature value
-    raw_signature = signature.value |> Base.decode64!() |> Base.encode16()
-    r = raw_signature |> String.slice(0, signature_component_size) |> String.to_integer(16)
-    s = raw_signature |> String.slice(signature_component_size, signature_component_size) |> String.to_integer(16)
+    signature_value = SignatureValueEncoder.parse_signature_value!(key_type, signature.value)
+      |> SignatureValueEncoder.to_binary()
 
-    signature_value = %EllipticCurve.Signature{
-      r: r,
-      s: s
-    }
-      |> EllipticCurve.Signature.toBase64()
-      |> Base.decode64!()
 
     # compute validation digest
     xml_string = ExCryptoSign.XmlDocument.build_xml(xml_document)
